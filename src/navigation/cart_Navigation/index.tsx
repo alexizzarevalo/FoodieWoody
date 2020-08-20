@@ -1,8 +1,9 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {Text, View} from 'react-native';
+import {CartStackParamList} from '../types';
 
-const Stack = createStackNavigator();
+const Stack = createStackNavigator<CartStackParamList>();
 
 export default function CartNavigation() {
   return (
