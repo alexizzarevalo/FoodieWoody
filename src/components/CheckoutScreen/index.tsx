@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import ListLayout from '../../listlayout'
+import ListLayout from './listlayout'
 import {StatusBar, SafeAreaView, FlatList, View, StyleSheet, Text } from 'react-native';
 
 class CheckoutScreen extends Component {
