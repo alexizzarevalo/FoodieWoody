@@ -1,16 +1,55 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { View, Text, TextInput, StyleSheet, Alert, ScrollView } from "react-native";
 import { TouchableHighlight } from "react-native-gesture-handler";
 import { DrawerScreenProps } from "@react-navigation/drawer";
 import { DrawerParamList } from "../../navigation/types";
+import auth from "@react-native-firebase/auth";
 
-export default function LoginScreen({ navigation, route }: DrawerScreenProps<DrawerParamList, 'Login'>) {
+const AuthError = {
+    wrongPassword: 'auth/wrong-password',
+    invalidEmail: 'auth/invalid-email',
+    userNotFound: 'auth/user-not-found',
+    tooManyRequests: 'auth/too-many-requests',
+}
+
+export default function LoginScreen({ }: DrawerScreenProps<DrawerParamList, 'Login'>) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const passwordRef = useRef<TextInput>(null); //Para hacer referencia al Input del password
 
+    useEffect(() => {
+        const unsubscribe = auth().onAuthStateChanged(user => {
+            if (user != null) {
+                console.log(user)
+            } else {
+                console.log('No esta logueado')
+            }
+        })
+        return unsubscribe
+    }, [auth])
+
     function login() {
-        Alert.alert('Login', 'Login')
+        auth()
+            .signInWithEmailAndPassword(email.trim(), password)
+            .then((_)=> {
+                Alert.alert('Bienvenido', 'Has iniciado sesión correctamente');
+                setEmail('');
+                setPassword('');
+            })
+            .catch((error: Error) => {
+                if (error.message.includes(AuthError.wrongPassword)) {
+                    Alert.alert('Contraseña incorrecta', 'La contraseña que has ingresado es incorrecta');
+                } else if (error.message.includes(AuthError.invalidEmail)) {
+                    Alert.alert('Correo inválido', 'Ingresa una dirección de correo válida');
+                } else if (error.message.includes(AuthError.userNotFound)) {
+                    Alert.alert('Cuenta no encontrada', 'No existe una cuenta con el correo especificado');
+                } else if (error.message.includes(AuthError.tooManyRequests)) {
+                    Alert.alert('Inicio de sesión bloqueado', 'Demasiados intentos de inicio de sesión fallidos. Por favor, inténtelo de nuevo más tarde.')
+                } else {
+                    Alert.alert('Error', 'No se pudo iniciar sesión. Intentalo nuevamente');
+                    console.log(error)
+                }
+            });
     }
 
     function register() {
