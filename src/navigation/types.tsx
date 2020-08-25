@@ -7,3 +7,8 @@ export type DrawerParamList = {
   Login: undefined;
   Cart: undefined;
 };
+
+export type RegisterStackParamList = {
+  Login: undefined;
+  Register: "Prueba de register";
+};
