@@ -1,11 +1,76 @@
-import React from 'react';
-import {createStackNavigator} from '@react-navigation/stack';
-import {Text, View} from 'react-native';
+import React, {PropsWithRef, useState} from 'react';
+import {
+  createStackNavigator,
+  StackHeaderInterpolatedStyle,
+  StackHeaderProps,
+  StackHeaderTitleProps
+} from '@react-navigation/stack';
+import {Button,ScrollView, StyleSheet, Text, TextInput, View} from 'react-native';
+import {Picker} from "@react-native-community/picker";
+import {StackHeaderOptions} from "@react-navigation/stack/lib/typescript/src/types";
 
-export default function CartNavigation() {
+export default function orderConfirmation({route, navigation}:StackHeaderProps) {
+  const [selectedValue, setSelectedValue] = useState("");
+  const [costumerInformation, setCostumerInformation] = useState(
+      {
+        name: 'Cristian Castellanos',
+        direcciones:[
+          {key: 1,
+            direccion: "31 calle 21-29, colonia Santa Elisa, zona 12"},
+          {key: 2,
+            direccion: "32 calle 21-30, colonia Santa Elisa, zona 12"}
+        ],
+      }
+  );
+  const {total} = route.params
+  const pressHandler = () =>{ navigation.navigate('Cart') }
     return(
-      <View>
-        <Text>Hello order screen</Text>
+      <View style={styles.container}>
+        <View style={styles.body}>
+          <ScrollView>
+            <Text style={styles.label}>Nombre</Text>
+            <TextInput
+              style={styles.input}
+              editable = {false}
+            >
+              {costumerInformation.name}
+            </TextInput>
+            <Text style={styles.label} >Direccion de envio</Text>
+            <Picker
+              selectedValue={selectedValue}
+              style={styles.picker}
+              onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue.toString())}
+            >
+              {costumerInformation.direcciones.map((d)=>{
+                return(
+                  <Picker.Item label={d.direccion} value={d.direccion} key={d.key} />
+                );
+              })}
+            </Picker>
+            <Text style={styles.label}>Total</Text>
+            <TextInput style={styles.input} editable = {false}>{total}</TextInput>
+            <Button title={'Terminar pedido'} onPress={pressHandler}/>
+          </ScrollView>
+        </View>
       </View>
     );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  body: {
+    flex: 1,
+  },
+  label:{
+
+  },
+  input:{
+
+  },
+  picker: {
+    height: 50,
+    width: '100%'
+  }
+});

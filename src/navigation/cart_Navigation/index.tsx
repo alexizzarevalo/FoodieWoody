@@ -1,6 +1,6 @@
 import React from 'react';
-import {createStackNavigator} from '@react-navigation/stack';
-import {Text, View} from 'react-native';
+import {createStackNavigator, StackHeaderProps} from '@react-navigation/stack';
+import {Button, Text, View} from 'react-native';
 import {CartStackParamList} from '../types';
 import {CheckoutScreen} from '../../components/CheckoutScreen/index'
 
@@ -10,19 +10,31 @@ const Stack = createStackNavigator<CartStackParamList>();
 export default function CartNavigation() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name={'Cart2'} component={OrderConfirmation} />
       <Stack.Screen name={'Cart'} component={ExampleCart} />
+      <Stack.Screen name={'CheckOut'} component={OrderCheckOut} />
+      <Stack.Screen name={'OrderConfirmation'} component={OrderConfirmation} />
       <Stack.Screen name={'Cart3'} component={CheckoutScreen} />
       {/*Agregar aqui las pantallas del carrito.
           La que está primero es la que se muestra por default*/}
     </Stack.Navigator>
   );
 }
-
-function ExampleCart() {
+function ExampleCart({navigation}:StackHeaderProps) {
+  const pressHandler = () =>{ navigation.navigate('CheckOut') }
   return (
     <View>
-      <Text>Cart</Text>
+      <Text>Cart with all the products</Text>
+        <Button title={'Carrito de compras'} onPress={pressHandler}/>
+    </View>
+  );
+}
+
+function OrderCheckOut({navigation}:StackHeaderProps) {
+  const pressHandler = () =>{ navigation.navigate('OrderConfirmation', {total:100}) }
+  return (
+    <View>
+      <Text>Shopping cart</Text>
+      <Button title={'Confirmar pedido'} onPress={pressHandler}/>
     </View>
   );
 }
