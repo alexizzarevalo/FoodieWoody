@@ -65,7 +65,7 @@ export default function LoginScreen({ }: DrawerScreenProps<DrawerParamList, 'Log
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <Text>Foodie Woody</Text>
+                <Text style={styles.headerText}>Inicia Sesión</Text>
             </View>
             <View style={styles.body}>
                 <ScrollView>
@@ -82,7 +82,7 @@ export default function LoginScreen({ }: DrawerScreenProps<DrawerParamList, 'Log
                     <Text style={styles.label}>Contraseña:</Text>
                     <TextInput
                         style={styles.input}
-                        placeholder={"Escribre tu contraseña"}
+                        placeholder={"Escribe tu contraseña"}
                         blurOnSubmit={true}
                         secureTextEntry={true} // Modo contraseña
                         value={password}
@@ -108,7 +108,7 @@ export default function LoginScreen({ }: DrawerScreenProps<DrawerParamList, 'Log
 
                         <View style={styles.buttonContainer}>
                             <TouchableHighlight style={styles.recoveryButton} underlayColor='gray' onPress={passwordRecovery}>
-                                <Text style={styles.buttonText}>Recuperar</Text>
+                                <Text style={[styles.buttonText, {color: 'black', fontWeight: 'bold'}]}>Recuperar</Text>
                             </TouchableHighlight>
                         </View>
                     </View>
@@ -121,28 +121,37 @@ export default function LoginScreen({ }: DrawerScreenProps<DrawerParamList, 'Log
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'orange'
+        backgroundColor: '#f87c09'
     },
     header: {
         height: 180,
-        backgroundColor: 'green',
-        borderBottomEndRadius: 10,
-        borderBottomStartRadius: 10,
+        backgroundColor: '#f87c09',
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    headerText: {
+        color: '#fff',
+        fontWeight: 'bold',
+        fontSize: 30,
     },
     body: {
         flex: 1,
         paddingHorizontal: 16,
+        borderTopLeftRadius: 30,
+        borderTopRightRadius: 30,
+        backgroundColor: 'white'
     },
     label: {
         fontSize: 18,
+        fontWeight: 'bold',
+        color: '#05375a',
         marginTop: 10,
         marginBottom: 5,
         marginLeft: 5
     },
     input: {
-        borderWidth: 1,
+        borderBottomWidth: 1,
+        borderColor: 'gray',
         backgroundColor: 'white',
         borderRadius: 10,
         paddingHorizontal: 10,
@@ -155,18 +164,19 @@ const styles = StyleSheet.create({
         overflow: 'hidden'
     },
     buttonText: {
-        fontSize: 16,
+        fontSize: 18,
         textAlign: 'center',
         padding: 10,
+        color: 'white',
     },
     loginButton: {
-        backgroundColor: 'blue',
+        backgroundColor: '#f87c09',
     },
     registerButton: {
-        backgroundColor: 'red'
+        backgroundColor: 'purple'
     },
     recoveryButton: {
-        backgroundColor: 'orange'
+        backgroundColor: 'white'
     },
     recoveryContainer: {
         justifyContent: 'center',
