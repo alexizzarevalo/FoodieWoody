@@ -1,15 +1,8 @@
-import React, {PropsWithRef, useState} from 'react';
-import {
-  createStackNavigator,
-  StackHeaderInterpolatedStyle,
-  StackHeaderProps,
-  StackHeaderTitleProps
-} from '@react-navigation/stack';
+import React, {useState} from 'react';
 import {Button,ScrollView, StyleSheet, Text, TextInput, View} from 'react-native';
 import {Picker} from "@react-native-community/picker";
-import {StackHeaderOptions} from "@react-navigation/stack/lib/typescript/src/types";
 
-export default function orderConfirmation({route, navigation}:StackHeaderProps) {
+export default function orderConfirmation({route, navigation}:any) {
   const [selectedValue, setSelectedValue] = useState("");
   const [selectedCard, setSelectedCard] = useState("");
   const [costumerInformation, setCostumerInformation] = useState(
@@ -41,29 +34,32 @@ export default function orderConfirmation({route, navigation}:StackHeaderProps) 
               {costumerInformation.name}
             </TextInput>
             <Text style={styles.label} >Direccion de envio</Text>
-            <Picker
-              selectedValue={selectedValue}
-              style={styles.picker}
-              onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue.toString())}
-            >
-              {costumerInformation.direcciones.map((d)=>{
-                return(
-                  <Picker.Item label={d.direccion} value={d.direccion} key={d.key} />
-                );
-              })}
-            </Picker>
+            <View style={styles.picker}>
+              <Picker
+                selectedValue={selectedValue}
+                onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue.toString())}
+              >
+                {costumerInformation.direcciones.map((d)=>{
+                  return(
+                    <Picker.Item label={d.direccion} value={d.direccion} key={d.key} />
+                  );
+                })}
+              </Picker>
+            </View>
             <Text style={styles.label} >Metodo de pago</Text>
-            <Picker
-              selectedValue={selectedCard}
-              style={styles.picker}
-              onValueChange={(itemValue, itemIndex) => setSelectedCard(itemValue.toString())}
-            >
-              {costumerInformation.tarjetas.map((t)=>{
-                return(
-                  <Picker.Item label={"*******"+t.numero} value={t.key} key={t.key} />
-                );
-              })}
-            </Picker>
+            <View style={styles.picker}>
+              <Picker
+                selectedValue={selectedCard}
+                style={styles.picker}
+                onValueChange={(itemValue, itemIndex) => setSelectedCard(itemValue.toString())}
+              >
+                {costumerInformation.tarjetas.map((t)=>{
+                  return(
+                    <Picker.Item label={"*******"+t.numero} value={t.key} key={t.key} />
+                  );
+                })}
+              </Picker>
+            </View>
             <Text style={styles.label}>Total</Text>
             <TextInput style={styles.input} editable = {false}>{total}</TextInput>
             <Button title={'Terminar pedido'} onPress={pressHandler}/>
@@ -79,15 +75,22 @@ const styles = StyleSheet.create({
   },
   body: {
     flex: 1,
+    marginLeft:10,
+    marginRight:10,
   },
   label:{
 
   },
   input:{
-
+    height:40,
+    borderWidth:1,
+    borderColor: 'black',
+    marginBottom: 10,
   },
   picker: {
-    height: 50,
-    width: '100%'
+    height:40,
+    borderWidth:1,
+    borderColor: 'black',
+    marginBottom: 10,
   }
 });
