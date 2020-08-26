@@ -1,9 +1,10 @@
-import React, { useState, useRef, useEffect } from "react";
-import { View, Text, TextInput, StyleSheet, Alert, ScrollView } from "react-native";
-import { TouchableHighlight } from "react-native-gesture-handler";
+import React, { useState, useRef } from "react";
+import { View, Text, TextInput, StyleSheet, Alert, ScrollView, ToastAndroid, ActivityIndicator } from "react-native";
+import { TouchableHighlight, TouchableOpacity } from "react-native-gesture-handler";
 import { DrawerScreenProps } from "@react-navigation/drawer";
 import { DrawerParamList } from "../../navigation/types";
 import auth from "@react-native-firebase/auth";
+import prompt from "react-native-prompt-android";
 
 const AuthError = {
     wrongPassword: 'auth/wrong-password',
@@ -12,23 +13,19 @@ const AuthError = {
     tooManyRequests: 'auth/too-many-requests',
 }
 
-export default function LoginScreen({ }: DrawerScreenProps<DrawerParamList, 'Login'>) {
+export default function LoginScreen({ navigation }: DrawerScreenProps<DrawerParamList, 'Login'>) {
+    const [loading, setLoading] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const passwordRef = useRef<TextInput>(null); //Para hacer referencia al Input del password
 
-    useEffect(() => {
-        const unsubscribe = auth().onAuthStateChanged(user => {
-            if (user != null) {
-                console.log(user)
-            } else {
-                console.log('No esta logueado')
-            }
-        })
-        return unsubscribe
-    }, [auth])
-
     function login() {
+        if (email.length === 0 || password.length === 0) {
+            Alert.alert('Datos faltantes', 'Debes agregar un correo y una contraseña')
+            return
+        }
+
+        setLoading(true);
         auth()
             .signInWithEmailAndPassword(email.trim(), password)
             .then((_)=> {
@@ -49,22 +46,48 @@ export default function LoginScreen({ }: DrawerScreenProps<DrawerParamList, 'Log
                     Alert.alert('Error', 'No se pudo iniciar sesión. Intentalo nuevamente');
                     console.log(error)
                 }
-            });
+            }).finally(() => { setLoading(false) });
     }
 
     function register() {
-        Alert.alert('Register', 'Register')
-        // TODO: Navegar hacia la pantalla de registro
-        // navigation.navigate('Register');
+        navigation.navigate('Register');
     }
 
     function passwordRecovery() {
-        Alert.alert('Recovery', 'Password')
+        function sendEmail(email: string) {
+            auth().sendPasswordResetEmail(email.trim())
+            .then(() => {
+                ToastAndroid.show('Se ha enviado un enlace a ' + email + ' si existe una cuenta con ese correo', ToastAndroid.LONG);
+            })
+            .catch((error: Error) => {
+                if (error.message.includes(AuthError.invalidEmail)) {
+                    ToastAndroid.show('Ingresa una dirección de correo válida', ToastAndroid.LONG);
+                } else {
+                    ToastAndroid.show('No se pudo enviar el enlace. Intentalo de nuevo más tarde.', ToastAndroid.LONG);
+                    console.log(error)
+                }
+            });
+        }
+
+        prompt(
+            'Recuperar contraseña',
+            'Escribe tu correo electrónico para enviarte un enlace para recuperar tu contraseña',
+            [
+             {text: 'Cancelar', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+             {text: 'OK', onPress: sendEmail},
+            ],
+            {
+                type: 'email-address',
+                cancelable: false,
+                placeholder: 'ejemplo@gmail.com'
+            }
+        );
     }
 
     return (
         <View style={styles.container}>
             <View style={styles.header}>
+                <Text style={[styles.headerText, {fontSize: 40}]}>Foodie Woody</Text>
                 <Text style={styles.headerText}>Inicia Sesión</Text>
             </View>
             <View style={styles.body}>
@@ -92,15 +115,18 @@ export default function LoginScreen({ }: DrawerScreenProps<DrawerParamList, 'Log
                     />
 
                     <View style={styles.buttonContainer}>
-                        <TouchableHighlight style={styles.loginButton} underlayColor='gray' onPress={login}>
-                            <Text style={styles.buttonText}>Iniciar sesión</Text>
-                        </TouchableHighlight>
+                        <TouchableOpacity style={styles.loginButton} activeOpacity={0.85} onPress={login}>
+                            {
+                                loading ? <ActivityIndicator style={styles.buttonText} size={24} color={"white"}/>
+                                : <Text style={styles.buttonText}>Iniciar sesión</Text>
+                            }
+                        </TouchableOpacity>
                     </View>
 
                     <View style={styles.buttonContainer}>
-                        <TouchableHighlight style={styles.registerButton} underlayColor='gray' onPress={register}>
+                        <TouchableOpacity style={styles.registerButton} activeOpacity={0.85} onPress={register}>
                             <Text style={styles.buttonText}>Registrarse</Text>
-                        </TouchableHighlight>
+                        </TouchableOpacity>
                     </View>
 
                     <View style={styles.recoveryContainer}>
@@ -155,7 +181,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         borderRadius: 10,
         paddingHorizontal: 10,
-        fontSize: 16
+        fontSize: 17
     },
     buttonContainer: {
         marginTop: 20,
