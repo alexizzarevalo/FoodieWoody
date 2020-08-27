@@ -5,6 +5,7 @@ import {CartStackParamList} from '../types';
 import {CheckoutScreen} from '../../components/CheckoutScreen/index'
 
 import OrderConfirmation from '../../components/orderConfirmation';
+import AddAddress from '../../components/orderConfirmation/addAddress';
 const Stack = createStackNavigator<CartStackParamList>();
 
 export default function CartNavigation() {
@@ -16,6 +17,7 @@ export default function CartNavigation() {
       <Stack.Screen name={'Cart3'} component={CheckoutScreen} />
       {/*Agregar aqui las pantallas del carrito.
           La que está primero es la que se muestra por default*/}
+      <Stack.Screen name={'AddAddress'} component={AddAddress} />
     </Stack.Navigator>
   );
 }

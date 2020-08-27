@@ -3,6 +3,7 @@ export type CartStackParamList = {
   Cart: undefined;
   CheckOut: undefined;
   OrderConfirmation: undefined;
+  AddAddress: undefined
 };
 
 export type DrawerParamList = {

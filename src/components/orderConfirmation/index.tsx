@@ -1,24 +1,12 @@
 import React, {useState} from 'react';
-import {Button,ScrollView, StyleSheet, Text, TextInput, View} from 'react-native';
+import {Button, ScrollView, StyleSheet, Text, TextInput, TouchableHighlight, View} from 'react-native';
 import {Picker} from "@react-native-community/picker";
 import {createStackNavigator} from "@react-navigation/stack";
 const Stack = createStackNavigator<any>();
 
-export default function orderConfirmationNavigation() {
-  return (
-      <Stack.Navigator>
-        <Stack.Screen name={'Confirmation'} component={orderConfirmation} />
-        <Stack.Screen name={'AddAddress'} component={addAddressView} />
-        <Stack.Screen name={'AddCard'} component={addCardView} />
-      </Stack.Navigator>
-  );
-}
-
-const orderConfirmation = ({route, navigation}:any) => {
-  //const {total} = route.params;
+export default function orderConfirmation({route, navigation}:any){
+  const {total} = route.params;
   const confirmarPedido = ()=> {};
-  const addCard = () => {};
-  const addAddress = () => {};
   const [selectedDirection, setSelectedDirection] = useState("");
   const [selectedCard, setSelectedCard] = useState("");
   const [costumerInformation, setCostumerInformation] = useState(
@@ -29,10 +17,6 @@ const orderConfirmation = ({route, navigation}:any) => {
             direccion: "31 calle 21-29, colonia Santa Elisa, zona 12"},
           {key: 2,
             direccion: "32 calle 21-30, colonia Santa Elisa, zona 12"}
-        ],
-        tarjetas:[
-          {key:3,numero:'6434'},
-          {key:4,numero:'4515'},
         ]
       }
   );
@@ -61,6 +45,10 @@ const orderConfirmation = ({route, navigation}:any) => {
               })}
             </Picker>
           </View>
+          <TouchableHighlight style={styles.addButton}
+            onPress={()=>{ navigation.navigate('AddAddress')}}>
+            <Text style={styles.addButtonText}>Add</Text>
+          </TouchableHighlight>
           <Text style={styles.label} >Metodo de pago</Text>
           <View style={styles.picker}>
             <Picker
@@ -68,27 +56,18 @@ const orderConfirmation = ({route, navigation}:any) => {
               style={styles.picker}
               onValueChange={(itemValue, itemIndex) => setSelectedCard(itemValue.toString())}
             >
-              {costumerInformation.tarjetas.map((t)=>{
-                return(
-                  <Picker.Item label={"*******"+t.numero} value={t.key} key={t.key} />
-                );
-              })}
+              <Picker.Item label={"Efectivo"} value={"Efectivo"} />
             </Picker>
           </View>
           <Text style={styles.label}>Total</Text>
-          {/*<TextInput style={styles.input} editable = {false}>Q.{total}</TextInput>**/}
+          <TextInput style={styles.input} editable = {false}>Q.{total}</TextInput>
           <Button title={'Terminar pedido'} onPress={pressHandler}/>
         </ScrollView>
       </View>
     </View>
   );
 }
-const addAddressView = () =>{
-  return <View><Text>Hello add Address</Text></View>
-}
-const addCardView = () =>{
-  return <View><Text>Hello add Card</Text></View>
-}
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -123,5 +102,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     fontSize: 17,
     marginBottom:10,
+  },
+  addButton:{
+    backgroundColor: '#5AE73D',
+    borderRadius: 5,
+    height: 30,
+    width: '20%',
+  },
+  addButtonText: {
+    color: 'white',
+    textAlign:'center',
+    fontSize: 17,
   }
 });
