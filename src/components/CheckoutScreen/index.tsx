@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import ListLayout from './listlayout'
 import {StatusBar, FlatList, View, StyleSheet, Text, TouchableOpacity} from 'react-native';
 
+//import { NavigationContainer } from '@react-navigation/native';
+//import { createStackNavigator } from '@react-navigation/stack';
+
 class CheckoutScreen extends Component {
   
   constructor(props){
@@ -57,6 +60,10 @@ class CheckoutScreen extends Component {
       ></View>
     )
   }
+
+  Confirmacion = () => {
+    this.props.navigation.navigate('PantallaCristian',{this.state.categories})
+  }
   
   render(){
     return (
@@ -71,8 +78,11 @@ class CheckoutScreen extends Component {
         ></FlatList>
         </View>
         <View style={styles.otro}>
-          <TouchableOpacity style={styles.contenedorboton}>
-            <Text style={styles.textoboton}>Confirmar Orden</Text>
+          <TouchableOpacity 
+            style={styles.contenedorboton}
+            onPress={this.Confirmacion}
+            >
+              <Text style={styles.textoboton}>Confirmar Orden</Text>
           </TouchableOpacity>
         </View>
       </View> 
