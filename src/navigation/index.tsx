@@ -13,7 +13,6 @@ export default function Navigation() {
       <Drawer.Navigator drawerType={'back'}>
         <Drawer.Screen name={'Login'} component={ExampleLogin} />
         <Drawer.Screen name={'Cart'} component={CartNavigation} />
-        {/*Agregar aqui las demas pantallas*/}
       </Drawer.Navigator>
     </NavigationContainer>
   );
