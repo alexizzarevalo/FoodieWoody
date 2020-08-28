@@ -30,6 +30,7 @@ local.properties
 *.iml
 android/app/google-services.json
 yarn.lock
+android/app/build.gradle
 
 # Visual Studio Code
 #

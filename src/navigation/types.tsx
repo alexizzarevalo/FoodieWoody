@@ -6,9 +6,6 @@ export type CartStackParamList = {
 export type DrawerParamList = {
   Login: undefined;
   Cart: undefined;
+  Register: undefined;
 };
 
-export type RegisterStackParamList = {
-  Login: undefined;
-  Register: "Prueba de register";
-};

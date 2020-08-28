@@ -12,28 +12,27 @@ import {
   StyleSheet,
   ScrollView,
   StatusBar,
-  Image
+  Image,
+  Alert
 } from 'react-native';
+import {} from '@react-navigation/drawer';
 
-import {styles} from '../Style'
+import {createStackNavigator} from '@react-navigation/stack';
+import {styles} from '../../Style'
 
 // import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 
-const Drawer = createDrawerNavigator();
+const Stack = createStackNavigator();
 
-
-export default function Navigation() {
+export default function RegisterN() {
   return (
-    <NavigationContainer>
-      <Drawer.Navigator drawerType={'back'}>
-        <Drawer.Screen name={'Register'} component={ExampleLogin} />
-        {/*Agregar aqui las demas pantallas*/}
-      </Drawer.Navigator>
-    </NavigationContainer>
+    <Stack.Navigator>
+      <Stack.Screen name={'Register'} component={Register} />
+    </Stack.Navigator>
   );
 }
 
-function ExampleLogin() {
+function Register() {
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor='#f87c09' barStyle="light-content"/>
@@ -68,8 +67,7 @@ function ExampleLogin() {
                     size={20}
                 /> */}
                 <TextInput 
-                    placeholder="Contrase;a"
-                    // secureTextEntry={data.secureTextEntry ? true : false}
+                    placeholder="Contraseña"
                     style={styles.textInput}
                     autoCapitalize="none"
                     // onChangeText={(val) => handlePasswordChange(val)}
@@ -104,18 +102,18 @@ function ExampleLogin() {
                     
                 </TouchableOpacity>
             </View>
-            <View style={styles.textPrivate}>
+            {/* <View style={styles.textPrivate}>
                 <Text style={styles.color_textPrivate}>
                     Al registrarte estas aceptando nuestros
                 </Text>
                 <Text style={[styles.color_textPrivate, {fontWeight: 'bold'}]}>{" "}Terminos de servicio</Text>
                 <Text style={styles.color_textPrivate}>{" "}y</Text>
                 <Text style={[styles.color_textPrivate, {fontWeight: 'bold'}]}>{" "}Políticas de privacidad</Text>
-            </View>
+            </View> */}
             <View style={styles.button}>
                 <TouchableOpacity
                     style={styles.signIn}
-                    onPress={() => {}}
+                    onPress={() => {signIn}}
                 >
                 {/* <LinearGradient
                     colors={['#08d4c4', '#01ab9d']}
@@ -128,16 +126,15 @@ function ExampleLogin() {
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                    // onPress={() => navigation.goBack()}
+                    onPress={() => signIn}
                     style={[styles.signIn, {
                         borderColor: '#f87c09',
-                        borderWidth: 1,
-                        marginTop: 15
+                        borderWidth: 1
                     }]}
                 >
                     <Text style={[styles.textSign, {
                         color: '#f87c09'
-                    }]}>Sign In</Text>
+                    }]}>Registrame</Text>
                 </TouchableOpacity>
             </View>
             </ScrollView>
@@ -146,3 +143,22 @@ function ExampleLogin() {
   );
 }
 
+function signIn(){
+    Alert.alert(
+        'Alert Title',
+        'My Alert Msg',
+        [
+          {
+            text: 'Ask me later',
+            onPress: () => console.log('Ask me later pressed')
+          },
+          {
+            text: 'Cancel',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel'
+          },
+          { text: 'OK', onPress: () => console.log('OK Pressed') }
+        ],
+        { cancelable: false }
+      );
+}
