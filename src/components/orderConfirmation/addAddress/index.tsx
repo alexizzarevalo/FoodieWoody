@@ -4,9 +4,10 @@ import {Picker} from "@react-native-community/picker";
 
 export default function AddAddress({route, navigation}:any){
   const [direction,setDirection]= useState({
-    pais:'', estado:'', provincia: '', address:''
+    pais:'', estado:'', ciudad: '', address:''
   })
   const pressHandler = () => {
+    console.log(direction);
     navigation.navigate('OrderConfirmation');
   }
   return(
@@ -17,28 +18,29 @@ export default function AddAddress({route, navigation}:any){
           <TextInput
             style={styles.input}
             placeholder={'Ingrese su pais'}
-            onChange={(val) => setDirection({...direction,pais:val})}
+            onChangeText={(val) => {
+              setDirection({...direction,pais:val})}}
           >
           </TextInput>
           <Text style={styles.label}>Estado</Text>
           <TextInput
             style={styles.input}
             placeholder={'Ingrese su estado'}
-            onChange={(val) => setDirection({...direction,estado:val})}
+            onChangeText={(val) => setDirection({...direction,estado:val})}
           >
           </TextInput>
           <Text style={styles.label}>Ciudad</Text>
           <TextInput
             style={styles.input}
             placeholder={'Ingrese su ciudad'}
-            onChange={(val) => setDirection({...direction,ciudad:val})}
+            onChangeText={(val) => setDirection({...direction,ciudad: val})}
           >
           </TextInput>
           <Text style={styles.label}>Direccion</Text>
           <TextInput
             style={styles.input}
             placeholder={'Ingrese su direccion'}
-            onChange={(val) => setDirection({...direction,address:val})}
+            onChangeText={(val) => setDirection({...direction,address:val})}
           >
           </TextInput>
           <Button title={'Agregar direccion'} onPress={pressHandler}/>
