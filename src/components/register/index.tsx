@@ -1,15 +1,15 @@
-import React from 'react';
+import React, { useState, useRef } from "react";
+import { DrawerScreenProps } from "@react-navigation/drawer";
 import {NavigationContainer} from '@react-navigation/native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
+import auth from "@react-native-firebase/auth";
+import prompt from "react-native-prompt-android";
+import { DrawerParamList } from "../../navigation/types";
 import {
   View, 
   Text, 
-  Button, 
   TouchableOpacity, 
-  Dimensions,
   TextInput,
-  Platform,
-  StyleSheet,
   ScrollView,
   StatusBar,
   Image,
@@ -20,19 +20,37 @@ import {} from '@react-navigation/drawer';
 import {createStackNavigator} from '@react-navigation/stack';
 import {styles} from '../../Style'
 
-// import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-
-const Stack = createStackNavigator();
-
-export default function RegisterN() {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen name={'Register'} component={Register} />
-    </Stack.Navigator>
-  );
-}
-
-function Register() {
+export default function RegisterN({ navigation }: DrawerScreenProps<DrawerParamList, 'Register'>) {
+  const Stack = createStackNavigator();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [passwordC, setPasswordC] = useState('');
+  const pswConf = useRef<TextInput>(null);
+  const psw = useRef<TextInput>(null);
+  
+  function signIn() {
+    if(email === '' || password === '' || passwordC === '') {
+      Alert.alert('Campos obligatorios', 'Todos los campos son obligatorios')
+      return;
+    }
+    if(password !== passwordC) {
+      Alert.alert('Contraseñas','Las contraseñas no coinciden')
+      return;
+    }else {
+    auth()
+      .createUserWithEmailAndPassword(email, password)
+      .then((res) => {
+        res.user.updateProfile({
+          displayName: email
+        })
+        console.log('User registered successfully!')
+        navigation.navigate('Login')
+      })
+      .catch((error:Error) => {
+        Alert.alert("Error" , "Error al registrar usuario");
+      })      
+    }
+  }
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor='#f87c09' barStyle="light-content"/>
@@ -46,13 +64,18 @@ function Register() {
       </View>
       <View style = {styles.footer}>
       <ScrollView>
-            <Text style={styles.text_footer}>Usuario</Text>
+            <Text style={styles.text_footer}>Correo</Text>
             <View style={styles.action}>
                 
                 <TextInput 
-                    placeholder="Nombre de usuario"
+                    placeholder="Correo Electrónico"
                     style={styles.textInput}
                     autoCapitalize="none"
+                    blurOnSubmit={false} //Para que no se baje el teclado cuando presiona enter
+                    value={email}
+                    onChangeText={setEmail} //Guarda el nuevo estado de email
+                    onSubmitEditing={() => { psw.current?.focus() }}
+                    //autoCompleteType = {"email"}
                     // onChangeText={(val) => textInputChange(val)}
                 />
             </View>
@@ -61,72 +84,34 @@ function Register() {
                 marginTop: 35
             }]}>Contraseña</Text>
             <View style={styles.action}>
-                {/* <Feather 
-                    name="lock"
-                    color="#05375a"
-                    size={20}
-                /> */}
                 <TextInput 
                     placeholder="Contraseña"
                     style={styles.textInput}
                     autoCapitalize="none"
-                    // onChangeText={(val) => handlePasswordChange(val)}
+                    onChangeText={setPassword} 
+                    ref ={psw}
+                    secureTextEntry = {true}
+                    onSubmitEditing={() => { pswConf.current?.focus() }} 
                 />
-                <TouchableOpacity
-                    // onPress={updateSecureTextEntry}
-                >
-                    
-                </TouchableOpacity>
             </View>
 
             <Text style={[styles.text_footer, {
                 marginTop: 35
             }]}>Confirma tu contraseña</Text>
             <View style={styles.action}>
-                {/* <Feather 
-                    name="lock"
-                    color="#05375a"
-                    size={20}
-                /> */}
                 <TextInput 
                     placeholder="Confirma tu contraseña"
-                    // secureTextEntry={data.confirm_secureTextEntry ? true : false}
                     style={styles.textInput}
                     autoCapitalize="none"
-                    // onChangeText={(val) => handleConfirmPasswordChange(val)}
+                    ref = {pswConf}
+                    onChangeText={setPasswordC} 
+                    secureTextEntry = {true}
+                    onSubmitEditing={signIn}
                 />
-                <TouchableOpacity
-                    // onPress={updateConfirmSecureTextEntry}
-                >
-                    {/* {data.secureTextEntry ?  */}
-                    
-                </TouchableOpacity>
             </View>
-            {/* <View style={styles.textPrivate}>
-                <Text style={styles.color_textPrivate}>
-                    Al registrarte estas aceptando nuestros
-                </Text>
-                <Text style={[styles.color_textPrivate, {fontWeight: 'bold'}]}>{" "}Terminos de servicio</Text>
-                <Text style={styles.color_textPrivate}>{" "}y</Text>
-                <Text style={[styles.color_textPrivate, {fontWeight: 'bold'}]}>{" "}Políticas de privacidad</Text>
-            </View> */}
             <View style={styles.button}>
                 <TouchableOpacity
-                    style={styles.signIn}
-                    onPress={() => {signIn}}
-                >
-                {/* <LinearGradient
-                    colors={['#08d4c4', '#01ab9d']}
-                    style={styles.signIn}
-                >
-                    <Text style={[styles.textSign, {
-                        color:'#fff'
-                    }]}>Sign Up</Text>
-                </LinearGradient> */}
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                    onPress={() => signIn}
+                    onPress={ signIn}
                     style={[styles.signIn, {
                         borderColor: '#f87c09',
                         borderWidth: 1
@@ -141,24 +126,4 @@ function Register() {
       </View>
     </View>
   );
-}
-
-function signIn(){
-    Alert.alert(
-        'Alert Title',
-        'My Alert Msg',
-        [
-          {
-            text: 'Ask me later',
-            onPress: () => console.log('Ask me later pressed')
-          },
-          {
-            text: 'Cancel',
-            onPress: () => console.log('Cancel Pressed'),
-            style: 'cancel'
-          },
-          { text: 'OK', onPress: () => console.log('OK Pressed') }
-        ],
-        { cancelable: false }
-      );
 }
