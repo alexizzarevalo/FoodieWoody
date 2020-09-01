@@ -1,12 +1,12 @@
 export interface Ingrediente {
-    ingrediente_nombre: String,
-    ingrediente_cantidad: Number,
-    ingrediente_unidad: String,
+    nombre: String,
+    cantidad: Number,
+    unidad: String,
 }
 
 export interface Receta {
-    receta_nombre: String,
-    receta_descripcion: String,
-    receta_precio: Number,
-    receta_ingredientes: Ingrediente[]
+    nombre: String,
+    descripcion: String,
+    precio: Number,
+    ingredientes: Ingrediente[]
 }
