@@ -1,6 +1,6 @@
 /*Screen names with their parameters*/
 export type CartStackParamList = {
-  Cart: undefined;
+  Cart:undefined;
   OrderCheckout: undefined;
   OrderConfirmation: undefined;
 };
