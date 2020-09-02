@@ -5,6 +5,12 @@ export type CartStackParamList = {
 
 export type DrawerParamList = {
   Login: undefined;
+  Search: undefined;
   Cart: undefined;
   Register: undefined;
 };
+
+export type SearchStackParamList = {
+  Search: undefined;
+  Detail: undefined;
+}
