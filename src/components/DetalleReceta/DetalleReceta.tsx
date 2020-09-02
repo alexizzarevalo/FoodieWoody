@@ -16,11 +16,11 @@ function getIngredientes(id:string): Array<Ingrediente>{
 
     return [
         {
-            nombre: 'pan',
+            nombre: 'Pan',
             imagen: ''
         },
         {
-            nombre: 'piña',
+            nombre: 'Piña',
             imagen: ''
         }
     ]
@@ -29,6 +29,20 @@ function getIngredientes(id:string): Array<Ingrediente>{
 function getNegocioNombre(negocio_id:string): string{
     return 'Dominos Pizza'
   }
+
+
+
+function SectionTitle({title}: {title: string}) {
+  return(
+    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+      <View style={{flex: 1, height: 1, backgroundColor: 'lightgray'}} />
+      <View>
+        <Text style={{width: '7em', textAlign: 'center', fontSize: 20}}>{title}</Text>
+      </View>
+      <View style={{flex: 1, height: 1, backgroundColor: 'lightgray'}} />
+    </View>
+  );
+}
 
 function DetalleReceta() {
     return (
@@ -51,15 +65,15 @@ function DetalleReceta() {
                         <Text style={styles.detailData}>Q{receta.precio}.00</Text>
                     </View>
                 </View>
-                <View>
-                    <Text>{receta.descripcion}</Text>
+                <View style={styles.blockText}>
+                    <Text style={{textAlign:"justify"}}>{receta.descripcion}</Text>
                 </View>
                 <View>
-                    <Text>Ingredientes</Text>
+                  <SectionTitle title="Ingredientes"/>
                     {getIngredientes(receta.id).map((ingrediente) => <Text>{ingrediente.nombre}</Text> )}
                 </View>
                 <View>
-                    <Text>Preparación</Text>
+                  <SectionTitle title="Preparacion"/>
                     {receta.pasos.map((paso, index) => <Text>{index + 1}. {paso}</Text> )}
                 </View>
                 <View style={{
@@ -127,6 +141,13 @@ const styles = StyleSheet.create({
     },
     detailData: {
         fontSize: 15
+    },
+    blockText: {
+        justifyContent: 'center',
+        padding: '1em'
+    },
+    sectionTitle: {
+      fontSize: 20
     }
 });
 
