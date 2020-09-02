@@ -1,9 +1,8 @@
 /*Screen names with their parameters*/
 export type CartStackParamList = {
   Cart: undefined;
-  CheckOut: undefined;
+  OrderCheckout: undefined;
   OrderConfirmation: undefined;
-  AddAddress: undefined
 };
 
 export type DrawerParamList = {

@@ -1,15 +1,38 @@
 import React, { Component } from 'react';
 import ListLayout from './listlayout'
 import {StatusBar, FlatList, View, StyleSheet, Text, TouchableOpacity} from 'react-native';
+import {StackScreenProps} from '@react-navigation/stack';
+import {CartStackParamList} from '../../navigation/types';
 
-//import { NavigationContainer } from '@react-navigation/native';
-//import { createStackNavigator } from '@react-navigation/stack';
-
-class CheckoutScreen extends Component {
-  
-  constructor(props){
-    super(props);
-    this.state = {
+export default function OrderCheckout(
+  {route,navigation}:StackScreenProps<CartStackParamList,'OrderCheckout'>) {
+  const confirmacion = () => {
+    navigation.navigate('OrderConfirmation')
+  }
+  return (
+    <View style={styles.container}>
+      {/*<View style={styles.lista}>
+          <FlatList
+          data = {this.state.categories}
+          renderItem ={ ({item}) => <ListLayout data={item}></ListLayout> }
+          horizontal = {false}
+          ListEmptyComponent = { <Text style={{ marginTop :40 }}> No hay elementos en la lista</Text>}
+          contentContainerStyle={{paddingBottom:80}}
+        ></FlatList>
+      </View>
+      */}
+      <View style={styles.otro}>
+        <TouchableOpacity
+          style={styles.contenedorboton}
+          onPress={confirmacion}
+        >
+          <Text style={styles.textoboton}>Confirmar Orden</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+}
+{/*this.state = {
       categories : [
         {
           id: 3,
@@ -51,44 +74,7 @@ class CheckoutScreen extends Component {
         },
       ]
     }
-  }
-
-  separador = () => {
-    return(
-      <View
-        style={styles.separador}
-      ></View>
-    )
-  }
-
-  Confirmacion = () => {
-    this.props.navigation.navigate('PantallaCristian',{this.state.categories})
-  }
-  
-  render(){
-    return (
-      <View style={styles.container}>
-        <View style={styles.lista}>
-        <FlatList
-          data = {this.state.categories}
-          renderItem ={ ({item}) => <ListLayout data={item}></ListLayout> }
-          horizontal = {false}
-          ListEmptyComponent = { <Text style={{ marginTop :40 }}> No hay elementos en la lista</Text>}
-          contentContainerStyle={{paddingBottom:80}} 
-        ></FlatList>
-        </View>
-        <View style={styles.otro}>
-          <TouchableOpacity 
-            style={styles.contenedorboton}
-            onPress={this.Confirmacion}
-            >
-              <Text style={styles.textoboton}>Confirmar Orden</Text>
-          </TouchableOpacity>
-        </View>
-      </View> 
-    );
-  }
-}
+  }*/}
 
 const styles = StyleSheet.create({
   container: {
@@ -123,5 +109,3 @@ const styles = StyleSheet.create({
     textTransform: "uppercase"
   }
 });
-
-export default CheckoutScreen;

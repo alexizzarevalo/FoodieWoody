@@ -1,26 +1,37 @@
-import React, {useState} from 'react';
-import {Button, ScrollView, StyleSheet, Text, TextInput, TouchableHighlight, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import { ScrollView, StyleSheet, Text, TextInput, TouchableHighlight, View} from 'react-native';
 import {Picker} from "@react-native-community/picker";
-import {createStackNavigator} from "@react-navigation/stack";
-const Stack = createStackNavigator<any>();
+import {StackScreenProps} from '@react-navigation/stack';
+import {CartStackParamList} from '../../navigation/types';
+import firestore from '@react-native-firebase/firestore'
 
-export default function orderConfirmation({route, navigation}:any){
-  const {total} = route.params;
-  const confirmarPedido = ()=> {};
-  const [selectedDirection, setSelectedDirection] = useState("");
-  const [selectedCard, setSelectedCard] = useState("");
-  const [costumerInformation, setCostumerInformation] = useState(
-      {
-        name: 'Cristian Castellanos',
-        direcciones:[
-          {key: 1,
-            direccion: "31 calle 21-29, colonia Santa Elisa, zona 12"},
-          {key: 2,
-            direccion: "32 calle 21-30, colonia Santa Elisa, zona 12"}
-        ]
-      }
-  );
-  const pressHandler = () =>{ navigation.navigate('Cart') }
+interface User{
+  nombre:string,
+  apellido:string,
+  correo:string,
+  direccion:string,
+  telefono:string,
+}
+
+export default function orderConfirmation({route, navigation}:StackScreenProps<CartStackParamList,'OrderConfirmation'>){
+  const [customerInformation, setCustomerInformation] = useState<User>({
+    nombre:'',
+    apellido:'',
+    correo:'',
+    telefono:'',
+    direccion:''
+  });
+  useEffect(()=>{
+    //Utilizar el hook para obtenerel UID
+    firestore()
+      .collection('users')
+      .doc('')
+      .get()
+      .then((documentSnapShot) =>{
+        setCustomerInformation(documentSnapShot.data() as User)
+      })
+  },[]);
+  const pressHandler = () =>{ /*confirmar el pedido*/ navigation.navigate('Cart') }
   return(
     <View style={styles.container}>
       <View style={styles.body}>
@@ -30,38 +41,39 @@ export default function orderConfirmation({route, navigation}:any){
             style={styles.input}
             editable = {false}
           >
-            {costumerInformation.name}
+            {customerInformation.nombre} {customerInformation.apellido}
+          </TextInput>
+          <Text style={styles.label}>Correo</Text>
+          <TextInput
+            style={styles.input}
+            editable = {false}
+          >
+            {customerInformation.correo}
+          </TextInput>
+          <Text style={styles.label}>Telefono</Text>
+          <TextInput
+            style={styles.input}
+            editable = {false}
+          >
+            {customerInformation.telefono}
           </TextInput>
           <Text style={styles.label} >Direccion de envio</Text>
           <View style={styles.picker}>
-            <Picker
-              selectedValue={selectedDirection}
-              onValueChange={(itemValue, itemIndex) => setSelectedDirection(itemValue.toString())}
-            >
-              {costumerInformation.direcciones.map((d)=>{
-                return(
-                  <Picker.Item label={d.direccion} value={d.direccion} key={d.key} />
-                );
-              })}
+            <Picker>
+              <Picker.Item label={customerInformation.direccion} value={customerInformation.direccion} />
             </Picker>
           </View>
-          <TouchableHighlight style={styles.addButton}
-            onPress={()=>{ navigation.navigate('AddAddress')}}>
-            <Text style={styles.addButtonText}>Add</Text>
-          </TouchableHighlight>
           <Text style={styles.label} >Metodo de pago</Text>
           <View style={styles.picker}>
-            <Picker
-              selectedValue={selectedCard}
-              style={styles.picker}
-              onValueChange={(itemValue, itemIndex) => setSelectedCard(itemValue.toString())}
-            >
+            <Picker>
               <Picker.Item label={"Efectivo"} value={"Efectivo"} />
             </Picker>
           </View>
           <Text style={styles.label}>Total</Text>
-          <TextInput style={styles.input} editable = {false}>Q.{total}</TextInput>
-          <Button title={'Terminar pedido'} onPress={pressHandler}/>
+          <TextInput style={styles.input} editable = {false}>Q.100</TextInput>
+          <TouchableHighlight style={styles.Button} onPress={pressHandler}>
+            <Text style={styles.textButton}>Terminar pedido</Text>
+          </TouchableHighlight>
         </ScrollView>
       </View>
     </View>
@@ -103,15 +115,19 @@ const styles = StyleSheet.create({
     fontSize: 17,
     marginBottom:10,
   },
-  addButton:{
-    backgroundColor: '#5AE73D',
-    borderRadius: 5,
-    height: 30,
-    width: '20%',
+  Button : {
+    elevation: 8,
+    backgroundColor: "#2d74ee",
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    margin : 15,
   },
-  addButtonText: {
-    color: 'white',
-    textAlign:'center',
-    fontSize: 17,
+  textButton : {
+    fontSize: 18,
+    color: "#fff",
+    fontWeight: "bold",
+    alignSelf: "center",
+    textTransform: "uppercase"
   }
 });
