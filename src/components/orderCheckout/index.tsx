@@ -14,13 +14,11 @@ interface ItemDetail{
   imagen:string,
 }
 
-export default function OrderCheckout(
-  {route,navigation}:any) {
-
+export default function OrderCheckout({route,navigation}:StackScreenProps<CartStackParamList, 'OrderCheckout'>) {
   const [total,setTotal] = useState(0)
   const [itemDetails,setItemDetails]=useState<ItemDetail[]>([])
   const cart:Item[] = useGlobalSelector(({cart})=>cart)
-  const confirmacion = () => {navigation.navigate('OrderConfirmation', {total:total})}
+  const confirmacion = () => {navigation.push('OrderConfirmation', {total})}
 
   useEffect(()=>{
     setItemDetails([])

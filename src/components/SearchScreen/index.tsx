@@ -3,10 +3,10 @@ import { View, Text, StyleSheet, TextInput, FlatList, ActivityIndicator } from "
 import Receta, { IReceta } from "./Receta";
 import firestore from "@react-native-firebase/firestore";
 import { StackScreenProps } from "@react-navigation/stack";
-import { SearchStackParamList, DrawerParamList } from "../../navigation/types";
+import { SearchStackParamList } from "../../navigation/types";
 import Icon from 'react-native-vector-icons/AntDesign';
 
-export default function SearchScreen({ navigation }: StackScreenProps<SearchStackParamList & DrawerParamList, 'Search'>) {
+export default function SearchScreen({ navigation }: StackScreenProps<SearchStackParamList, 'Search'>) {
     const [search, setSearch] = useState<string>('');
     const [recetas, setRecetas] = useState<IReceta[]>([]);
     const [busqueda, setBusqueda] = useState<IReceta[]>([]);
@@ -59,7 +59,7 @@ export default function SearchScreen({ navigation }: StackScreenProps<SearchStac
                                 onChangeText={setSearch}
                             />
                     }
-                    <Icon name="shoppingcart" size={40} onPress={() => { navigation.navigate('Cart') }}></Icon>
+                    <Icon name="shoppingcart" size={40} onPress={() => { navigation.push('Checkout') }}></Icon>
                 </View>
             </View>
             <View style={styles.container}>
