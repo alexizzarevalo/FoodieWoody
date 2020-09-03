@@ -28,6 +28,10 @@ build/
 .gradle
 local.properties
 *.iml
+android/app/google-services.json
+yarn.lock
+android/app/build.gradle
+android/build.gradle
 
 # Visual Studio Code
 #
