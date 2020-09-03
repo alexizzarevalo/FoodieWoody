@@ -1,3 +1,5 @@
+import { IReceta } from "../components/SearchScreen/Receta";
+
 /*Screen names with their parameters*/
 export type CartStackParamList = {
   Cart: undefined;
@@ -12,5 +14,7 @@ export type DrawerParamList = {
 
 export type SearchStackParamList = {
   Search: undefined;
-  Detail: undefined;
+  Detail: {
+    receta: IReceta
+  };
 }

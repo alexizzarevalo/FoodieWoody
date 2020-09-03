@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, TextInput, ScrollView, FlatList, ActivityIndicator } from "react-native";
+import { View, Text, StyleSheet, TextInput, FlatList, ActivityIndicator } from "react-native";
 import Receta, { IReceta } from "./Receta";
 import firestore from "@react-native-firebase/firestore";
+import { StackScreenProps } from "@react-navigation/stack";
+import { SearchStackParamList, DrawerParamList } from "../../navigation/types";
+import Icon from 'react-native-vector-icons/AntDesign';
 
-export default function SearchScreen() {
+export default function SearchScreen({ navigation }: StackScreenProps<SearchStackParamList & DrawerParamList, 'Search'>) {
     const [search, setSearch] = useState<string>('');
     const [recetas, setRecetas] = useState<IReceta[]>([]);
     const [busqueda, setBusqueda] = useState<IReceta[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
+    const [showInput, setShowInput] = useState<boolean>(false);
 
     useEffect(() => {
         setLoading(true);
@@ -41,18 +45,21 @@ export default function SearchScreen() {
                     backgroundColor: '#f87c09',
                     flex: 1,
                     flexDirection: 'row',
-                    justifyContent: 'flex-end',
+                    justifyContent: 'space-between',
                     alignItems: 'center',
                     paddingHorizontal: 20
                 }}>
-                    <Text>Icon</Text>
-                    <TextInput
-                        placeholder="Buscar..."
-                        style={{ borderBottomWidth: 1, flex: 1 }}
-                        value={search}
-                        onChangeText={setSearch}
-                    />
-                    <Text>Hola</Text>
+                    <Icon name={showInput ? 'back' : 'search1'} size={40} onPress={() => { setShowInput(state => !state) }} ></Icon>
+                    {
+                        !showInput ? <Text style={{ fontSize: 25, fontWeight: 'bold', color: 'white' }}>Foodie Woody</Text> :
+                            <TextInput
+                                placeholder="Buscar..."
+                                style={{ borderBottomWidth: 1, flex: 1, fontSize: 18 }}
+                                value={search}
+                                onChangeText={setSearch}
+                            />
+                    }
+                    <Icon name="shoppingcart" size={40} onPress={() => { navigation.navigate('Cart') }}></Icon>
                 </View>
             </View>
             <View style={styles.container}>
@@ -65,7 +72,7 @@ export default function SearchScreen() {
                             :
                             <FlatList
                                 data={busqueda}
-                                renderItem={({ item }) => <Receta key={item.id} receta={item} />}
+                                renderItem={({ item }) => <Receta key={item.id} receta={item} nav={navigation} />}
                                 keyExtractor={(item) => item.id}
                                 ListEmptyComponent={
                                     <View style={{ marginTop: 150, justifyContent: 'center', alignItems: 'center' }}>
