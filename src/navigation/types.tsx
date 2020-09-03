@@ -1,10 +1,13 @@
 import { IReceta } from "../components/SearchScreen/Receta";
-
+import {Receta} from '../models/receta'
 /*Screen names with their parameters*/
 export type CartStackParamList = {
   Cart:undefined;
   OrderCheckout: undefined;
   OrderConfirmation: undefined;
+  DetalleReceta: {
+    receta: Receta
+  }
 };
 
 export type DrawerParamList = {
