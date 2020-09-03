@@ -72,11 +72,12 @@ export default function OrderCheckout(
       keyExtractor={(item => item.receta_id)}
       horizontal={false}
     />
-    <Text>
-      {total}
-    </Text>
+    <View style={styles.total}>
+      <Text style={styles.textoTotal}>Total</Text>
+      <Text style={styles.textoTotal}>{total}</Text>
+    </View>
     <TouchableOpacity
-      style={styles.button}
+      style={styles.btn}
       onPress={confirmacion}
     >
       <Text style={styles.textButton}>Confirmar Orden</Text>
@@ -104,12 +105,7 @@ const CartItem = (props:any) =>{
     })
   }
   return (
-    <View
-      style={{flexDirection: "row",
-        justifyContent: "space-evenly",
-        padding: 5,
-        borderBottomColor: 'lightgray',
-        borderBottomWidth: 1}}>
+    <View style={styles.cartItem}>
       <View style={{flex: 0.7}}>
         <Text>
           {props.nombre}

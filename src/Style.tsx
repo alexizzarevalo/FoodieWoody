@@ -73,5 +73,51 @@ export const styles = StyleSheet.create({
   },
   color_textPrivate: {
     color: 'grey'
-  }
+  },
+  input: {
+    borderBottomWidth: 1,
+    borderColor: 'black',
+    backgroundColor: 'white',
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    fontSize: 17,
+    marginBottom:10,
+  },
+  picker: {
+    borderBottomWidth: 1,
+    borderColor: 'gray',
+    backgroundColor: 'white',
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    fontSize: 17,
+    marginBottom:10,
+  },
+  btn: {
+    alignItems: 'center',
+    backgroundColor: "#2d74ee",
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    margin : 15,
+  },
+  total:{
+    backgroundColor:'white',
+    alignContent:'center',
+    borderRadius: 10,
+  },
+  textoTotal:{
+    textAlign:'center',
+    textTransform:'uppercase',
+    color:'black',
+    fontSize: 18
+  },
+  cartItem: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    padding: 5,
+    borderBottomColor: 'lightgray',
+    borderBottomWidth: 1,
+    backgroundColor:'white',
+    margin:10,
+  },
 });

@@ -12,7 +12,6 @@ import useUser from '../../hook/useUser';
 
 interface User{
   nombre:string,
-  apellido:string,
   correo:string,
   direccion:string,
   telefono:string,
@@ -27,7 +26,6 @@ export default function orderConfirmation(
   const uid = user?.uid
   const [customerInformation, setCustomerInformation] = useState<User>({
     nombre:'',
-    apellido:'',
     correo:'',
     telefono:'',
     direccion:''
@@ -67,40 +65,40 @@ export default function orderConfirmation(
         <ScrollView>
           <Text style={styles.text_header}>Nombre</Text>
           <TextInput
-            style={styles.textInput}
+            style={styles.input}
             editable = {false}
           >
-            {customerInformation?.nombre} {customerInformation?.apellido}
+            {customerInformation?.nombre}
           </TextInput>
           <Text style={styles.text_header}>Correo</Text>
           <TextInput
-            style={styles.textInput}
+            style={styles.input}
             editable = {false}
           >
             {customerInformation?.correo}
           </TextInput>
           <Text style={styles.text_header}>Telefono</Text>
           <TextInput
-            style={styles.textInput}
+            style={styles.input}
             editable = {false}
           >
             {customerInformation?.telefono}
           </TextInput>
           <Text style={styles.text_header} >Direccion de envio</Text>
-          <View >
+          <View style={styles.picker}>
             <Picker>
               <Picker.Item label={customerInformation?.direccion} value={customerInformation?.direccion} />
             </Picker>
           </View>
           <Text style={styles.text_header} >Metodo de pago</Text>
-          <View >
+          <View style={styles.picker}>
             <Picker>
               <Picker.Item label={"Efectivo"} value={"Efectivo"} />
             </Picker>
           </View>
           <Text style={styles.text_header}>Total</Text>
-          <TextInput style={styles.textInput} editable = {false}>Q.{total}</TextInput>
-          <TouchableHighlight style={styles.button} onPress={pressHandler}>
+          <TextInput style={styles.input} editable = {false}>Q.{total}</TextInput>
+          <TouchableHighlight style={styles.btn} onPress={pressHandler}>
             <Text style={styles.textButton}>Terminar pedido</Text>
           </TouchableHighlight>
         </ScrollView>
@@ -152,11 +150,11 @@ export default function orderConfirmation(
     paddingHorizontal: 12,
     margin : 15,
   },
-  textButton : {
+  `textButton : {
     fontSize: 18,
     color: "#fff",
     fontWeight: "bold",
     alignSelf: "center",
     textTransform: "uppercase"
-  }
+  }`
 });*/

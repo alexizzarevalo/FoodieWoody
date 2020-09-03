@@ -8,6 +8,11 @@ import { GlobalDispatch } from '../../storage'
 import {styles} from '../../Style'
 
 export default function Cart({route,navigation}:StackScreenProps<CartStackParamList,'Cart'>){
+  /**
+   * Esta pantalla es de pruebas solo para probar la funcionalidad
+   * de hacer un pedido
+   */
+
   /* Cargando informacion de prueba*/
   const dispatch:GlobalDispatch = useDispatch()
   const add1=()=>{
@@ -22,18 +27,18 @@ export default function Cart({route,navigation}:StackScreenProps<CartStackParamL
 
   return (<View style={styles.container}>
     <ScrollView>
-      <Receta name="Limonada"></Receta>
-      <Receta name="Jugo de naranja"></Receta>
-      <View >
-        <TouchableOpacity
-          style={styles.button}
-          onPress={()=>{navigation.navigate('OrderCheckout')}}
-        >
-          <Text style={styles.textButton}>Checkout</Text>
-        </TouchableOpacity>
+      <View style={{marginBottom:10,marginTop:10}}>
+        <Button title={'Prueba add Pizza 1'} onPress={add1}/>
       </View>
-      <Button title={'Prueba add Pizza 1'} onPress={add1}/>
-      <Button title={'Prueba add Sopa  2'} onPress={add2}/>
+      <View style={{marginBottom:10}}>
+        <Button title={'Prueba add Sopa  2'} onPress={add2}/>
+      </View>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={()=>{navigation.navigate('OrderCheckout')}}
+      >
+        <Text style={styles.btn}>Checkout</Text>
+      </TouchableOpacity>
     </ScrollView>
   </View>);
 }
