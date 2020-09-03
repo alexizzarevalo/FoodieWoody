@@ -3,6 +3,8 @@ import { View, Text, Image, Alert } from "react-native";
 import { TouchableHighlight } from "react-native-gesture-handler";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { SearchStackParamList } from "../../../navigation/types";
+import { GlobalDispatch } from "../../../storage";
+import { useDispatch } from "react-redux";
 
 export interface IReceta {
     id: string;
@@ -20,10 +22,18 @@ type Props = {
 }
 
 export default function Receta({ receta, nav }: Props) {
-    
+    const dispatch: GlobalDispatch = useDispatch();
+
     function addToCart() {
-        // TODO: Agregar al carrito esta receta (Contexto global)
-        Alert.alert('Agregar al carrito', `¿Desea agregar ${receta.nombre} a su carrito?`)
+        Alert.alert('Agregar al carrito', `¿Desea agregar ${receta.nombre} a su carrito?`, [
+            { text: 'Cancelar' },
+            {
+                text: 'Agregar',
+                onPress: () => {
+                    dispatch({ type: 'ADD_TO_CART', payload: { receta_id: receta.id, cantidad: 1 } })
+                }
+            }
+        ])
     }
 
     function goToDetails() {

@@ -49,7 +49,7 @@ export default function SearchScreen({ navigation }: StackScreenProps<SearchStac
                     alignItems: 'center',
                     paddingHorizontal: 20
                 }}>
-                    <Icon name={showInput ? 'back' : 'search1'} size={40} onPress={() => { setShowInput(state => !state) }} ></Icon>
+                    <Icon name={showInput ? 'back' : 'search1'} size={40} onPress={() => { setShowInput(state => !state); setSearch('') }} ></Icon>
                     {
                         !showInput ? <Text style={{ fontSize: 25, fontWeight: 'bold', color: 'white' }}>Foodie Woody</Text> :
                             <TextInput
