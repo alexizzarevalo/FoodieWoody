@@ -4,11 +4,11 @@ import { Receta, Ingrediente } from '../../models/receta'
 
 var receta: Receta = {
     id: "",
-    nombre: "Pizza",
+    nombre: "Pizza Hawaiana",
     descripcion: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer porttitor sem nunc, ullamcorper iaculis sapien efficitur eu. Morbi maximus mattis sem, eget dignissim neque tempor eget. Ut viverra sagittis accumsan. ",
-    imagen: "https://homepages.cae.wisc.edu/~ece533/images/fruits.png",
+    imagen: "https://i.cbc.ca/1.3993184.1583946118!/fileImage/httpImage/hawaiian-pizza-pineapple-pizza.jpg",
     precio: 50,
-    pasos: ["Preparar el pan.", "Hornear el pan."],
+    pasos: ["Preparar el pan, y una linea bastante larga para ver como realiza el wrap la aplicacion.", "Hornear el pan."],
     negocio_id: ""
 }
 
@@ -35,11 +35,11 @@ function getNegocioNombre(negocio_id:string): string{
 function SectionTitle({title}: {title: string}) {
   return(
     <View style={{flexDirection: 'row', alignItems: 'center'}}>
-      <View style={{flex: 1, height: 1, backgroundColor: 'lightgray'}} />
-      <View>
-        <Text style={{width: '7em', textAlign: 'center', fontSize: 20}}>{title}</Text>
+      <View style={{flex: 0.3, height: 1, backgroundColor: 'lightgray'}} />
+      <View style={{flex: 0.4}}>
+        <Text style={{textAlign: 'center', fontSize: 20}}>{title}</Text>
       </View>
-      <View style={{flex: 1, height: 1, backgroundColor: 'lightgray'}} />
+      <View style={{flex: 0.3, height: 1, backgroundColor: 'lightgray'}} />
     </View>
   );
 }
@@ -69,36 +69,22 @@ function DetalleReceta() {
                     <Text style={{textAlign:"justify"}}>{receta.descripcion}</Text>
                 </View>
                 <View>
-                  <SectionTitle title="Ingredientes"/>
-                    {getIngredientes(receta.id).map((ingrediente) => <Text>{ingrediente.nombre}</Text> )}
+                    <SectionTitle title="Ingredientes"/>
+                        {getIngredientes(receta.id).map((ingrediente, index) =>                           
+                            <View key={index} style={styles.bulletItem}>
+                                <Text style={{textAlign:"justify"}}>{'\u2022 '} {ingrediente.nombre}</Text> 
+                            </View>
+                        )}
                 </View>
                 <View>
-                  <SectionTitle title="Preparacion"/>
-                    {receta.pasos.map((paso, index) => <Text>{index + 1}. {paso}</Text> )}
-                </View>
-                <View style={{
-                    flexDirection: "row", justifyContent: "space-evenly", padding: 5, borderBottomColor: 'lightgray',
-                    borderBottomWidth: 1
-                }}>
-                    <View style={{ flex: 0.1 }}>
-                        <Button
-                            title="-"
-                            onPress={() => { { () => null } }}
-                        //disabled={amount <= 0}
-                        />
-                    </View>
-                    <View style={{ flex: 0.1, justifyContent: 'center' }}>
-                        <Text style={{ textAlign: "center" }}>
-                        </Text>
-                    </View>
-                    <View style={{ flex: 0.1 }}>
-                        <Button
-                            title="+"
-                            onPress={() => { { () => null } }}
-                        />
-                    </View></View>
-                <View>
-                    <Button title="Agregar a carrito" onPress={() => console.log("deberia ir a checkout")} />
+                    <SectionTitle title="Preparacion"/>
+                    {receta.pasos.map((paso, index) => 
+                        <View key={index} style={styles.bulletItem}>
+                            <Text style={{textAlign:"justify"}}>{index + 1}. {paso}</Text>
+                        </View>
+                    )}
+
+                    
                 </View>
             </View>
         </View>)
@@ -143,11 +129,12 @@ const styles = StyleSheet.create({
         fontSize: 15
     },
     blockText: {
-        justifyContent: 'center',
-        padding: '1em'
+        padding: 20
     },
-    sectionTitle: {
-      fontSize: 20
+    bulletItem: {
+        paddingLeft: 20,
+        paddingRight:20,
+        paddingTop: 5
     }
 });
 
