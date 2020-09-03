@@ -2,7 +2,9 @@ import { IReceta } from "../components/SearchScreen/Receta";
 
 /*Screen names with their parameters*/
 export type CartStackParamList = {
-  Cart: undefined;
+  Cart:undefined;
+  OrderCheckout: undefined;
+  OrderConfirmation: undefined;
 };
 
 export type DrawerParamList = {

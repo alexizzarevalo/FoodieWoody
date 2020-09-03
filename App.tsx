@@ -13,14 +13,18 @@ import React from 'react';
 import Navigation from './src/navigation';
 import {SafeAreaView, StyleSheet, StatusBar} from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
+import {Provider} from 'react-redux';
+import {store} from './src/storage';
 
 const App = () => {
   return (
     <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView style={{flex: 1}}>
-        <Navigation />
-      </SafeAreaView>
+      <Provider store={store}>
+        <StatusBar barStyle="dark-content" />
+        <SafeAreaView style={{flex: 1}}>
+          <Navigation />
+        </SafeAreaView>
+      </Provider>
     </>
   );
 };
