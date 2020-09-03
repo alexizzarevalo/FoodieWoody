@@ -1,6 +1,11 @@
 import React from 'react';
 import { Text, View, Image, StyleSheet, Button } from 'react-native';
-import { Receta, Ingrediente } from '../../models/receta'
+import { Receta, Ingrediente } from '../../models/receta';
+import { User } from '../../models/user';
+
+import firestore from '@react-native-firebase/firestore';
+import { StackScreenProps } from '@react-navigation/stack';
+import { CartStackParamList } from '../../navigation/types';
 
 var receta: Receta = {
     id: "",
@@ -9,7 +14,7 @@ var receta: Receta = {
     imagen: "https://i.cbc.ca/1.3993184.1583946118!/fileImage/httpImage/hawaiian-pizza-pineapple-pizza.jpg",
     precio: 50,
     pasos: ["Preparar el pan, y una linea bastante larga para ver como realiza el wrap la aplicacion.", "Hornear el pan."],
-    negocio_id: ""
+    negocio_id: "users/Z2Pzggc3gem8Bx5qsbgD"
 }
 
 function getIngredientes(id:string): Array<Ingrediente>{
@@ -26,10 +31,9 @@ function getIngredientes(id:string): Array<Ingrediente>{
     ]
 }
 
-function getNegocioNombre(negocio_id:string): string{
-    return 'Dominos Pizza'
-  }
-
+function getNegocioNombre(negocio_id: string) {
+    return "Domino's Pizza";
+}
 
 
 function SectionTitle({title}: {title: string}) {
@@ -44,7 +48,8 @@ function SectionTitle({title}: {title: string}) {
   );
 }
 
-function DetalleReceta() {
+function DetalleReceta({route}:StackScreenProps<CartStackParamList, "DetalleReceta">) {
+
     return (
         <View style={styles.container}>
             <View>
