@@ -8,7 +8,7 @@ import { styles } from '../../Style';
 import { GlobalDispatch, useGlobalSelector } from '../../storage';
 import { useDispatch } from 'react-redux';
 import { Item } from '../../storage/global-state.interface';
-import useUser from '../../hook/useUser';
+import useUser from '../../hooks/useUser';
 
 interface User {
   nombre: string,
