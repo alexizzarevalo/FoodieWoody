@@ -7,5 +7,6 @@ export type DrawerParamList = {
   Login: undefined;
   Cart: undefined;
   Register: undefined;
+  Regcomplete: undefined;
 };
 

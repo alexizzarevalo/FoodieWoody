@@ -44,10 +44,11 @@ export default function RegisterN({ navigation }: DrawerScreenProps<DrawerParamL
           displayName: email
         })
         console.log('User registered successfully!')
-        navigation.navigate('Login')
+        console.log(res.user);
+        //navigation.navigate('Login')
       })
       .catch((error:Error) => {
-        Alert.alert("Error" , "Error al registrar usuario");
+        Alert.alert("Error" , "Error al registrar usuario. "+ error.message);
       })      
     }
   }
