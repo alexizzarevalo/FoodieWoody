@@ -1,103 +1,103 @@
-import React, {useEffect, useState} from 'react';
-import { ScrollView, StyleSheet, Text, TextInput, TouchableHighlight, View} from 'react-native';
-import {Picker} from "@react-native-community/picker";
-import {StackScreenProps} from '@react-navigation/stack';
-import {CartStackParamList} from '../../navigation/types';
+import React, { useEffect, useState } from 'react';
+import { ScrollView, StyleSheet, Text, TextInput, TouchableHighlight, View } from 'react-native';
+import { Picker } from "@react-native-community/picker";
+import { StackScreenProps } from '@react-navigation/stack';
+import { CartStackParamList } from '../../navigation/types';
 import firestore from '@react-native-firebase/firestore'
-import {styles} from '../../Style';
-import {GlobalDispatch, useGlobalSelector} from '../../storage';
-import {useDispatch} from 'react-redux';
-import {Item} from '../../storage/global-state.interface';
+import { styles } from '../../Style';
+import { GlobalDispatch, useGlobalSelector } from '../../storage';
+import { useDispatch } from 'react-redux';
+import { Item } from '../../storage/global-state.interface';
 import useUser from '../../hook/useUser';
 
-interface User{
-  nombre:string,
-  correo:string,
-  direccion:string,
-  telefono:string,
+interface User {
+  nombre: string,
+  correo: string,
+  direccion: string,
+  telefono: string,
 }
 
 export default function orderConfirmation(
-  {route, navigation}: any){
-  const {total} = route.params
-  const cart:Item[] = useGlobalSelector(({cart})=>cart)
-  const dispatch:GlobalDispatch=useDispatch();
-  const {user} = useUser()
-  const uid = user?.uid
+  { route, navigation }: any) {
+  const { total } = route.params
+  const cart: Item[] = useGlobalSelector(({ cart }) => cart)
+  const dispatch: GlobalDispatch = useDispatch();
+  const { user } = useUser()
   const [customerInformation, setCustomerInformation] = useState<User>({
-    nombre:'',
-    correo:'',
-    telefono:'',
-    direccion:''
+    nombre: '',
+    correo: '',
+    telefono: '',
+    direccion: ''
   });
-  useEffect(()=>{
-    firestore()
-      .collection('users')
-      .doc(uid)
-      .get()
-      .then((documentSnapShot) =>{
-        setCustomerInformation(documentSnapShot.data() as User)
-      })
-  },[]);
-  const pressHandler = () =>{
-    const aux:{}[] = [];
-    cart.map((i)=>{
-      aux.push({receta:'recetas/'+i.receta_id,cantidad:i.cantidad})
+  useEffect(() => {
+    if (user) {
+      firestore()
+        .collection('users')
+        .doc(user.uid)
+        .get()
+        .then((documentSnapShot) => {
+          setCustomerInformation(documentSnapShot.data() as User)
+          console.log(customerInformation)
+        }).catch(console.log)
+    }
+  }, [user]);
+
+  const pressHandler = () => {
+    const aux: {}[] = [];
+    cart.map((i) => {
+      aux.push({ receta: 'recetas/' + i.receta_id, cantidad: i.cantidad })
     })
 
     //Adding format to the info
     firestore()
       .collection('ordenes')
       .add({
-        user_id: 'users/'+uid,
+        user_id: 'users/' + user?.uid,
         recetas: aux
       })
       .then(() => {
         console.log('Orden added!');
       });
 
-    dispatch({type:'SET_CART',payload:[]})
+    dispatch({ type: 'SET_CART', payload: [] })
     navigation.navigate('Cart')
   }
-  return(
+  return (
     <View style={styles.container}>
       <View >
         <ScrollView>
           <Text style={styles.text_header}>Nombre</Text>
           <TextInput
             style={styles.input}
-            editable = {false}
-          >
-            {customerInformation?.nombre}
-          </TextInput>
+            editable={false}
+            value={customerInformation?.nombre}
+          />
           <Text style={styles.text_header}>Correo</Text>
           <TextInput
             style={styles.input}
-            editable = {false}
-          >
-            {customerInformation?.correo}
-          </TextInput>
+            editable={false}
+            value={customerInformation?.correo}
+          />
           <Text style={styles.text_header}>Telefono</Text>
           <TextInput
             style={styles.input}
-            editable = {false}
-          >
-            {customerInformation?.telefono}
-          </TextInput>
-          <Text style={styles.text_header} >Direccion de envio</Text>
+            editable={false}
+            value={customerInformation?.telefono}
+          />
+          <Text style={styles.text_header}>Direccion de envio</Text>
           <View style={styles.picker}>
-            <Picker>
+            {/* <Picker>
               <Picker.Item label={customerInformation?.direccion} value={customerInformation?.direccion} />
-            </Picker>
+            </Picker> */}
           </View>
           <Text style={styles.text_header} >Metodo de pago</Text>
           <View style={styles.picker}>
-            <Picker>
+            {/* <Picker>
               <Picker.Item label={"Efectivo"} value={"Efectivo"} />
-            </Picker>
+            </Picker> */}
           </View>
           <Text style={styles.text_header}>Total</Text>
-          <TextInput style={styles.input} editable = {false}>Q.{total}</TextInput>
+          <TextInput style={styles.input} editable={false} value={`Q.${total}`}/>
           <TouchableHighlight style={styles.btn} onPress={pressHandler}>
             <Text style={styles.textButton}>Terminar pedido</Text>
           </TouchableHighlight>
