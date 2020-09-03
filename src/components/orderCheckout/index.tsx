@@ -68,7 +68,10 @@ export default function OrderCheckout(
           cantidad={item.cantidad}
         />
       )}}
-      ListEmptyComponent={<Text>Vacio</Text>}
+      ListEmptyComponent={<Text style={{
+        textAlign:'center',
+        fontSize: 22,
+        color:'white'}}>Vacio</Text>}
       keyExtractor={(item => item.receta_id)}
       horizontal={false}
     />
