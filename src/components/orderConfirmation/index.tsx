@@ -4,6 +4,11 @@ import {Picker} from "@react-native-community/picker";
 import {StackScreenProps} from '@react-navigation/stack';
 import {CartStackParamList} from '../../navigation/types';
 import firestore from '@react-native-firebase/firestore'
+import {styles} from '../../Style';
+import {GlobalDispatch, useGlobalSelector} from '../../storage';
+import {useDispatch} from 'react-redux';
+import {Item} from '../../storage/global-state.interface';
+import useUser from '../../hook/useUser';
 
 interface User{
   nombre:string,
@@ -13,7 +18,13 @@ interface User{
   telefono:string,
 }
 
-export default function orderConfirmation({route, navigation}:StackScreenProps<CartStackParamList,'OrderConfirmation'>){
+export default function orderConfirmation(
+  {route, navigation}: any){
+  const {total} = route.params
+  const cart:Item[] = useGlobalSelector(({cart})=>cart)
+  const dispatch:GlobalDispatch=useDispatch();
+  const {user} = useUser()
+  const uid = user?.uid
   const [customerInformation, setCustomerInformation] = useState<User>({
     nombre:'',
     apellido:'',
@@ -22,56 +33,74 @@ export default function orderConfirmation({route, navigation}:StackScreenProps<C
     direccion:''
   });
   useEffect(()=>{
-    //Utilizar el hook para obtenerel UID
     firestore()
       .collection('users')
-      .doc('')
+      .doc(uid)
       .get()
       .then((documentSnapShot) =>{
         setCustomerInformation(documentSnapShot.data() as User)
       })
   },[]);
-  const pressHandler = () =>{ /*confirmar el pedido*/ navigation.navigate('Cart') }
+  const pressHandler = () =>{
+    const aux:{}[] = [];
+    cart.map((i)=>{
+      aux.push({receta:'recetas/'+i.receta_id,cantidad:i.cantidad})
+    })
+
+    //Adding format to the info
+    firestore()
+      .collection('ordenes')
+      .add({
+        user_id: 'users/'+uid,
+        recetas: aux
+      })
+      .then(() => {
+        console.log('Orden added!');
+      });
+
+    dispatch({type:'SET_CART',payload:[]})
+    navigation.navigate('Cart')
+  }
   return(
     <View style={styles.container}>
-      <View style={styles.body}>
+      <View >
         <ScrollView>
-          <Text style={styles.label}>Nombre</Text>
+          <Text style={styles.text_header}>Nombre</Text>
           <TextInput
-            style={styles.input}
+            style={styles.textInput}
             editable = {false}
           >
-            {customerInformation.nombre} {customerInformation.apellido}
+            {customerInformation?.nombre} {customerInformation?.apellido}
           </TextInput>
-          <Text style={styles.label}>Correo</Text>
+          <Text style={styles.text_header}>Correo</Text>
           <TextInput
-            style={styles.input}
+            style={styles.textInput}
             editable = {false}
           >
-            {customerInformation.correo}
+            {customerInformation?.correo}
           </TextInput>
-          <Text style={styles.label}>Telefono</Text>
+          <Text style={styles.text_header}>Telefono</Text>
           <TextInput
-            style={styles.input}
+            style={styles.textInput}
             editable = {false}
           >
-            {customerInformation.telefono}
+            {customerInformation?.telefono}
           </TextInput>
-          <Text style={styles.label} >Direccion de envio</Text>
-          <View style={styles.picker}>
+          <Text style={styles.text_header} >Direccion de envio</Text>
+          <View >
             <Picker>
-              <Picker.Item label={customerInformation.direccion} value={customerInformation.direccion} />
+              <Picker.Item label={customerInformation?.direccion} value={customerInformation?.direccion} />
             </Picker>
           </View>
-          <Text style={styles.label} >Metodo de pago</Text>
-          <View style={styles.picker}>
+          <Text style={styles.text_header} >Metodo de pago</Text>
+          <View >
             <Picker>
               <Picker.Item label={"Efectivo"} value={"Efectivo"} />
             </Picker>
           </View>
-          <Text style={styles.label}>Total</Text>
-          <TextInput style={styles.input} editable = {false}>Q.100</TextInput>
-          <TouchableHighlight style={styles.Button} onPress={pressHandler}>
+          <Text style={styles.text_header}>Total</Text>
+          <TextInput style={styles.textInput} editable = {false}>Q.{total}</TextInput>
+          <TouchableHighlight style={styles.button} onPress={pressHandler}>
             <Text style={styles.textButton}>Terminar pedido</Text>
           </TouchableHighlight>
         </ScrollView>
@@ -80,7 +109,7 @@ export default function orderConfirmation({route, navigation}:StackScreenProps<C
   );
 }
 
-const styles = StyleSheet.create({
+/*const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
@@ -130,4 +159,4 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     textTransform: "uppercase"
   }
-});
+});*/

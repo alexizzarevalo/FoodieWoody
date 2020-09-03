@@ -1,84 +1,149 @@
-import React, { Component } from 'react';
-import ListLayout from './listlayout'
-import {StatusBar, FlatList, View, StyleSheet, Text, TouchableOpacity} from 'react-native';
+import React, {Component, useEffect, useState} from 'react';
+import { View, Text, TouchableOpacity, Button, FlatList} from 'react-native';
 import {StackScreenProps} from '@react-navigation/stack';
 import {CartStackParamList} from '../../navigation/types';
+import {GlobalDispatch, useGlobalSelector} from '../../storage';
+import {Item} from '../../storage/global-state.interface';
+import {useDispatch} from 'react-redux';
+import {styles} from '../../Style';
+import firestore from '@react-native-firebase/firestore'
+
+interface ItemDetail{
+  nombre:string,
+  precio:number,
+  imagen:string,
+}
 
 export default function OrderCheckout(
-  {route,navigation}:StackScreenProps<CartStackParamList,'OrderCheckout'>) {
-  const confirmacion = () => {
-    navigation.navigate('OrderConfirmation')
+  {route,navigation}:any) {
+
+  const [total,setTotal] = useState(0)
+  const [itemDetails,setItemDetails]=useState<ItemDetail[]>([])
+  const cart:Item[] = useGlobalSelector(({cart})=>cart)
+  const confirmacion = () => {navigation.navigate('OrderConfirmation', {total:total})}
+
+  useEffect(()=>{
+    setItemDetails([])
+    cart.map((i:Item)=>{
+      firestore()
+        .collection('recetas')
+        .doc(i.receta_id)
+        .get()
+        .then((documentSanpshot)=>{
+          const data = documentSanpshot.data() as ItemDetail
+          const aux = itemDetails
+          aux.push({
+            nombre: data.nombre,
+            precio: data.precio,
+            imagen: data.imagen,
+          })
+          setItemDetails([...aux])
+          calcularTotal()
+        })
+    })
+  },[])
+
+  useEffect(()=>{
+    //Actualiza el total cada vez que el precio se actualiza
+    calcularTotal()
+  },[cart])
+
+  const calcularTotal = () =>{
+    let total = 0
+    cart.map((item,index)=>{
+      total+= item.cantidad* (itemDetails[index]!=undefined ?itemDetails[index].precio:0)
+    })
+    setTotal(total)
+  }
+
+  return (<View style={styles.container}>
+    <FlatList
+      data={cart}
+      renderItem={({item,index} )=>{ return(
+        <CartItem
+          nombre={itemDetails[index]?.nombre}
+          precio={itemDetails[index]?.precio}
+          imagen={itemDetails[index]?.imagen}
+          receta_id={item.receta_id}
+          cantidad={item.cantidad}
+        />
+      )}}
+      ListEmptyComponent={<Text>Vacio</Text>}
+      keyExtractor={(item => item.receta_id)}
+      horizontal={false}
+    />
+    <Text>
+      {total}
+    </Text>
+    <TouchableOpacity
+      style={styles.button}
+      onPress={confirmacion}
+    >
+      <Text style={styles.textButton}>Confirmar Orden</Text>
+    </TouchableOpacity>
+  </View>)
+}
+const CartItem = (props:any) =>{
+  const dispatch:GlobalDispatch = useDispatch()
+  const decCantidad = () => {
+    dispatch({
+      type:'DEC_QUANTITY',
+      payload:{
+        receta_id:props.receta_id,
+        cantidad:props.cantidad
+      }
+    })
+  }
+  const incCantidad = () => {
+    dispatch({
+      type:'INC_QUANTITY',
+      payload:{
+        receta_id:props.receta_id,
+        cantidad:props.cantidad
+      }
+    })
   }
   return (
-    <View style={styles.container}>
-      {/*<View style={styles.lista}>
-          <FlatList
-          data = {this.state.categories}
-          renderItem ={ ({item}) => <ListLayout data={item}></ListLayout> }
-          horizontal = {false}
-          ListEmptyComponent = { <Text style={{ marginTop :40 }}> No hay elementos en la lista</Text>}
-          contentContainerStyle={{paddingBottom:80}}
-        ></FlatList>
+    <View
+      style={{flexDirection: "row",
+        justifyContent: "space-evenly",
+        padding: 5,
+        borderBottomColor: 'lightgray',
+        borderBottomWidth: 1}}>
+      <View style={{flex: 0.7}}>
+        <Text>
+          {props.nombre}
+        </Text>
+        <Text>
+          {props.precio}
+        </Text>
       </View>
-      */}
-      <View style={styles.otro}>
-        <TouchableOpacity
-          style={styles.contenedorboton}
-          onPress={confirmacion}
-        >
-          <Text style={styles.textoboton}>Confirmar Orden</Text>
-        </TouchableOpacity>
+      <View style={{flex: 0.1}}>
+        <Button
+          title="-"
+          onPress={decCantidad}
+        />
+      </View>
+      <View style={{flex: 0.1, justifyContent: 'center'}}>
+        <Text style={{textAlign: "center"}}>
+          {props.cantidad}
+        </Text>
+      </View>
+      <View style={{flex: 0.1}}>
+        <Button
+          title="+"
+          onPress={incCantidad}
+        />
       </View>
     </View>
   );
 }
-{/*this.state = {
-      categories : [
-        {
-          id: 3,
-          name: 'Galletas',
-          cantidad: '1',
-          photo_url:
-          'https://www.telegraph.co.uk/content/dam/Travel/2019/January/france-food.jpg?imwidth=1400',
-          key: '0'
-        },
-        {
-          id: 1,
-          name: 'Coquita con Hielo',
-          cantidad: '5',
-          photo_url: 'https://ak1.picdn.net/shutterstock/videos/19498861/thumb/1.jpg',
-          key: '1'
-        },
-        {
-          id: 2,
-          name: 'Spaguetti',
-          cantidad: '11',
-          photo_url:
-            'https://images.unsplash.com/photo-1533777324565-a040eb52facd?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80',
-            key: '2'
-        },
-        {
-          id: 3,
-          name: 'Smoothies',
-          cantidad: '2',
-          photo_url:
-          'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/still-life-of-three-fresh-smoothies-in-front-of-royalty-free-image-561093647-1544042068.jpg?crop=0.715xw:0.534xh;0.0945xw,0.451xh&resize=768:*',
-          key: '3'
-        },
-        {
-          id: 4,
-          name: 'Pizza',
-          cantidad: '3',
-          photo_url: 'https://amp.businessinsider.com/images/5c084bf7bde70f4ea53f0436-750-563.jpg',
-          key: '4'
-        },
-      ]
-    }
-  }*/}
-
-const styles = StyleSheet.create({
+/*const styles = StyleSheet.create({
   container: {
     flex: 1
+  },
+  body: {
+
   },
   lista : {
     height : '100%',
@@ -108,4 +173,4 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     textTransform: "uppercase"
   }
-});
+});*/

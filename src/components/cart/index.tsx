@@ -3,21 +3,39 @@ import React, { useState } from "react";
 import {StackScreenProps} from '@react-navigation/stack';
 import {CartStackParamList} from '../../navigation/types';
 import OrderCheckout from '../orderCheckout';
+import { useDispatch } from 'react-redux'
+import { GlobalDispatch } from '../../storage'
+import {styles} from '../../Style'
 
 export default function Cart({route,navigation}:StackScreenProps<CartStackParamList,'Cart'>){
+  /* Cargando informacion de prueba*/
+  const dispatch:GlobalDispatch = useDispatch()
+  const add1=()=>{
+    dispatch({type:'ADD_TO_CART',payload:{receta_id:'JLMlOFhyoheIjAP4uieS',cantidad:1}})
+  }
+  const add2=()=>{
+    dispatch({type:'ADD_TO_CART',payload:{receta_id:'8XVTmvBhUULExQ8k1VZ0',cantidad:1}})
+  }
+  /* Fin de la informacion de prueba*/
+
   //TODO should get info from firestore
-  return (<ScrollView>
-    <Receta name="Limonada"></Receta>
-    <Receta name="Jugo de naranja"></Receta>
-    <View >
-      <TouchableOpacity
-        style={styles.contenedorboton}
-        onPress={()=>{navigation.navigate('OrderCheckout')}}
-      >
-        <Text style={styles.textoboton}>Checkout</Text>
-      </TouchableOpacity>
-    </View>
-  </ScrollView>);
+
+  return (<View style={styles.container}>
+    <ScrollView>
+      <Receta name="Limonada"></Receta>
+      <Receta name="Jugo de naranja"></Receta>
+      <View >
+        <TouchableOpacity
+          style={styles.button}
+          onPress={()=>{navigation.navigate('OrderCheckout')}}
+        >
+          <Text style={styles.textButton}>Checkout</Text>
+        </TouchableOpacity>
+      </View>
+      <Button title={'Prueba add Pizza 1'} onPress={add1}/>
+      <Button title={'Prueba add Sopa  2'} onPress={add2}/>
+    </ScrollView>
+  </View>);
 }
 function Receta(props:any){
     const [amount, changeAmount] = useState(0);
@@ -52,7 +70,7 @@ function Receta(props:any){
     );
 }
 
-const styles = StyleSheet.create({
+/*const styles = StyleSheet.create({
   contenedorboton : {
     elevation: 8,
     backgroundColor: "#2d74ee",
@@ -69,3 +87,13 @@ const styles = StyleSheet.create({
     textTransform: "uppercase"
   }
 })
+
+  /*import { GlobalDispatch } from '../../Store'
+import { useDispatch } from "react-redux"
+
+const dispatch: GlobalDispatch = useDispatch();
+
+dispatch({
+    type: 'ADD_TO_CART',
+    payload: product
+})*/
