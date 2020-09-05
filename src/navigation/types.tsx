@@ -17,7 +17,7 @@ export type DrawerParamList = {
 
 export type SearchStackParamList = {
   Search: undefined;
-  Detail: {
+  DetalleReceta: {
     receta: IReceta
   };
   Checkout: undefined;

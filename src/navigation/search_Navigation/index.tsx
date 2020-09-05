@@ -11,7 +11,7 @@ export default function SearchNavigation() {
   return (
     <Stack.Navigator>
       <Stack.Screen name={'Search'} options={{headerShown: false}} component={SearchScreen} />
-      <Stack.Screen name={'Detail'} options={{headerShown: true}} component={DetalleReceta} />
+      <Stack.Screen name={'DetalleReceta'} options={{headerShown: true}} component={DetalleReceta} />
       <Stack.Screen name={'Checkout'} component={CartNavigation} />
       {/*Agregar aqui las pantallas del carrito.
           La que está primero es la que se muestra por default*/}
