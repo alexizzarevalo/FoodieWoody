@@ -37,7 +37,7 @@ export default function Receta({ receta, nav }: Props) {
     }
 
     function goToDetails() {
-        nav.navigate('Detail', {
+        nav.navigate('DetalleReceta', {
             receta
         })
     }
