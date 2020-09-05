@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, TextInput, TouchableHighlight, View } from 'react-native';
-import { Picker } from "@react-native-community/picker";
-import { StackScreenProps } from '@react-navigation/stack';
-import { CartStackParamList } from '../../navigation/types';
+import { ScrollView, Text, TextInput, TouchableHighlight, View } from 'react-native';
 import firestore from '@react-native-firebase/firestore'
 import { styles } from '../../Style';
 import { GlobalDispatch, useGlobalSelector } from '../../storage';
 import { useDispatch } from 'react-redux';
 import { Item } from '../../storage/global-state.interface';
 import useUser from '../../hooks/useUser';
+import {Picker} from '@react-native-community/picker';
 
 interface User {
   nombre: string,
@@ -60,7 +58,7 @@ export default function orderConfirmation(
       });
 
     dispatch({ type: 'SET_CART', payload: [] })
-    navigation.navigate('Cart')
+    navigation.navigate('Search')
   }
   return (
     <View style={styles.container}>
@@ -86,15 +84,15 @@ export default function orderConfirmation(
           />
           <Text style={styles.text_header}>Direccion de envio</Text>
           <View style={styles.picker}>
-            {/* <Picker>
+            <Picker>
               <Picker.Item label={customerInformation?.direccion} value={customerInformation?.direccion} />
-            </Picker> */}
+            </Picker>
           </View>
           <Text style={styles.text_header} >Metodo de pago</Text>
           <View style={styles.picker}>
-            {/* <Picker>
+            <Picker>
               <Picker.Item label={"Efectivo"} value={"Efectivo"} />
-            </Picker> */}
+            </Picker>
           </View>
           <Text style={styles.text_header}>Total</Text>
           <TextInput style={styles.input} editable={false} value={`Q.${total}`}/>
