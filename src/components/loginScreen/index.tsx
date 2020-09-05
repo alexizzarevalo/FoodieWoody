@@ -3,7 +3,7 @@ import { View, Text, TextInput, StyleSheet, Alert, ScrollView, ToastAndroid, Act
 import { TouchableHighlight, TouchableOpacity } from "react-native-gesture-handler";
 import { DrawerScreenProps } from "@react-navigation/drawer";
 import { DrawerParamList } from "../../navigation/types";
-import auth from "@react-native-firebase/auth";
+import { firebase } from "@react-native-firebase/auth";
 import prompt from "react-native-prompt-android";
 
 const AuthError = {
@@ -24,11 +24,11 @@ export default function LoginScreen({ navigation }: DrawerScreenProps<DrawerPara
             Alert.alert('Datos faltantes', 'Debes agregar un correo y una contraseña')
             return
         }
-
         setLoading(true);
-        auth()
+        firebase.auth()
+            // auth()
             .signInWithEmailAndPassword(email.trim(), password)
-            .then((_)=> {
+            .then((_) => {
                 Alert.alert('Bienvenido', 'Has iniciado sesión correctamente');
                 setEmail('');
                 setPassword('');
@@ -55,26 +55,28 @@ export default function LoginScreen({ navigation }: DrawerScreenProps<DrawerPara
 
     function passwordRecovery() {
         function sendEmail(email: string) {
-            auth().sendPasswordResetEmail(email.trim())
-            .then(() => {
-                ToastAndroid.show('Se ha enviado un enlace a ' + email + ' si existe una cuenta con ese correo', ToastAndroid.LONG);
-            })
-            .catch((error: Error) => {
-                if (error.message.includes(AuthError.invalidEmail)) {
-                    ToastAndroid.show('Ingresa una dirección de correo válida', ToastAndroid.LONG);
-                } else {
-                    ToastAndroid.show('No se pudo enviar el enlace. Intentalo de nuevo más tarde.', ToastAndroid.LONG);
-                    console.log(error)
-                }
-            });
+            firebase
+                .auth()
+                .sendPasswordResetEmail(email.trim())
+                .then(() => {
+                    ToastAndroid.show('Se ha enviado un enlace a ' + email + ' si existe una cuenta con ese correo', ToastAndroid.LONG);
+                })
+                .catch((error: Error) => {
+                    if (error.message.includes(AuthError.invalidEmail)) {
+                        ToastAndroid.show('Ingresa una dirección de correo válida', ToastAndroid.LONG);
+                    } else {
+                        ToastAndroid.show('No se pudo enviar el enlace. Intentalo de nuevo más tarde.', ToastAndroid.LONG);
+                        console.log(error)
+                    }
+                });
         }
 
         prompt(
             'Recuperar contraseña',
             'Escribe tu correo electrónico para enviarte un enlace para recuperar tu contraseña',
             [
-             {text: 'Cancelar', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-             {text: 'OK', onPress: sendEmail},
+                { text: 'Cancelar', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+                { text: 'OK', onPress: sendEmail },
             ],
             {
                 type: 'email-address',
@@ -87,7 +89,7 @@ export default function LoginScreen({ navigation }: DrawerScreenProps<DrawerPara
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <Text style={[styles.headerText, {fontSize: 40}]}>Foodie Woody</Text>
+                <Text style={[styles.headerText, { fontSize: 40 }]}>Foodie Woody</Text>
                 <Text style={styles.headerText}>Inicia Sesión</Text>
             </View>
             <View style={styles.body}>
@@ -95,6 +97,7 @@ export default function LoginScreen({ navigation }: DrawerScreenProps<DrawerPara
 
                     <Text style={styles.label}>Correo:</Text>
                     <TextInput
+                        testID="emailInput"
                         style={styles.input}
                         placeholder={"Escribe tu correo electrónico"}
                         blurOnSubmit={false} //Para que no se baje el teclado cuando presiona enter
@@ -104,6 +107,7 @@ export default function LoginScreen({ navigation }: DrawerScreenProps<DrawerPara
                     />
                     <Text style={styles.label}>Contraseña:</Text>
                     <TextInput
+                        testID="passwordInput"
                         style={styles.input}
                         placeholder={"Escribe tu contraseña"}
                         blurOnSubmit={true}
@@ -115,10 +119,10 @@ export default function LoginScreen({ navigation }: DrawerScreenProps<DrawerPara
                     />
 
                     <View style={styles.buttonContainer}>
-                        <TouchableOpacity style={styles.loginButton} activeOpacity={0.85} onPress={login}>
+                        <TouchableOpacity testID="loginButton" style={styles.loginButton} activeOpacity={0.85} onPress={login}>
                             {
-                                loading ? <ActivityIndicator style={styles.buttonText} size={24} color={"white"}/>
-                                : <Text style={styles.buttonText}>Iniciar sesión</Text>
+                                loading ? <ActivityIndicator testID="activityIndicator" style={styles.buttonText} size={24} color={"white"} />
+                                    : <Text testID="loginButtonText" style={styles.buttonText}>Iniciar sesión</Text>
                             }
                         </TouchableOpacity>
                     </View>
@@ -134,7 +138,7 @@ export default function LoginScreen({ navigation }: DrawerScreenProps<DrawerPara
 
                         <View style={styles.buttonContainer}>
                             <TouchableHighlight style={styles.recoveryButton} underlayColor='gray' onPress={passwordRecovery}>
-                                <Text style={[styles.buttonText, {color: 'black', fontWeight: 'bold'}]}>Recuperar</Text>
+                                <Text style={[styles.buttonText, { color: 'black', fontWeight: 'bold' }]}>Recuperar</Text>
                             </TouchableHighlight>
                         </View>
                     </View>
