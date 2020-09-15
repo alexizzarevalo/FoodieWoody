@@ -37,7 +37,7 @@ export default function RegisterN({ navigation }: DrawerScreenProps<DrawerParamL
   const phoneR = useRef<TextInput>(null);
   
   function signIn() {
-    if(email === '' || password === '' || passwordC === '') {
+    if(email === '' || password === '' || passwordC === '' || name == '' || address == '' || phone == '') {
       Alert.alert('Campos obligatorios', 'Todos los campos son obligatorios')
       return;
     }
@@ -97,6 +97,7 @@ export default function RegisterN({ navigation }: DrawerScreenProps<DrawerParamL
                 
                 <TextInput 
                     placeholder="Correo Electrónico"
+                    testID="email"
                     style={styles.textInput}
                     autoCapitalize="none"
                     blurOnSubmit={false} //Para que no se baje el teclado cuando presiona enter
@@ -111,6 +112,7 @@ export default function RegisterN({ navigation }: DrawerScreenProps<DrawerParamL
             <View style={styles.action}>
                 <TextInput 
                     placeholder="Contraseña"
+                    testID="password"
                     style={styles.textInput}
                     autoCapitalize="none"
                     onChangeText={setPassword} 
@@ -126,6 +128,7 @@ export default function RegisterN({ navigation }: DrawerScreenProps<DrawerParamL
             <View style={styles.action}>
                 <TextInput 
                     placeholder="Confirma tu contraseña"
+                    testID="passwordc"
                     style={styles.textInput}
                     autoCapitalize="none"
                     ref = {pswConf}
@@ -140,6 +143,7 @@ export default function RegisterN({ navigation }: DrawerScreenProps<DrawerParamL
             <View style={styles.action}>
                 <TextInput 
                     placeholder="Nombre y Apellido"
+                    testID="name"
                     style={styles.textInput}
                     autoCapitalize="none"
                     ref = {nameR}
@@ -154,6 +158,7 @@ export default function RegisterN({ navigation }: DrawerScreenProps<DrawerParamL
             <View style={styles.action}>
                 <TextInput 
                     placeholder="Dirección"
+                    testID="address"
                     style={styles.textInput}
                     autoCapitalize="none"
                     ref = {addressR}
@@ -168,6 +173,7 @@ export default function RegisterN({ navigation }: DrawerScreenProps<DrawerParamL
             <View style={styles.action}>
                 <TextInput 
                     placeholder="Teléfono"
+                    testID="phone"
                     style={styles.textInput}
                     autoCapitalize="none"
                     ref = {phoneR}
@@ -177,11 +183,13 @@ export default function RegisterN({ navigation }: DrawerScreenProps<DrawerParamL
             </View>
             <View style={styles.button}>
                 <TouchableOpacity
+                    testID="registerBtn"
                     onPress={ signIn}
                     style={[styles.signIn, {
                         borderColor: '#f87c09',
                         borderWidth: 1
                     }]}
+                    
                 >
                     <Text style={[styles.textSign, {
                         color: '#f87c09'
