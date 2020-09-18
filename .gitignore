@@ -1,3 +1,5 @@
+coverage/
+
 # Firebase
 __mocks__/firestore-emulator.tsx
 src/firebaseConfig.tsx
