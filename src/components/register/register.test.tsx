@@ -1,4 +1,4 @@
-import '../../../__mocks__/firebase-auth-mock';
+//import '../../../__mocks__/firebase-auth-mock';
 import { Alert } from 'react-native';
 import React from 'react';
 // Note: test renderer must be required after react-native.
@@ -58,12 +58,12 @@ describe('Register Component', () => {
             <RegisterN navigation={navigation} route={route} />
         );
 
-        const emailInput = getByTestId('emailInput');
-        const passwordInput = getByTestId('passwordInput');
-        const passwordcInput = getByTestId('passwordInput');
-        const addressInput = getByTestId('passwordInput');
-        const nameInput = getByTestId('passwordInput');
-        const phoneInput = getByTestId('passwordInput');
+        const emailInput = getByTestId('email');
+        const passwordInput = getByTestId('password');
+        const passwordcInput = getByTestId('passwordc');
+        const addressInput = getByTestId('address');
+        const nameInput = getByTestId('name');
+        const phoneInput = getByTestId('phone');
 
         const email = 'p.casiano33@gmail.com';
         const password = 'Abc123';
@@ -101,27 +101,12 @@ describe('Register Component', () => {
         const regbtn = getByTestId('registerBtn');
 
         fireEvent.press(regbtn);
-
-        expect(Alert.alert).toHaveBeenCalledWith('Datos faltantes', 'Debes agregar un correo y una contraseña');
-    })
-
-    test('El boton de login debe tener un texto "Iniciar sesión"', async () => {
-        const { getByTestId, } = render(
-            <LoginScreen navigation={navigation} route={route} />
-        );
-
-        const loginButton = getByTestId('loginButton');
-        const loginButtonText = getByTestId('loginButtonText');
-
-        //@ts-ignore
-        expect(loginButtonText).toHaveTextContent('Iniciar sesión');
-        //@ts-ignore
-        expect(loginButton).toContainElement(loginButtonText);
+        expect(Alert.alert).toHaveBeenCalledWith('Campos obligatorios', 'Todos los campos son obligatorios')
     })
 
     test('Debe ejecutar la funcion de auth de firebase', async () => {
         const { getByTestId, } = render(
-            <LoginScreen navigation={navigation} route={route} />
+            <RegisterN navigation={navigation} route={route} />
         );
 
         const loginButton = getByTestId('loginButton');

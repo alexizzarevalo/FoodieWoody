@@ -1,11 +1,6 @@
 import React, { useState, useRef } from "react";
 import { DrawerScreenProps } from "@react-navigation/drawer";
-import {NavigationContainer} from '@react-navigation/native';
-import {createDrawerNavigator} from '@react-navigation/drawer';
-import auth from "@react-native-firebase/auth";
-import prompt from "react-native-prompt-android";
 import { DrawerParamList } from "../../navigation/types";
-import firestore from '@react-native-firebase/firestore'
 import {
   View, 
   Text, 
@@ -16,14 +11,15 @@ import {
   Image,
   Alert
 } from 'react-native';
-import {} from '@react-navigation/drawer';
+import firebase from "../../database/Firebase";
+import "firebase/auth" 
+import "firebase/firestore" 
+//import {} from '@react-navigation/drawer';
 
-import {createStackNavigator} from '@react-navigation/stack';
 import {styles} from '../../Style'
 
 export default function RegisterN({ navigation }: DrawerScreenProps<DrawerParamList, 'Register'>) {
-  const ref = firestore().collection('users');
-  const Stack = createStackNavigator();
+  const ref = firebase.firestore().collection('users');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordC, setPasswordC] = useState('');
@@ -45,14 +41,17 @@ export default function RegisterN({ navigation }: DrawerScreenProps<DrawerParamL
       Alert.alert('Contraseñas','Las contraseñas no coinciden')
       return;
     }else {
-    auth()
+    firebase.auth()
       .createUserWithEmailAndPassword(email, password)
       .then((res) => {
-        res.user.updateProfile({
-          displayName: email
-        });
-        addDetails(res.user.uid);
-        //navigation.navigate('Login')
+        if(res.user){
+          res.user.updateProfile({
+            displayName: email
+          });
+          addDetails(res.user.uid);
+          //navigation.navigate('Login')
+        }
+        
       })
       .catch((error:Error) => {
         let message = "";
@@ -83,11 +82,6 @@ export default function RegisterN({ navigation }: DrawerScreenProps<DrawerParamL
     <View style={styles.container}>
       <StatusBar backgroundColor='#f87c09' barStyle="light-content"/>
       <View style = {styles.header}>
-        <Image
-          source={{
-            uri: 'https://reactnative.dev/img/tiny_logo.png',
-          }}
-        />
         <Text style={styles.text_header}>¡Registrate Ahora!</Text>
       </View>
       <View style = {styles.footer}>
@@ -117,6 +111,7 @@ export default function RegisterN({ navigation }: DrawerScreenProps<DrawerParamL
                     autoCapitalize="none"
                     onChangeText={setPassword} 
                     ref = {psw}
+                    value = {password}
                     secureTextEntry = {true}
                     onSubmitEditing={() => { pswConf.current?.focus() }} 
                 />
@@ -132,6 +127,7 @@ export default function RegisterN({ navigation }: DrawerScreenProps<DrawerParamL
                     style={styles.textInput}
                     autoCapitalize="none"
                     ref = {pswConf}
+                    value = {passwordC}
                     onChangeText={setPasswordC} 
                     secureTextEntry = {true}
                     onSubmitEditing={() => { nameR.current?.focus() }} 
@@ -147,6 +143,7 @@ export default function RegisterN({ navigation }: DrawerScreenProps<DrawerParamL
                     style={styles.textInput}
                     autoCapitalize="none"
                     ref = {nameR}
+                    value = {name}
                     onChangeText={setName} 
                     onSubmitEditing={() => { addressR.current?.focus() }} 
                 />
@@ -162,6 +159,7 @@ export default function RegisterN({ navigation }: DrawerScreenProps<DrawerParamL
                     style={styles.textInput}
                     autoCapitalize="none"
                     ref = {addressR}
+                    value = {address}
                     onChangeText={setAddress} 
                     onSubmitEditing={() => { phoneR.current?.focus() }} 
                 />
@@ -177,6 +175,7 @@ export default function RegisterN({ navigation }: DrawerScreenProps<DrawerParamL
                     style={styles.textInput}
                     autoCapitalize="none"
                     ref = {phoneR}
+                    value= {phone}
                     onChangeText={setPhone} 
                     onSubmitEditing={signIn}
                 />
