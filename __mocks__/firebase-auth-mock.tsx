@@ -4,26 +4,27 @@
 // https://callstack.github.io/react-native-testing-library/
 // https://reactjs.org/docs/test-renderer.html
 
-import { FirebaseAuthTypes } from "@react-native-firebase/auth";
+const signInWithEmailAndPassword = (email: string, password: string): Promise<string> => {
+  return Promise.resolve('Ha iniciado sesion')
+}
 
-const signInWithEmailAndPassword = (email: string, password: string): Promise<FirebaseAuthTypes.UserCredential> => {
-  return new Promise((resolve, reject) => {
-      return reject(new Error('auth/wrong-password'))
-  })
+const sendPasswordResetEmail = (email: string): Promise<string> => {
+  return Promise.resolve('Hola');
 }
 
 export const auth = () => {
   return {
-    signInWithEmailAndPassword
+    signInWithEmailAndPassword,
+    sendPasswordResetEmail
   }
 }
 
-
+export const firebase = {
+  auth
+}
 export default jest.mock('@react-native-firebase/auth', () => {
   return {
-    firebase: {
-      auth
-    }
+    firebase
   }
 });
 

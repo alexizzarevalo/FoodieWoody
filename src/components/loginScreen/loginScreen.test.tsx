@@ -1,18 +1,22 @@
-import '../../../__mocks__/firebase-auth-mock';
-import { Alert } from 'react-native';
+import firebaseAuthMock, { firebase } from '../../../__mocks__/firebase-auth-mock';
 import React from 'react';
-// Note: test renderer must be required after react-native.
+import { Alert, ToastAndroid } from 'react-native';
 import renderer, { act } from 'react-test-renderer';
-import { render, fireEvent, waitFor } from "@testing-library/react-native";
-import LoginScreen from '.';
+import { render, fireEvent } from "@testing-library/react-native";
+import LoginScreen, { passwordRecovery, sendEmail } from '.';
+import * as g from "react-native-prompt-android";
 
 jest.spyOn(Alert, 'alert');
+ToastAndroid.show = jest.fn();
+
 const navigation: any = null;
 const route: any = null;
 
 describe('Login Screen Component', () => {
     test('Debe renderizar correctamente', () => {
-        renderer.create(<LoginScreen navigation={navigation} route={route} />)
+        act(() => {
+            renderer.create(<LoginScreen navigation={navigation} route={route} />)
+        })
     })
 
     test('Los campos deben estar vacios al iniciar', () => {
@@ -49,11 +53,11 @@ describe('Login Screen Component', () => {
         const email = 'dalexis.da@gmail.com';
         const password = 'password';
 
-        fireEvent.changeText(emailInput, email);
-        fireEvent.changeText(passwordInput, password);
-
+        act(() => {fireEvent.changeText(emailInput, email)})
         //@ts-ignore
         expect(emailInput).toHaveProp('value', email);
+
+        act(() => {fireEvent.changeText(passwordInput, password)})
         //@ts-ignore
         expect(passwordInput).toHaveProp('value', password);
     });
@@ -65,7 +69,7 @@ describe('Login Screen Component', () => {
 
         const loginButton = getByTestId('loginButton');
 
-        fireEvent.press(loginButton);
+        act(() => fireEvent.press(loginButton))
 
         expect(Alert.alert).toHaveBeenCalledWith('Datos faltantes', 'Debes agregar un correo y una contraseña');
     })
@@ -84,28 +88,188 @@ describe('Login Screen Component', () => {
         expect(loginButton).toContainElement(loginButtonText);
     })
 
-    test('Debe ejecutar la funcion de auth de firebase', async () => {
-        const { getByTestId, } = render(
-            <LoginScreen navigation={navigation} route={route} />
-        );
+    describe('Ejecucion de auth firebase', () => {
+        test('Debe ejecutar la funcion de auth de firebase con respuesta positiva', async () => {
+            const signInWithEmailAndPassword = jest.fn(() => {
+                return Promise.resolve();
+            })
+            //@ts-ignore
+            jest.spyOn(firebase, 'auth').mockImplementation(() => {
+                return { signInWithEmailAndPassword }
+            })
 
-        const loginButton = getByTestId('loginButton');
+            const { getByTestId, } = render(
+                <LoginScreen navigation={navigation} route={route} />
+            );
 
-        const emailInput = getByTestId('emailInput');
-        const passwordInput = getByTestId('passwordInput');
+            const loginButton = getByTestId('loginButton');
+            const emailInput = getByTestId('emailInput');
+            const passwordInput = getByTestId('passwordInput');
 
-        const email = 'dalexis.da@gmail.com';
-        const password = 'password';
+            act(() => fireEvent.changeText(emailInput, 'dalexis.da@gmail.com'))
+            act(() => fireEvent.changeText(passwordInput, 'password'))
+            await act(async () => await fireEvent.press(loginButton))
+        })
 
-        fireEvent.changeText(emailInput, email);
-        fireEvent.changeText(passwordInput, password);
+        test('Debe ejecutar la funcion de auth de firebase con respuesta negativa', async () => {
+            const signInWithEmailAndPassword = jest.fn(() => {
+                return Promise.reject(new Error('auth/wrong-password'));
+            })
+            //@ts-ignore
+            jest.spyOn(firebase, 'auth').mockImplementation(() => {
+                return { signInWithEmailAndPassword }
+            })
 
-        fireEvent.press(loginButton);
-        // act(() => {
-        // })
-        // const activityIndicator = await waitFor(() => getByTestId('activityIndicator'));
-        // // @ts-ignore
-        // expect(loginButton).toContainElement(activityIndicator);
+            const { getByTestId, } = render(
+                <LoginScreen navigation={navigation} route={route} />
+            );
+
+            const loginButton = getByTestId('loginButton');
+            const emailInput = getByTestId('emailInput');
+            const passwordInput = getByTestId('passwordInput');
+
+            act(() => fireEvent.changeText(emailInput, 'dalexis.da@gmail.com'))
+            act(() => fireEvent.changeText(passwordInput, 'password'))
+            await act(async () => await fireEvent.press(loginButton))
+        })
+
+        test('Debe ejecutar la funcion de auth de firebase con respuesta negativa', async () => {
+            const signInWithEmailAndPassword = jest.fn(() => {
+                return Promise.reject(new Error('auth/invalid-email'));
+            })
+            //@ts-ignore
+            jest.spyOn(firebase, 'auth').mockImplementation(() => {
+                return { signInWithEmailAndPassword }
+            })
+
+            const { getByTestId, } = render(
+                <LoginScreen navigation={navigation} route={route} />
+            );
+
+            const loginButton = getByTestId('loginButton');
+            const emailInput = getByTestId('emailInput');
+            const passwordInput = getByTestId('passwordInput');
+
+            act(() => fireEvent.changeText(emailInput, 'dalexis.da@gmail.com'))
+            act(() => fireEvent.changeText(passwordInput, 'password'))
+            await act(async () => await fireEvent.press(loginButton))
+        })
+
+        test('Debe ejecutar la funcion de auth de firebase con respuesta negativa', async () => {
+            const signInWithEmailAndPassword = jest.fn(() => {
+                return Promise.reject(new Error('auth/user-not-found'));
+            })
+            //@ts-ignore
+            jest.spyOn(firebase, 'auth').mockImplementation(() => {
+                return { signInWithEmailAndPassword }
+            })
+
+            const { getByTestId, } = render(
+                <LoginScreen navigation={navigation} route={route} />
+            );
+
+            const loginButton = getByTestId('loginButton');
+            const emailInput = getByTestId('emailInput');
+            const passwordInput = getByTestId('passwordInput');
+
+            act(() => fireEvent.changeText(emailInput, 'dalexis.da@gmail.com'))
+            act(() => fireEvent.changeText(passwordInput, 'password'))
+            await act(async () => await fireEvent.press(loginButton))
+        })
+
+        test('Debe ejecutar la funcion de auth de firebase con respuesta negativa', async () => {
+            const signInWithEmailAndPassword = jest.fn(() => {
+                return Promise.reject(new Error('auth/too-many-requests'));
+            })
+            //@ts-ignore
+            jest.spyOn(firebase, 'auth').mockImplementation(() => {
+                return { signInWithEmailAndPassword }
+            })
+
+            const { getByTestId, } = render(
+                <LoginScreen navigation={navigation} route={route} />
+            );
+
+
+            const loginButton = getByTestId('loginButton');
+            const emailInput = getByTestId('emailInput');
+            const passwordInput = getByTestId('passwordInput');
+
+            act(() => fireEvent.changeText(emailInput, 'dalexis.da@gmail.com'))
+            act(() => fireEvent.changeText(passwordInput, 'password'))
+            await act(async () => await fireEvent.press(loginButton))
+        })
+
+        test('Debe ejecutar la funcion de auth de firebase con respuesta negativa', async () => {
+            const signInWithEmailAndPassword = jest.fn(() => {
+                return Promise.reject(new Error('error del servidor'));
+            })
+            //@ts-ignore
+            jest.spyOn(firebase, 'auth').mockImplementation(() => {
+                return { signInWithEmailAndPassword }
+            })
+
+            const { getByTestId, } = render(
+                <LoginScreen navigation={navigation} route={route} />
+            );
+
+            const loginButton = getByTestId('loginButton');
+            const emailInput = getByTestId('emailInput');
+            const passwordInput = getByTestId('passwordInput');
+
+            act(() => fireEvent.changeText(emailInput, 'dalexis.da@gmail.com'))
+            act(() => fireEvent.changeText(passwordInput, 'password'))
+            await act(async () => await fireEvent.press(loginButton))
+        })
+    })
+
+    describe('Funcion para enviar un correo', () => {
+        test('Debe enviar un email al correo indicado', async () => {
+            const sendPasswordResetEmail = jest.fn(() => {
+                return Promise.resolve();
+            })
+
+            //@ts-ignore
+            jest.spyOn(firebase, 'auth').mockImplementation(() => {
+                return { sendPasswordResetEmail }
+            })
+
+            sendEmail('dalexis.da@gmail.com')
+            expect(sendPasswordResetEmail).toHaveBeenCalled();
+        })
+
+        test('Debe retornar un error de email invalido', async () => {
+            const sendPasswordResetEmail = jest.fn(() => {
+                return Promise.reject(new Error('auth/invalid-email'));
+            })
+            //@ts-ignore
+            jest.spyOn(firebase, 'auth').mockImplementation(() => {
+                return { sendPasswordResetEmail }
+            })
+
+            sendEmail('dalexis.da@gmail')
+            expect(sendPasswordResetEmail).toHaveBeenCalled();
+        })
+
+        test('Debe retornar un error de que no se pudo enviar el email', async () => {
+            const sendPasswordResetEmail = jest.fn(() => {
+                return Promise.reject(new Error('error de servidor'));
+            })
+            //@ts-ignore
+            jest.spyOn(firebase, 'auth').mockImplementation(() => {
+                return { sendPasswordResetEmail }
+            })
+
+            sendEmail('dalexis.da@gmail.com')
+            expect(sendPasswordResetEmail).toHaveBeenCalled();
+        })
+    })
+
+    test('Debe llamarse un prompt', async () => {
+        const prompt = jest.spyOn(g, 'default');
+
+        passwordRecovery();
+        expect(prompt).toHaveBeenCalled();
     })
 });
 

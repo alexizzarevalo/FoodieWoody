@@ -1,10 +1,10 @@
 import React, { useState, useRef } from "react";
 import { View, Text, TextInput, StyleSheet, Alert, ScrollView, ToastAndroid, ActivityIndicator } from "react-native";
 import { TouchableHighlight, TouchableOpacity } from "react-native-gesture-handler";
-import { DrawerScreenProps } from "@react-navigation/drawer";
+import { DrawerNavigationProp, DrawerScreenProps } from "@react-navigation/drawer";
 import { DrawerParamList } from "../../navigation/types";
 import { firebase } from "@react-native-firebase/auth";
-import prompt from "react-native-prompt-android";
+import * as prompt from "react-native-prompt-android";
 
 const AuthError = {
     wrongPassword: 'auth/wrong-password',
@@ -13,25 +13,100 @@ const AuthError = {
     tooManyRequests: 'auth/too-many-requests',
 }
 
-export default function LoginScreen({ navigation }: DrawerScreenProps<DrawerParamList, 'Login'>) {
+export function sendEmail(email: string) {
+    firebase
+        .auth()
+        .sendPasswordResetEmail(email.trim())
+        .then(() => {
+            ToastAndroid.show('Se ha enviado un enlace a ' + email + ' si existe una cuenta con ese correo', ToastAndroid.LONG);
+        })
+        .catch((error: Error) => {
+            if (error.message.includes(AuthError.invalidEmail)) {
+                ToastAndroid.show('Ingresa una dirección de correo válida', ToastAndroid.LONG);
+            } else {
+                ToastAndroid.show('No se pudo enviar el enlace. Intentalo de nuevo más tarde.', ToastAndroid.LONG);
+            }
+        });
+}
+
+export function passwordRecovery() {
+    prompt.default(
+        'Recuperar contraseña',
+        'Escribe tu correo electrónico para enviarte un enlace para recuperar tu contraseña',
+        [
+            { text: 'Cancelar', style: 'cancel' },
+            { text: 'OK', onPress: sendEmail },
+        ],
+        {
+            type: 'email-address',
+            cancelable: false,
+            placeholder: 'ejemplo@gmail.com'
+        }
+    );
+}
+
+
+
+export function signIn(email: string, password: string) {
+    return new Promise((resolve, reject) => {
+        firebase.auth()
+            .signInWithEmailAndPassword(email, password)
+            .then(resolve)
+            .catch(reject);
+    })
+}
+
+export function useElements({ navigation }: { navigation: DrawerNavigationProp<DrawerParamList, "Login"> }) {
     const [loading, setLoading] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const passwordRef = useRef<TextInput>(null); //Para hacer referencia al Input del password
+    const passwordRef = useRef<TextInput>(null);
+
+    const handleEmailChange = (email: string) => {
+        setEmail(email);
+    }
+
+    const handlePasswordChange = (password: string) => {
+        setPassword(password);
+    };
+
+    const focusPasswordField = () => { passwordRef.current?.focus() }
+
+    const goToRegister = () => navigation.navigate('Register')
+
+    return {
+        emailField: {
+            onChangeText: handleEmailChange,
+            value: email
+        },
+        passwordField: {
+            onChangeText: handlePasswordChange,
+            value: password,
+            focus: focusPasswordField,
+            ref: passwordRef
+        },
+        loading: {
+            value: loading,
+            change: setLoading
+        },
+        goToRegister,
+    }
+}
+
+export default function LoginScreen({ navigation }: DrawerScreenProps<DrawerParamList, 'Login'>) {
+    const { loading, emailField, passwordField, goToRegister } = useElements({ navigation });
 
     function login() {
-        if (email.length === 0 || password.length === 0) {
+        if (emailField.value.length === 0 || passwordField.value.length === 0) {
             Alert.alert('Datos faltantes', 'Debes agregar un correo y una contraseña')
             return
         }
-        setLoading(true);
-        firebase.auth()
-            // auth()
-            .signInWithEmailAndPassword(email.trim(), password)
-            .then((_) => {
+        loading.change(true);
+        signIn(emailField.value.trim(), passwordField.value)
+            .then(() => {
                 Alert.alert('Bienvenido', 'Has iniciado sesión correctamente');
-                setEmail('');
-                setPassword('');
+                emailField.onChangeText('');
+                passwordField.onChangeText('');
             })
             .catch((error: Error) => {
                 if (error.message.includes(AuthError.wrongPassword)) {
@@ -44,46 +119,8 @@ export default function LoginScreen({ navigation }: DrawerScreenProps<DrawerPara
                     Alert.alert('Inicio de sesión bloqueado', 'Demasiados intentos de inicio de sesión fallidos. Por favor, inténtelo de nuevo más tarde.')
                 } else {
                     Alert.alert('Error', 'No se pudo iniciar sesión. Intentalo nuevamente');
-                    console.log(error)
                 }
-            }).finally(() => { setLoading(false) });
-    }
-
-    function register() {
-        navigation.navigate('Register');
-    }
-
-    function passwordRecovery() {
-        function sendEmail(email: string) {
-            firebase
-                .auth()
-                .sendPasswordResetEmail(email.trim())
-                .then(() => {
-                    ToastAndroid.show('Se ha enviado un enlace a ' + email + ' si existe una cuenta con ese correo', ToastAndroid.LONG);
-                })
-                .catch((error: Error) => {
-                    if (error.message.includes(AuthError.invalidEmail)) {
-                        ToastAndroid.show('Ingresa una dirección de correo válida', ToastAndroid.LONG);
-                    } else {
-                        ToastAndroid.show('No se pudo enviar el enlace. Intentalo de nuevo más tarde.', ToastAndroid.LONG);
-                        console.log(error)
-                    }
-                });
-        }
-
-        prompt(
-            'Recuperar contraseña',
-            'Escribe tu correo electrónico para enviarte un enlace para recuperar tu contraseña',
-            [
-                { text: 'Cancelar', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
-                { text: 'OK', onPress: sendEmail },
-            ],
-            {
-                type: 'email-address',
-                cancelable: false,
-                placeholder: 'ejemplo@gmail.com'
-            }
-        );
+            }).finally(() => { loading.change(false) })
     }
 
     return (
@@ -101,9 +138,9 @@ export default function LoginScreen({ navigation }: DrawerScreenProps<DrawerPara
                         style={styles.input}
                         placeholder={"Escribe tu correo electrónico"}
                         blurOnSubmit={false} //Para que no se baje el teclado cuando presiona enter
-                        value={email}
-                        onChangeText={setEmail} //Guarda el nuevo estado de email
-                        onSubmitEditing={() => { passwordRef.current?.focus() }} // Cuando presiona enter, se pone el focus en el textInput de password
+                        value={emailField.value}
+                        onChangeText={emailField.onChangeText} //Guarda el nuevo estado de email
+                        onSubmitEditing={passwordField.focus} // Cuando presiona enter, se pone el focus en el textInput de password
                     />
                     <Text style={styles.label}>Contraseña:</Text>
                     <TextInput
@@ -112,23 +149,23 @@ export default function LoginScreen({ navigation }: DrawerScreenProps<DrawerPara
                         placeholder={"Escribe tu contraseña"}
                         blurOnSubmit={true}
                         secureTextEntry={true} // Modo contraseña
-                        value={password}
-                        onChangeText={setPassword} //Guarda el nuevo estado de password
-                        ref={passwordRef}
+                        value={passwordField.value}
+                        onChangeText={passwordField.onChangeText} //Guarda el nuevo estado de password
+                        ref={passwordField.ref}
                         onSubmitEditing={login} // Cuando presiona enter, se ejecuta la funcion login
                     />
 
                     <View style={styles.buttonContainer}>
                         <TouchableOpacity testID="loginButton" style={styles.loginButton} activeOpacity={0.85} onPress={login}>
                             {
-                                loading ? <ActivityIndicator testID="activityIndicator" style={styles.buttonText} size={24} color={"white"} />
+                                loading.value ? <ActivityIndicator testID="activityIndicator" style={styles.buttonText} size={24} color={"white"} />
                                     : <Text testID="loginButtonText" style={styles.buttonText}>Iniciar sesión</Text>
                             }
                         </TouchableOpacity>
                     </View>
 
                     <View style={styles.buttonContainer}>
-                        <TouchableOpacity style={styles.registerButton} activeOpacity={0.85} onPress={register}>
+                        <TouchableOpacity style={styles.registerButton} activeOpacity={0.85} onPress={goToRegister}>
                             <Text style={styles.buttonText}>Registrarse</Text>
                         </TouchableOpacity>
                     </View>
@@ -137,8 +174,8 @@ export default function LoginScreen({ navigation }: DrawerScreenProps<DrawerPara
                         <Text style={styles.recoveryText}>¿Se te olvido tu contraseña?</Text>
 
                         <View style={styles.buttonContainer}>
-                            <TouchableHighlight style={styles.recoveryButton} underlayColor='gray' onPress={passwordRecovery}>
-                                <Text style={[styles.buttonText, { color: 'black', fontWeight: 'bold' }]}>Recuperar</Text>
+                            <TouchableHighlight testID="recoveryButton" style={styles.recoveryButton} underlayColor='gray' onPress={passwordRecovery}>
+                                <Text testID="recoveryButtonText" style={[styles.buttonText, { color: 'black', fontWeight: 'bold' }]}>Recuperar</Text>
                             </TouchableHighlight>
                         </View>
                     </View>
@@ -217,3 +254,28 @@ const styles = StyleSheet.create({
 
     }
 })
+
+
+        // firebase.auth()
+        //     // auth()
+        //     .signInWithEmailAndPassword(email.trim(), password)
+        //     .then((data) => {
+        //         console.log(data)
+        //         Alert.alert('Bienvenido', 'Has iniciado sesión correctamente');
+        //         setEmail('');
+        //         setPassword('');
+        //     })
+        //     .catch((error: Error) => {
+        //         if (error.message.includes(AuthError.wrongPassword)) {
+        //             Alert.alert('Contraseña incorrecta', 'La contraseña que has ingresado es incorrecta');
+        //         } else if (error.message.includes(AuthError.invalidEmail)) {
+        //             Alert.alert('Correo inválido', 'Ingresa una dirección de correo válida');
+        //         } else if (error.message.includes(AuthError.userNotFound)) {
+        //             Alert.alert('Cuenta no encontrada', 'No existe una cuenta con el correo especificado');
+        //         } else if (error.message.includes(AuthError.tooManyRequests)) {
+        //             Alert.alert('Inicio de sesión bloqueado', 'Demasiados intentos de inicio de sesión fallidos. Por favor, inténtelo de nuevo más tarde.')
+        //         } else {
+        //             Alert.alert('Error', 'No se pudo iniciar sesión. Intentalo nuevamente');
+        //             console.log(error)
+        //         }
+        //     }).finally(() => { setLoading(false) });
