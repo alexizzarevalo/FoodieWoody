@@ -33,6 +33,62 @@ export default function CrearReceta(){
                 />
                 </View>
             </View>
+            <View style={styles.continput}>
+                <View style={styles.top}>
+                    <Text> Descripción: </Text>
+                </View>
+                <View style={styles.bottom}>
+                <TextInput
+                    style={styles.texti}
+                    underlineColorAndroid = "transparent"
+                    placeholder=""
+                    onChangeText={text => setText(text)}
+                    defaultValue=""
+                />
+                </View>
+            </View>
+            <View style={styles.continput}>
+                <View style={styles.top}>
+                    <Text> Ingredientes: </Text>
+                </View>
+                <View style={styles.bottom}>
+                <TextInput
+                    style={styles.texti}
+                    underlineColorAndroid = "transparent"
+                    placeholder=""
+                    onChangeText={text => setText(text)}
+                    defaultValue=""
+                />
+                </View>
+            </View>
+            <View style={styles.continput}>
+                <View style={styles.top}>
+                    <Text> Tiempo de preparación: </Text>
+                </View>
+                <View style={styles.bottom}>
+                <TextInput
+                    style={styles.texti}
+                    underlineColorAndroid = "transparent"
+                    placeholder=""
+                    onChangeText={text => setText(text)}
+                    defaultValue=""
+                />
+                </View>
+            </View>
+            <View style={styles.continput}>
+                <View style={styles.top}>
+                    <Text> Costo total: </Text>
+                </View>
+                <View style={styles.bottom}>
+                <TextInput
+                    style={styles.texti}
+                    underlineColorAndroid = "transparent"
+                    placeholder=""
+                    onChangeText={text => setText(text)}
+                    defaultValue=""
+                />
+                </View>
+            </View>
         </View>
       </SafeAreaView>
     </>
