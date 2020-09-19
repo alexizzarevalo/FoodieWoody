@@ -1,15 +1,18 @@
 import firebaseAuthMock, { firebase } from '../../../__mocks__/firebase-auth-mock';
 import React from 'react';
-import { Alert, ToastAndroid } from 'react-native';
+import { Alert, ToastAndroid, View } from 'react-native';
 import renderer, { act } from 'react-test-renderer';
 import { render, fireEvent } from "@testing-library/react-native";
-import LoginScreen, { passwordRecovery, sendEmail } from '.';
+import LoginScreen, { passwordRecovery, sendEmail, useElements } from '.';
 import * as g from "react-native-prompt-android";
+import { shallow } from "enzyme";
 
 jest.spyOn(Alert, 'alert');
 ToastAndroid.show = jest.fn();
 
-const navigation: any = null;
+const navigation: any = {
+    navigate: (path: string) => {}
+};
 const route: any = null;
 
 describe('Login Screen Component', () => {
@@ -53,11 +56,11 @@ describe('Login Screen Component', () => {
         const email = 'dalexis.da@gmail.com';
         const password = 'password';
 
-        act(() => {fireEvent.changeText(emailInput, email)})
+        act(() => { fireEvent.changeText(emailInput, email) })
         //@ts-ignore
         expect(emailInput).toHaveProp('value', email);
 
-        act(() => {fireEvent.changeText(passwordInput, password)})
+        act(() => { fireEvent.changeText(passwordInput, password) })
         //@ts-ignore
         expect(passwordInput).toHaveProp('value', password);
     });
@@ -72,6 +75,16 @@ describe('Login Screen Component', () => {
         act(() => fireEvent.press(loginButton))
 
         expect(Alert.alert).toHaveBeenCalledWith('Datos faltantes', 'Debes agregar un correo y una contraseña');
+    })
+
+    test('Debe navegar hacia la pantalla de registro', async () => {
+        const { getByTestId, } = render(
+            <LoginScreen navigation={navigation} route={route} />
+        );
+
+        const registerButton = getByTestId('goToRegisterButton');
+
+        act(() => fireEvent.press(registerButton))
     })
 
     test('El boton de login debe tener un texto "Iniciar sesión"', async () => {
@@ -271,5 +284,18 @@ describe('Login Screen Component', () => {
         passwordRecovery();
         expect(prompt).toHaveBeenCalled();
     })
+
+    describe('useLoginElements', () => {
+        const Elements = () => {
+            const props = useElements({ navigation });
+            //@ts-ignore
+            return <View {...props} />;
+        }; // since hooks can only be used inside a function component we wrap it inside one
+        const container = shallow(<Elements />);
+
+        it('El campo de password debe tener una funcion focus', () => {
+            container.prop('passwordField').focus();
+        });
+    });
 });
 

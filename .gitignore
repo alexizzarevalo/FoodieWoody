@@ -69,3 +69,4 @@ buck-out/
 
 #API Keys
 ios/GoogleService-Info.plist
+/coverage
