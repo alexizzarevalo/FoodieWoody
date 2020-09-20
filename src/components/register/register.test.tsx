@@ -103,7 +103,7 @@ describe('Register Component', () => {
         fireEvent.press(regbtn);
         expect(Alert.alert).toHaveBeenCalledWith('Campos obligatorios', 'Todos los campos son obligatorios')
     })
-
+        
     test('Debe ejecutar la funcion de auth de firebase', async () => {
         const { getByTestId, } = render(
             <RegisterN navigation={navigation} route={route} />

@@ -52,6 +52,17 @@ buck-out/
 *.keystore
 !debug.keystore
 
+#test
+coverage/
+
+database-debug.log
+firebase-debug.log
+firestore-debug.log
+firestore.indexes.json
+firestore.rules
+pubsub-debug.log
+ui-debug.log
+
 # fastlane
 #
 # It is recommended to not store the screenshots in the git repo. Instead, use fastlane to re-generate the
