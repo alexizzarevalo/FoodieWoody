@@ -254,28 +254,3 @@ const styles = StyleSheet.create({
 
     }
 })
-
-
-        // firebase.auth()
-        //     // auth()
-        //     .signInWithEmailAndPassword(email.trim(), password)
-        //     .then((data) => {
-        //         console.log(data)
-        //         Alert.alert('Bienvenido', 'Has iniciado sesión correctamente');
-        //         setEmail('');
-        //         setPassword('');
-        //     })
-        //     .catch((error: Error) => {
-        //         if (error.message.includes(AuthError.wrongPassword)) {
-        //             Alert.alert('Contraseña incorrecta', 'La contraseña que has ingresado es incorrecta');
-        //         } else if (error.message.includes(AuthError.invalidEmail)) {
-        //             Alert.alert('Correo inválido', 'Ingresa una dirección de correo válida');
-        //         } else if (error.message.includes(AuthError.userNotFound)) {
-        //             Alert.alert('Cuenta no encontrada', 'No existe una cuenta con el correo especificado');
-        //         } else if (error.message.includes(AuthError.tooManyRequests)) {
-        //             Alert.alert('Inicio de sesión bloqueado', 'Demasiados intentos de inicio de sesión fallidos. Por favor, inténtelo de nuevo más tarde.')
-        //         } else {
-        //             Alert.alert('Error', 'No se pudo iniciar sesión. Intentalo nuevamente');
-        //             console.log(error)
-        //         }
-        //     }).finally(() => { setLoading(false) });
