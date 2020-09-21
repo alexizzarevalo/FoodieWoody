@@ -7,7 +7,7 @@ import {Item} from '../../storage/global-state.interface';
 import {useDispatch} from 'react-redux';
 import {styles} from '../../Style';
 import firestore from '@react-native-firebase/firestore'
-import CartItem from './CartItem/CartItem.component';
+import CartItem from './CarItem/CarItem.component';
 
 interface ItemDetail{
   nombre:string,

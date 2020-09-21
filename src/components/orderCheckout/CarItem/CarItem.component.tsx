@@ -4,26 +4,23 @@ import {Button, Text, View} from 'react-native';
 import {styles} from '../../../Style';
 import React from 'react';
 
+const dispatchWrapper = (
+  action_type:any,
+  receta_id:any,
+  cantidad:any,
+  dispatch:any
+) => {
+  dispatch({
+    type: action_type,
+    payload:{
+      receta_id:receta_id,
+      cantidad:cantidad
+    }
+  })
+}
+
 export default function CartItem(props:any){
   const dispatch:GlobalDispatch = useDispatch()
-  const decCantidad = () => {
-    dispatch({
-      type:'DEC_QUANTITY',
-      payload:{
-        receta_id:props.receta_id,
-        cantidad:props.cantidad
-      }
-    })
-  }
-  const incCantidad = () => {
-    dispatch({
-      type:'INC_QUANTITY',
-      payload:{
-        receta_id:props.receta_id,
-        cantidad:props.cantidad
-      }
-    })
-  }
   return (
     <View style={styles.cartItem}>
       <View style={{flex: 0.7}}>
@@ -37,7 +34,8 @@ export default function CartItem(props:any){
       <View style={{flex: 0.1}}>
         <Button
           title="-"
-          onPress={decCantidad}
+          onPress={() => {dispatchWrapper('DEC_QUANTITY',
+            props.receta_id, props.cantidad, dispatch)}}
         />
       </View>
       <View style={{flex: 0.1, justifyContent: 'center'}}>
@@ -48,7 +46,8 @@ export default function CartItem(props:any){
       <View style={{flex: 0.1}}>
         <Button
           title="+"
-          onPress={incCantidad}
+          onPress={() => {dispatchWrapper('INC_QUANTITY',
+            props.receta_id, props.cantidad, dispatch)}}
         />
       </View>
     </View>
