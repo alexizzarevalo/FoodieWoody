@@ -2,105 +2,114 @@ import React, { useState, useEffect } from 'react';
 import { Text, View, Image, StyleSheet } from 'react-native';
 import { Receta, Ingrediente } from '../../models/receta';
 
-import firestore from '@react-native-firebase/firestore';
+import { firestore } from '../../firebaseConfig';
+
 import { StackScreenProps } from '@react-navigation/stack';
 import { SearchStackParamList } from '../../navigation/types';
 
-function SectionTitle({title}: {title: string}) {
+export function SectionTitle({title}: {title: string}) {
   return(
     <View style={{flexDirection: 'row', alignItems: 'center'}}>
       <View style={{flex: 0.3, height: 1, backgroundColor: 'lightgray'}} />
       <View style={{flex: 0.4}}>
-        <Text style={{textAlign: 'center', fontSize: 20}}>{title}</Text>
+        <Text testID='title' style={{textAlign: 'center', fontSize: 20}}>{title}</Text>
       </View>
       <View style={{flex: 0.3, height: 1, backgroundColor: 'lightgray'}} />
     </View>
   );
 }
 
+export function StaticComponent({negocio_nombre, receta, ingredientes}:
+    {negocio_nombre: string, receta: Receta, ingredientes: Array<Ingrediente>}){
+
+    return (<View style={styles.container}>
+        <View>
+            <View>
+                <View style={styles.orangeFranja}></View>
+                <View style={styles.imageWrapper}>
+                    <Image testID="imagen" style={styles.image} source={{ uri: receta.imagen }} />
+                    <Text testID="nombre" style={styles.name}>{receta.nombre}</Text>
+                </View>
+            </View>
+            <View>
+                <View style={styles.metdataWrapper}>
+                    <Text style={styles.metadata}>Vendedor:</Text>
+                    <Text testID='negocio_nombre' style={styles.detailData}>{negocio_nombre}</Text>
+                </View>
+                <View style={styles.metdataWrapper}>
+                    <Text style={styles.metadata}>Precio:</Text>
+                    <Text testID="precio" style={styles.detailData}>Q{receta.precio}</Text>
+                </View>
+            </View>
+            <View style={styles.blockText}>
+                <Text testID="descripcion" style={{textAlign:"justify"}}>{receta.descripcion}</Text>
+            </View>
+            <View>
+                <SectionTitle title="Ingredientes"/>
+                    {ingredientes.map((ingrediente, index) =>                           
+                        <View key={index} style={styles.bulletItem}>
+                            <Text style={{textAlign:"justify"}}>{'\u2022 '} {ingrediente.nombre}</Text> 
+                        </View>
+                    )}
+            </View>
+            <View>
+                <SectionTitle title="Preparacion"/>
+                {receta.pasos?.map((paso, index) => 
+                    <View key={index} style={styles.bulletItem}>
+                        <Text style={{textAlign:"justify"}}>{index + 1}. {paso}</Text>
+                    </View>
+                )}
+            </View>
+        </View>
+    </View>)
+}
+
+export function getNegocioNombre(negocio_id:string, stateCallback: Function){
+    firestore().doc(negocio_id).get().then(
+        doc => {
+            stateCallback(doc.get('nombre') as string)
+        }
+    )
+}
+
+export function getIngredientes(receta_id:string, stateCallback:Function){
+    firestore().collection('ingredientes_receta').where('receta_id', '==', 'recetas/' + receta_id).get().then(
+        query => {
+            const ids = Array<string>("0");
+            query.docs.forEach(doc => {
+                ids.push((doc.data().ingrediente_id as string).substring('ingredientes/'.length));
+            })
+
+            firestore().collection('ingredientes').where('id', 'in', ids).get().then(
+                query => {
+                    const ingredientes = Array<Ingrediente>();
+                    query.docs.forEach(doc => {
+                        ingredientes.push(doc.data() as Ingrediente);
+                    })
+
+                    stateCallback(ingredientes);
+                }
+            )
+        }
+    );
+}
+
 function DetalleReceta({route}:StackScreenProps<SearchStackParamList, "DetalleReceta">) {
 
     const receta: Receta = route.params.receta;
+
     const [negocio_nombre, setNegocioNombre] = useState('');
     const [ingredientes, setIngredientes] = useState(Array<Ingrediente>());
 
-    function getNegocioNombre(negocio_id: string) {
-        firestore().doc(negocio_id).get().then(
-            doc => {
-                setNegocioNombre(doc.get('nombre') as string)
-            }
-        )
-    }
-
-    function getIngredientes(){
-        firestore().collection('ingredientes_receta').where('receta_id', '==', 'recetas/' + receta.id).get().then(
-            query => {
-                const ids = Array<string>();
-                query.docs.forEach(doc => {
-                    ids.push((doc.data().ingrediente_id as string).substring('ingredientes/'.length));
-                })
-                console.log(ids);
-
-                firestore().collection('ingredientes').where('id', 'in', ids).get().then(
-                    query => {
-                        const ingredientes = Array<Ingrediente>();
-                        query.docs.forEach(doc => {
-                            ingredientes.push(doc.data() as Ingrediente);
-                        })
-
-                        setIngredientes(ingredientes);
-                    }
-                )
-            }
-        );
-    }
-
     useEffect(() => {
-        getNegocioNombre(receta.negocio_id);
-        getIngredientes();
+        getNegocioNombre(receta.negocio_id, setNegocioNombre);
+        getIngredientes(receta.id, setIngredientes);
     }, [])
 
-    return (
-        <View style={styles.container}>
-            <View>
-                <View>
-                    <View style={styles.orangeFranja}></View>
-                    <View style={styles.imageWrapper}>
-                        <Image style={styles.image} source={{ uri: receta.imagen }} />
-                        <Text style={styles.name}>{receta.nombre}</Text>
-                    </View>
-                </View>
-                <View>
-                    <View style={styles.metdataWrapper}>
-                        <Text style={styles.metadata}>Vendedor:</Text>
-                        <Text style={styles.detailData}>{negocio_nombre}</Text>
-                    </View>
-                    <View style={styles.metdataWrapper}>
-                        <Text style={styles.metadata}>Precio:</Text>
-                        <Text style={styles.detailData}>Q{receta.precio}.00</Text>
-                    </View>
-                </View>
-                <View style={styles.blockText}>
-                    <Text style={{textAlign:"justify"}}>{receta.descripcion}</Text>
-                </View>
-                <View>
-                    <SectionTitle title="Ingredientes"/>
-                        {ingredientes.map((ingrediente, index) =>                           
-                            <View key={index} style={styles.bulletItem}>
-                                <Text style={{textAlign:"justify"}}>{'\u2022 '} {ingrediente.nombre}</Text> 
-                            </View>
-                        )}
-                </View>
-                <View>
-                    <SectionTitle title="Preparacion"/>
-                    {receta.pasos.map((paso, index) => 
-                        <View key={index} style={styles.bulletItem}>
-                            <Text style={{textAlign:"justify"}}>{index + 1}. {paso}</Text>
-                        </View>
-                    )}
-                </View>
-            </View>
-        </View>)
+    if(ingredientes.length != 0 && negocio_nombre.length != 0)
+        return <StaticComponent receta={receta} negocio_nombre={negocio_nombre} ingredientes={ingredientes}/>
+    else
+        return <></>
 }
 
 const styles = StyleSheet.create({

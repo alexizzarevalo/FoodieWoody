@@ -1,47 +1,11 @@
 import React from "react";
-import { View, Text, Image, Alert } from "react-native";
-import { TouchableHighlight } from "react-native-gesture-handler";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { SearchStackParamList } from "../../../navigation/types";
-import { GlobalDispatch } from "../../../storage";
-import { useDispatch } from "react-redux";
+import { View, Text, Image, TouchableHighlight } from "react-native";
+import { useRecetaElements, Props } from "./state";
 
-export interface IReceta {
-    id: string;
-    nombre: string;
-    descripcion: string;
-    imagen: string;
-    precio: number;
-    pasos: string[];
-    negocio_id: string;
-}
-
-type Props = {
-    receta: IReceta;
-    nav: StackNavigationProp<SearchStackParamList, 'Search'>;
-}
+export type { IReceta } from './state';
 
 export default function Receta({ receta, nav }: Props) {
-    const dispatch: GlobalDispatch = useDispatch();
-
-    function addToCart() {
-        Alert.alert('Agregar al carrito', `¿Desea agregar ${receta.nombre} a su carrito?`, [
-            { text: 'Cancelar' },
-            {
-                text: 'Agregar',
-                onPress: () => {
-                    dispatch({ type: 'ADD_TO_CART', payload: { receta_id: receta.id, cantidad: 1 } })
-                }
-            }
-        ])
-    }
-
-    function goToDetails() {
-        nav.navigate('DetalleReceta', {
-            receta
-        })
-    }
-
+    const { addToCart, goToDetails } = useRecetaElements({ nav, receta });
     return (
         <View style={{
             flex: 1, flexDirection: 'row',

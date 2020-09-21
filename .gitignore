@@ -1,3 +1,16 @@
+coverage/
+
+# Firebase
+__mocks__/firestore-emulator.tsx
+src/firebaseConfig.tsx
+firebase-debug.log
+firestore-debug.log
+firestore.indexes.json
+firestore.rules
+firebase.json
+.firebaserc
+ui-debug.log
+
 # OSX
 #
 .DS_Store
@@ -83,3 +96,4 @@ ui-debug.log
 
 #API Keys
 ios/GoogleService-Info.plist
+/coverage

@@ -7,9 +7,11 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "firebase-emulator": "firebase emulators:start --import=./test_data --export-on-exit"
   },
   "dependencies": {
+    "@firebase/testing": "^0.20.11",
     "@fortawesome/fontawesome-svg-core": "^1.2.30",
     "@fortawesome/free-solid-svg-icons": "^5.14.0",
     "@fortawesome/react-native-fontawesome": "^0.2.5",
@@ -51,7 +53,7 @@
     "babel-jest": "^25.1.0",
     "eslint": "^6.5.1",
     "firebase-mock": "^2.3.2",
-    "jest": "^25.1.0",
+    "jest": "^25.5.4",
     "metro-react-native-babel-preset": "^0.59.0",
     "prettier": "^2.0.4",
     "react-test-renderer": "16.13.1",

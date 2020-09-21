@@ -1,12 +1,33 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, TextInput, FlatList, ActivityIndicator } from "react-native";
 import Receta, { IReceta } from "./Receta";
-import firestore from "@react-native-firebase/firestore";
-import { StackScreenProps } from "@react-navigation/stack";
+import { firebase, FirebaseFirestoreTypes } from "@react-native-firebase/firestore";
+import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack";
 import { SearchStackParamList } from "../../navigation/types";
 import Icon from 'react-native-vector-icons/AntDesign';
 
-export default function SearchScreen({ navigation }: StackScreenProps<SearchStackParamList, 'Search'>) {
+export function getRecetas(): Promise<FirebaseFirestoreTypes.QuerySnapshot> {
+    return new Promise((resolve) => {
+        firebase.firestore()
+            .collection('recetas')
+            .get()
+            .then(resolve)
+    })
+}
+
+export function SetRecetas(setLoading: any, setRecetas: any, setBusqueda: any) {
+    setLoading(true);
+        getRecetas().then(snapshot => {
+            const recetas: IReceta[] = [];
+            snapshot.forEach(docSnapshot => {
+                recetas.push({ ...docSnapshot.data() as IReceta, id: docSnapshot.id })
+            })
+            setRecetas(recetas);
+            setBusqueda(recetas);
+        }).finally(() => { setLoading(false) })
+}
+
+export function useElements({ navigation }: { navigation: StackNavigationProp<SearchStackParamList, "Search"> }) {
     const [search, setSearch] = useState<string>('');
     const [recetas, setRecetas] = useState<IReceta[]>([]);
     const [busqueda, setBusqueda] = useState<IReceta[]>([]);
@@ -14,18 +35,7 @@ export default function SearchScreen({ navigation }: StackScreenProps<SearchStac
     const [showInput, setShowInput] = useState<boolean>(false);
 
     useEffect(() => {
-        setLoading(true);
-        firestore()
-            .collection('recetas')
-            .get()
-            .then(snapshot => {
-                const recetas: IReceta[] = [];
-                snapshot.forEach(docSnapshot => {
-                    recetas.push({ ...docSnapshot.data() as IReceta, id: docSnapshot.id })
-                })
-                setRecetas(recetas);
-                setBusqueda(recetas);
-            }).finally(() => { setLoading(false) })
+        SetRecetas(setLoading, setRecetas, setBusqueda);
     }, [])
 
     useEffect(() => {
@@ -38,6 +48,31 @@ export default function SearchScreen({ navigation }: StackScreenProps<SearchStac
         })
     }, [search])
 
+    const onPressIcon = () => { setShowInput(state => !state); setSearch('') }
+
+    const onPressCartIcon = () => { navigation.push('Checkout') }
+
+    return {
+        search: {
+            icon: {
+                name: showInput ? 'back' : 'search1',
+                onPress: onPressIcon
+            },
+            showInput,
+            value: search,
+            onChangeText: setSearch
+        },
+        cartIcon: {
+            onPress: onPressCartIcon
+        },
+        recetas: busqueda,
+        loading
+    }
+}
+
+export default function SearchScreen({ navigation }: StackScreenProps<SearchStackParamList, 'Search'>) {
+    const { loading, recetas, search, cartIcon } = useElements({ navigation })
+
     return (
         <View style={styles.container}>
             <View style={styles.searchContainer}>
@@ -49,17 +84,17 @@ export default function SearchScreen({ navigation }: StackScreenProps<SearchStac
                     alignItems: 'center',
                     paddingHorizontal: 20
                 }}>
-                    <Icon name={showInput ? 'back' : 'search1'} size={40} onPress={() => { setShowInput(state => !state); setSearch('') }} ></Icon>
+                    <Icon name={search.icon.name} size={40} onPress={search.icon.onPress} ></Icon>
                     {
-                        !showInput ? <Text style={{ fontSize: 25, fontWeight: 'bold', color: 'white' }}>Foodie Woody</Text> :
+                        !search.showInput ? <Text style={{ fontSize: 25, fontWeight: 'bold', color: 'white' }}>Foodie Woody</Text> :
                             <TextInput
                                 placeholder="Buscar..."
                                 style={{ borderBottomWidth: 1, flex: 1, fontSize: 18 }}
-                                value={search}
-                                onChangeText={setSearch}
+                                value={search.value}
+                                onChangeText={search.onChangeText}
                             />
                     }
-                    <Icon name="shoppingcart" size={40} onPress={() => { navigation.push('Checkout') }}></Icon>
+                    <Icon name="shoppingcart" size={40} onPress={cartIcon.onPress}></Icon>
                 </View>
             </View>
             <View style={styles.container}>
@@ -71,7 +106,7 @@ export default function SearchScreen({ navigation }: StackScreenProps<SearchStac
                             </View>
                             :
                             <FlatList
-                                data={busqueda}
+                                data={recetas}
                                 renderItem={({ item }) => <Receta key={item.id} receta={item} nav={navigation} />}
                                 keyExtractor={(item) => item.id}
                                 ListEmptyComponent={
