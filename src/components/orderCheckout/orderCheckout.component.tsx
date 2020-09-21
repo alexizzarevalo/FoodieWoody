@@ -7,6 +7,7 @@ import {Item} from '../../storage/global-state.interface';
 import {useDispatch} from 'react-redux';
 import {styles} from '../../Style';
 import firestore from '@react-native-firebase/firestore'
+import CartItem from './CartItem/CartItem.component';
 
 interface ItemDetail{
   nombre:string,
@@ -85,89 +86,3 @@ export default function OrderCheckout({route,navigation}:StackScreenProps<CartSt
     </TouchableOpacity>
   </View>)
 }
-const CartItem = (props:any) =>{
-  const dispatch:GlobalDispatch = useDispatch()
-  const decCantidad = () => {
-    dispatch({
-      type:'DEC_QUANTITY',
-      payload:{
-        receta_id:props.receta_id,
-        cantidad:props.cantidad
-      }
-    })
-  }
-  const incCantidad = () => {
-    dispatch({
-      type:'INC_QUANTITY',
-      payload:{
-        receta_id:props.receta_id,
-        cantidad:props.cantidad
-      }
-    })
-  }
-  return (
-    <View style={styles.cartItem}>
-      <View style={{flex: 0.7}}>
-        <Text>
-          {props.nombre}
-        </Text>
-        <Text>
-          {props.precio}
-        </Text>
-      </View>
-      <View style={{flex: 0.1}}>
-        <Button
-          title="-"
-          onPress={decCantidad}
-        />
-      </View>
-      <View style={{flex: 0.1, justifyContent: 'center'}}>
-        <Text style={{textAlign: "center"}}>
-          {props.cantidad}
-        </Text>
-      </View>
-      <View style={{flex: 0.1}}>
-        <Button
-          title="+"
-          onPress={incCantidad}
-        />
-      </View>
-    </View>
-  );
-}
-/*const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  },
-  body: {
-
-  },
-  lista : {
-    height : '100%',
-    width : '100%',
-    marginTop: StatusBar.currentHeight || 0,
-    backgroundColor: '#F87C09'
-  },
-  otro : {
-    height : 60,
-    width : '100%',
-    zIndex : 5,
-    position : 'absolute',
-    bottom : 5,
-  },
-  contenedorboton : {
-    elevation: 8,
-    backgroundColor: "#2d74ee",
-    borderRadius: 10,
-    paddingVertical: 10,
-    paddingHorizontal: 12,
-    margin : 15,
-  },
-  textoboton : {
-    fontSize: 18,
-    color: "#fff",
-    fontWeight: "bold",
-    alignSelf: "center",
-    textTransform: "uppercase"
-  }
-});*/
