@@ -2,7 +2,7 @@
 
 import React from 'react';
 import renderer from 'react-test-renderer'
-import OrderConfirmation from '../src/components/orderConfirmation'
+import OrderConfirmation from './orderConfirmation.component'
 
 describe('Order confirmation screen component', () => {
   test('renders', () => {
