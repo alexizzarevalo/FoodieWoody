@@ -1,10 +1,11 @@
 import firebase from '../../../__mocks__/firebase-register-mock';
+import firestore from '../../../__mocks__/firebase-firestore-mock'
 import { Alert } from 'react-native';
 import React from 'react';
 // Note: test renderer must be required after react-native.
 import renderer, { act } from 'react-test-renderer';
 import { render, fireEvent, waitFor } from "@testing-library/react-native";
-import RegisterN, {respuesta, addDetails} from '.';
+import RegisterN, {respuesta, respuestaErr, addDetails} from '.';
 
 jest.spyOn(Alert, 'alert');
 const navigation: any = null;
@@ -182,6 +183,50 @@ describe('Register Component', () => {
 
         
         await act(async () => await fireEvent.press(regbtn))
+    })
+
+    test('RespuestaErr', async () => {
+        let erro = Error("email-already-in-use")
+        respuestaErr(erro);
+        expect(Alert.alert).toHaveBeenCalledWith("Error" , "Error al registrar usuario. "+ "El correo ya ha sido registrado");
+    })
+
+    
+
+    test('Solo respuesta', async () => {
+        // const set = jest.fn(() => {
+        //     return Promise.resolve();
+        // })
+
+        // //@ts-ignore
+        // jest.spyOn(firebase, 'firestore').mockImplementation(() => {
+        //     return { set }
+        // })
+
+        let res = {
+            user:'123456789',
+            email:'correo_generico@gmail.com'
+        }
+        respuesta(res,'nombre generico', 'direccion generica','5559292')
+        expect(addDetails).toHaveBeenCalled();
+    })
+
+    test('AgregarDetalles', async () => {
+        const set = jest.fn(() => {
+            return Promise.resolve();
+        })
+
+        //@ts-ignore
+        jest.spyOn(firebase, 'firestore').mockImplementation(() => {
+            return { set }
+        })
+
+        let res = {
+            user:'123456789',
+            email:'correo_generico@gmail.com'
+        }
+        respuesta(res,'nombre generico', 'direccion generica','5559292')
+        expect(set).toHaveBeenCalled();
     })
 });
 

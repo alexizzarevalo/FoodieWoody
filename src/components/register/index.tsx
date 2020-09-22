@@ -52,18 +52,7 @@ export default function RegisterN({ navigation }: DrawerScreenProps<DrawerParamL
     }
   }
 
-  function respuestaErr(error:Error){
-    let message = "";
-    if(error.message.includes("email-already-in-use")){
-      message = "El correo ya ha sido registrado";
-    }else if (error.message.includes("weak-password")){
-      message = "La contraseña es muy corta";
-    }else if (error.message.includes("invalid-email")){
-      message = "Formato de correo inválido";
-    }
-    Alert.alert("Error" , "Error al registrar usuario. "+ message);
-    console.log(error);
-  }
+
   
 
   return (
@@ -212,4 +201,17 @@ export async function addDetails(idt:string, rol:string = "usuario", email: stri
     rol: rol,
     telefono: phone
   });
+}
+
+export function respuestaErr(error:Error){
+  let message = "";
+  if(error.message.includes("email-already-in-use")){
+    message = "El correo ya ha sido registrado";
+  }else if (error.message.includes("weak-password")){
+    message = "La contraseña es muy corta";
+  }else if (error.message.includes("invalid-email")){
+    message = "Formato de correo inválido";
+  }
+  Alert.alert("Error" , "Error al registrar usuario. "+ message);
+  //console.log(error);
 }
