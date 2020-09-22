@@ -1,11 +1,6 @@
 import React, { useState, useRef } from "react";
 import { DrawerScreenProps } from "@react-navigation/drawer";
-import {NavigationContainer} from '@react-navigation/native';
-import {createDrawerNavigator} from '@react-navigation/drawer';
-import auth from "@react-native-firebase/auth";
-import prompt from "react-native-prompt-android";
 import { DrawerParamList } from "../../navigation/types";
-import firestore from '@react-native-firebase/firestore'
 import {
   View, 
   Text, 
@@ -16,14 +11,19 @@ import {
   Image,
   Alert
 } from 'react-native';
-import {} from '@react-navigation/drawer';
+import firebase from "../../database/Firebase";
+import "firebase/auth" 
+import "firebase/firestore" 
+//import {} from '@react-navigation/drawer';
 
-import {createStackNavigator} from '@react-navigation/stack';
 import {styles} from '../../Style'
+import { sendEmail } from "../loginScreen";
+
+const ref = firebase.firestore().collection('users');
+
+
 
 export default function RegisterN({ navigation }: DrawerScreenProps<DrawerParamList, 'Register'>) {
-  const ref = firestore().collection('users');
-  const Stack = createStackNavigator();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordC, setPasswordC] = useState('');
@@ -35,9 +35,9 @@ export default function RegisterN({ navigation }: DrawerScreenProps<DrawerParamL
   const nameR = useRef<TextInput>(null);
   const addressR = useRef<TextInput>(null);
   const phoneR = useRef<TextInput>(null);
-  
+
   function signIn() {
-    if(email === '' || password === '' || passwordC === '') {
+    if(email === '' || password === '' || passwordC === '' || name == '' || address == '' || phone == '') {
       Alert.alert('Campos obligatorios', 'Todos los campos son obligatorios')
       return;
     }
@@ -45,49 +45,20 @@ export default function RegisterN({ navigation }: DrawerScreenProps<DrawerParamL
       Alert.alert('Contraseñas','Las contraseñas no coinciden')
       return;
     }else {
-    auth()
+    firebase.auth()
       .createUserWithEmailAndPassword(email, password)
-      .then((res) => {
-        res.user.updateProfile({
-          displayName: email
-        });
-        addDetails(res.user.uid);
-        //navigation.navigate('Login')
-      })
-      .catch((error:Error) => {
-        let message = "";
-        if(error.message.includes("email-already-in-use")){
-          message = "El correo ya ha sido registrado";
-        }else if (error.message.includes("weak-password")){
-          message = "La contraseña es muy corta";
-        }else if (error.message.includes("invalid-email")){
-          message = "Formato de correo inválido";
-        }
-        Alert.alert("Error" , "Error al registrar usuario. "+ message);
-        console.log(error);
-      })      
+      .then((res:any) => respuesta(res, name, address, phone))
+      .catch((error:Error) => respuestaErr(error))      
     }
   }
 
-  async function addDetails(idt:string, rol:string = "usuario") {
-    await ref.doc(idt).set({
-      correo: email,
-      direccion: address,
-      nombre: name,
-      rol: rol,
-      telefono: phone
-    });
-  }
+
+  
 
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor='#f87c09' barStyle="light-content"/>
       <View style = {styles.header}>
-        <Image
-          source={{
-            uri: 'https://reactnative.dev/img/tiny_logo.png',
-          }}
-        />
         <Text style={styles.text_header}>¡Registrate Ahora!</Text>
       </View>
       <View style = {styles.footer}>
@@ -97,6 +68,7 @@ export default function RegisterN({ navigation }: DrawerScreenProps<DrawerParamL
                 
                 <TextInput 
                     placeholder="Correo Electrónico"
+                    testID="email"
                     style={styles.textInput}
                     autoCapitalize="none"
                     blurOnSubmit={false} //Para que no se baje el teclado cuando presiona enter
@@ -111,10 +83,12 @@ export default function RegisterN({ navigation }: DrawerScreenProps<DrawerParamL
             <View style={styles.action}>
                 <TextInput 
                     placeholder="Contraseña"
+                    testID="password"
                     style={styles.textInput}
                     autoCapitalize="none"
                     onChangeText={setPassword} 
                     ref = {psw}
+                    value = {password}
                     secureTextEntry = {true}
                     onSubmitEditing={() => { pswConf.current?.focus() }} 
                 />
@@ -126,9 +100,11 @@ export default function RegisterN({ navigation }: DrawerScreenProps<DrawerParamL
             <View style={styles.action}>
                 <TextInput 
                     placeholder="Confirma tu contraseña"
+                    testID="passwordc"
                     style={styles.textInput}
                     autoCapitalize="none"
                     ref = {pswConf}
+                    value = {passwordC}
                     onChangeText={setPasswordC} 
                     secureTextEntry = {true}
                     onSubmitEditing={() => { nameR.current?.focus() }} 
@@ -140,9 +116,11 @@ export default function RegisterN({ navigation }: DrawerScreenProps<DrawerParamL
             <View style={styles.action}>
                 <TextInput 
                     placeholder="Nombre y Apellido"
+                    testID="name"
                     style={styles.textInput}
                     autoCapitalize="none"
                     ref = {nameR}
+                    value = {name}
                     onChangeText={setName} 
                     onSubmitEditing={() => { addressR.current?.focus() }} 
                 />
@@ -154,9 +132,11 @@ export default function RegisterN({ navigation }: DrawerScreenProps<DrawerParamL
             <View style={styles.action}>
                 <TextInput 
                     placeholder="Dirección"
+                    testID="address"
                     style={styles.textInput}
                     autoCapitalize="none"
                     ref = {addressR}
+                    value = {address}
                     onChangeText={setAddress} 
                     onSubmitEditing={() => { phoneR.current?.focus() }} 
                 />
@@ -168,20 +148,24 @@ export default function RegisterN({ navigation }: DrawerScreenProps<DrawerParamL
             <View style={styles.action}>
                 <TextInput 
                     placeholder="Teléfono"
+                    testID="phone"
                     style={styles.textInput}
                     autoCapitalize="none"
                     ref = {phoneR}
+                    value= {phone}
                     onChangeText={setPhone} 
                     onSubmitEditing={signIn}
                 />
             </View>
             <View style={styles.button}>
                 <TouchableOpacity
+                    testID="registerBtn"
                     onPress={ signIn}
                     style={[styles.signIn, {
                         borderColor: '#f87c09',
                         borderWidth: 1
                     }]}
+                    
                 >
                     <Text style={[styles.textSign, {
                         color: '#f87c09'
@@ -192,4 +176,42 @@ export default function RegisterN({ navigation }: DrawerScreenProps<DrawerParamL
       </View>
     </View>
   );
+}
+
+
+
+export function respuesta(res:any, name:string, address: string, phone: string){
+  {
+    if(res.user){
+      res.user.updateProfile({
+        displayName: res.email
+      });
+      addDetails(res.user.uid, 'usuario', res.user.email, address, phone, name);
+      //navigation.navigate('Login')
+    }
+    
+  }
+}
+
+export async function addDetails(idt:string, rol:string = "usuario", email: string, address: string, phone: string, name: string) {
+  await ref.doc(idt).set({
+    correo: email,
+    direccion: address,
+    nombre: name,
+    rol: rol,
+    telefono: phone
+  });
+}
+
+export function respuestaErr(error:Error){
+  let message = "";
+  if(error.message.includes("email-already-in-use")){
+    message = "El correo ya ha sido registrado";
+  }else if (error.message.includes("weak-password")){
+    message = "La contraseña es muy corta";
+  }else if (error.message.includes("invalid-email")){
+    message = "Formato de correo inválido";
+  }
+  Alert.alert("Error" , "Error al registrar usuario. "+ message);
+  //console.log(error);
 }

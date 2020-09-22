@@ -50,6 +50,9 @@ android/build.gradle
 #
 .vscode/
 
+#firebase
+src/database/Firebase.js
+
 # node.js
 #
 node_modules/
@@ -61,6 +64,17 @@ buck-out/
 \.buckd/
 *.keystore
 !debug.keystore
+
+#test
+coverage/
+
+database-debug.log
+firebase-debug.log
+firestore-debug.log
+firestore.indexes.json
+firestore.rules
+pubsub-debug.log
+ui-debug.log
 
 # fastlane
 #
