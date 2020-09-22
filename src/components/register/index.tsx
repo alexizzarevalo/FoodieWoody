@@ -17,9 +17,13 @@ import "firebase/firestore"
 //import {} from '@react-navigation/drawer';
 
 import {styles} from '../../Style'
+import { sendEmail } from "../loginScreen";
+
+const ref = firebase.firestore().collection('users');
+
+
 
 export default function RegisterN({ navigation }: DrawerScreenProps<DrawerParamList, 'Register'>) {
-  const ref = firebase.firestore().collection('users');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordC, setPasswordC] = useState('');
@@ -31,7 +35,7 @@ export default function RegisterN({ navigation }: DrawerScreenProps<DrawerParamL
   const nameR = useRef<TextInput>(null);
   const addressR = useRef<TextInput>(null);
   const phoneR = useRef<TextInput>(null);
-  
+
   function signIn() {
     if(email === '' || password === '' || passwordC === '' || name == '' || address == '' || phone == '') {
       Alert.alert('Campos obligatorios', 'Todos los campos son obligatorios')
@@ -43,40 +47,24 @@ export default function RegisterN({ navigation }: DrawerScreenProps<DrawerParamL
     }else {
     firebase.auth()
       .createUserWithEmailAndPassword(email, password)
-      .then((res) => {
-        if(res.user){
-          res.user.updateProfile({
-            displayName: email
-          });
-          addDetails(res.user.uid);
-          //navigation.navigate('Login')
-        }
-        
-      })
-      .catch((error:Error) => {
-        let message = "";
-        if(error.message.includes("email-already-in-use")){
-          message = "El correo ya ha sido registrado";
-        }else if (error.message.includes("weak-password")){
-          message = "La contraseña es muy corta";
-        }else if (error.message.includes("invalid-email")){
-          message = "Formato de correo inválido";
-        }
-        Alert.alert("Error" , "Error al registrar usuario. "+ message);
-        console.log(error);
-      })      
+      .then((res:any) => respuesta(res, name, address, phone))
+      .catch((error:Error) => respuestaErr(error))      
     }
   }
 
-  async function addDetails(idt:string, rol:string = "usuario") {
-    await ref.doc(idt).set({
-      correo: email,
-      direccion: address,
-      nombre: name,
-      rol: rol,
-      telefono: phone
-    });
+  function respuestaErr(error:Error){
+    let message = "";
+    if(error.message.includes("email-already-in-use")){
+      message = "El correo ya ha sido registrado";
+    }else if (error.message.includes("weak-password")){
+      message = "La contraseña es muy corta";
+    }else if (error.message.includes("invalid-email")){
+      message = "Formato de correo inválido";
+    }
+    Alert.alert("Error" , "Error al registrar usuario. "+ message);
+    console.log(error);
   }
+  
 
   return (
     <View style={styles.container}>
@@ -199,4 +187,29 @@ export default function RegisterN({ navigation }: DrawerScreenProps<DrawerParamL
       </View>
     </View>
   );
+}
+
+
+
+export function respuesta(res:any, name:string, address: string, phone: string){
+  {
+    if(res.user){
+      res.user.updateProfile({
+        displayName: res.email
+      });
+      addDetails(res.user.uid, 'usuario', res.user.email, address, phone, name);
+      //navigation.navigate('Login')
+    }
+    
+  }
+}
+
+export async function addDetails(idt:string, rol:string = "usuario", email: string, address: string, phone: string, name: string) {
+  await ref.doc(idt).set({
+    correo: email,
+    direccion: address,
+    nombre: name,
+    rol: rol,
+    telefono: phone
+  });
 }
