@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Receta, { IReceta } from "./Receta";
 import { firebase, FirebaseFirestoreTypes } from "@react-native-firebase/firestore";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { SearchStackParamList } from "../../navigation/types";
+import { act } from "react-test-renderer";
 
 export function getRecetas(): Promise<FirebaseFirestoreTypes.QuerySnapshot> {
     return new Promise((resolve) => {
@@ -37,8 +38,17 @@ export function useElements({ navigation, showSearch = false }: { navigation: St
     const [loading, setLoading] = useState<boolean>(false);
     const [showInput, setShowInput] = useState<boolean>(showSearch);
 
+    const update = (recetas: IReceta[]) => {
+        act(() => {
+            setRecetas(recetas);
+            setBusqueda(recetas);
+        })
+    }
+
+    const updateLoading = (loading: boolean) => act(() => setLoading(loading))
+
     useEffect(() => {
-        SetRecetas(setLoading, (recetas: IReceta[]) => { setRecetas(recetas); setBusqueda(recetas) });
+        SetRecetas(updateLoading, update);
     }, [])
 
     useEffect(() => {
