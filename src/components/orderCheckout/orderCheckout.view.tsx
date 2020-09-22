@@ -29,6 +29,7 @@ export default function Template({cart,itemDetails,total,confirmacion}:PropsWith
         <Text style={styles.textoTotal}>{total}</Text>
       </View>
       <TouchableOpacity
+        testID={'confirmationbtn'}
         style={styles.btn}
         onPress={()=>confirmacion}
       >

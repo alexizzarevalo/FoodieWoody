@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Text, View, Image, StyleSheet } from 'react-native';
 import { Receta, Ingrediente } from '../../models/receta';
 
-import { firestore } from '../../firebaseConfig';
-
+//import { firestore } from '../../firebaseConfig';
+import firestore from '@react-native-firebase/firestore'
 import { StackScreenProps } from '@react-navigation/stack';
 import { SearchStackParamList } from '../../navigation/types';
 
@@ -46,15 +46,15 @@ export function StaticComponent({negocio_nombre, receta, ingredientes}:
             </View>
             <View>
                 <SectionTitle title="Ingredientes"/>
-                    {ingredientes.map((ingrediente, index) =>                           
+                    {ingredientes.map((ingrediente, index) =>
                         <View key={index} style={styles.bulletItem}>
-                            <Text style={{textAlign:"justify"}}>{'\u2022 '} {ingrediente.nombre}</Text> 
+                            <Text style={{textAlign:"justify"}}>{'\u2022 '} {ingrediente.nombre}</Text>
                         </View>
                     )}
             </View>
             <View>
                 <SectionTitle title="Preparacion"/>
-                {receta.pasos?.map((paso, index) => 
+                {receta.pasos?.map((paso, index) =>
                     <View key={index} style={styles.bulletItem}>
                         <Text style={{textAlign:"justify"}}>{index + 1}. {paso}</Text>
                     </View>
