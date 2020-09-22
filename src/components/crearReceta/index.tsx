@@ -8,12 +8,34 @@ import {
   TextInput,
   TouchableOpacity
 } from 'react-native';
-
+import firestore from '@react-native-firebase/firestore'
 
 declare const global: {HermesInternal: null | {}};
 
 export default function CrearReceta(){
-    const [text, setText] = useState('');
+    const [nombrer, setNombrer] = useState('');
+    const [costo, setCosto] = useState('');
+    const [desc, setDesc] = useState('');
+    const [ingredientes, setIngredientes] = useState('');
+    const [preparacion, setPreparacion] = useState('');
+
+    const pressHandler = () =>{
+        //Adding format to the info
+        firestore()
+          .collection('recetas')
+          .add({
+            descripcion: desc,
+            id: "prueba",
+            imagen: "https://dam.cocinafacil.com.mx/wp-content/uploads/2019/08/comida-tailandesa.jpg",
+            negocio_id: "users/Z2Pzggc3gem8Bx5qsbgD", 
+            nombre: nombrer,
+            pasos: {},
+            precio: parseInt(costo)
+          })
+          .then(() => {
+            console.log('Receta agregada!');
+          });
+      }
     return (
       <>
         <StatusBar barStyle="dark-content" />
@@ -27,7 +49,7 @@ export default function CrearReceta(){
                       style={styles.texti}
                       underlineColorAndroid = "transparent"
                       placeholder=""
-                      onChangeText={text => setText(text)}
+                      onChangeText={nombre => setNombrer(nombrer)}
                       defaultValue=""
                   />
                   
@@ -42,7 +64,7 @@ export default function CrearReceta(){
                       style={styles.textig}
                       underlineColorAndroid = "transparent"
                       placeholder=""
-                      onChangeText={text => setText(text)}
+                      onChangeText={desc => setDesc(desc)}
                       defaultValue=""
                   />
               
@@ -57,7 +79,7 @@ export default function CrearReceta(){
                       style={styles.textig}
                       underlineColorAndroid = "transparent"
                       placeholder=""
-                      onChangeText={text => setText(text)}
+                      onChangeText={ingredientes => setIngredientes(ingredientes)}
                       defaultValue=""
                   />
                   
@@ -72,7 +94,7 @@ export default function CrearReceta(){
                       style={styles.texti}
                       underlineColorAndroid = "transparent"
                       placeholder=""
-                      onChangeText={text => setText(text)}
+                      onChangeText={preparacion => setPreparacion(preparacion)}
                       defaultValue=""
                   />
                   
@@ -87,14 +109,14 @@ export default function CrearReceta(){
                       style={styles.texti}
                       underlineColorAndroid = "transparent"
                       placeholder=""
-                      onChangeText={text => setText(text)}
+                      onChangeText={costo => setCosto(costo)}
                       defaultValue=""
                   />
                  
               
               <TouchableOpacity
                 style={styles.boton}
-                
+                onPress={pressHandler}
               >
                 <Text>Crear</Text>
               </TouchableOpacity>
