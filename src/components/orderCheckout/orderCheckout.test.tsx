@@ -1,4 +1,4 @@
-//import '../__mocks__/firebase-auth-mock';
+import '../../../__mocks__/firebase-firestore-mock';
 
 import React from 'react';
 import renderer, {act} from 'react-test-renderer';

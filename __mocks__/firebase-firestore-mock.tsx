@@ -2,6 +2,12 @@ const get = () => {
     return Promise.resolve('')
 }
 
+const doc = (name: string) => {
+    return {
+        get
+    }
+}
+
 const collection = (name: string) => {
     return {
         get
@@ -11,6 +17,7 @@ const collection = (name: string) => {
 export const firestore = () => {
     return {
         collection,
+        doc
     }
 }
 

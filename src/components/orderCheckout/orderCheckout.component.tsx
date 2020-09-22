@@ -6,7 +6,7 @@ import {GlobalDispatch, useGlobalSelector} from '../../storage';
 import {Item} from '../../storage/global-state.interface';
 import {useDispatch} from 'react-redux';
 import {styles} from '../../Style';
-//import firestore from '@react-native-firebase/firestore'
+import firestore from '@react-native-firebase/firestore'
 import CarItem from './CarItem/CarItem.component';
 import Template from './orderCheckout.view';
 
@@ -22,7 +22,7 @@ export default function OrderCheckout({route,navigation}:StackScreenProps<CartSt
   const cart:Item[] = useGlobalSelector(({cart})=>cart)
   const confirmacion = () => {navigation.push('OrderConfirmation', {total})}
 
-  /*useEffect(()=>{
+  useEffect(()=>{
     setItemDetails([])
     cart.map((i:Item)=>{
       firestore()
@@ -41,7 +41,7 @@ export default function OrderCheckout({route,navigation}:StackScreenProps<CartSt
           calcularTotal()
         })
     })
-  },[])*/
+  },[])
 
   useEffect(()=>{
     //Actualiza el total cada vez que el precio se actualiza
