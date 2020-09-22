@@ -7,7 +7,7 @@ import {Item} from '../../storage/global-state.interface';
 import {useDispatch} from 'react-redux';
 import {styles} from '../../Style';
 import firestore from '@react-native-firebase/firestore'
-import CartItem from './CarItem/CarItem.component';
+import CarItem from './CarItem/CarItem.component';
 
 interface ItemDetail{
   nombre:string,
@@ -59,7 +59,7 @@ export default function OrderCheckout({route,navigation}:StackScreenProps<CartSt
     <FlatList
       data={cart}
       renderItem={({item,index} )=>{ return(
-        <CartItem
+        <CarItem
           nombre={itemDetails[index]?.nombre}
           precio={itemDetails[index]?.precio}
           imagen={itemDetails[index]?.imagen}

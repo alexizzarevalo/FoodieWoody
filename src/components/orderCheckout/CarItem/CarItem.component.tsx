@@ -19,7 +19,7 @@ const dispatchWrapper = (
   })
 }
 
-export default function CartItem(props:any){
+export default function CarItem(props:any){
   const dispatch:GlobalDispatch = useDispatch()
   return (
     <View style={styles.cartItem}>
@@ -33,6 +33,7 @@ export default function CartItem(props:any){
       </View>
       <View style={{flex: 0.1}}>
         <Button
+          testID={'dec_quantity'}
           title="-"
           onPress={() => {dispatchWrapper('DEC_QUANTITY',
             props.receta_id, props.cantidad, dispatch)}}
@@ -45,6 +46,7 @@ export default function CartItem(props:any){
       </View>
       <View style={{flex: 0.1}}>
         <Button
+          testID={'inc_quantity'}
           title="+"
           onPress={() => {dispatchWrapper('INC_QUANTITY',
             props.receta_id, props.cantidad, dispatch)}}
