@@ -1,8 +1,8 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { CartStackParamList } from '../types';
-import OrderCheckout from '../../components/orderCheckout'
-import OrderConfirmation from '../../components/orderConfirmation';
+import OrderCheckout from '../../components/orderCheckout/orderCheckout.component'
+import OrderConfirmation from '../../components/orderConfirmation/orderConfirmation.component';
 
 const Stack = createStackNavigator<CartStackParamList>();
 

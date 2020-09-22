@@ -18,7 +18,7 @@ const getReceta = (data: object) => {
   return {
     descripcion: 'Pizza hawaiana',
     id: '1',
-    imagen: 'imagen',
+    imagen: 'https://www.laespanolaaceites.com/wp-content/uploads/2019/06/pizza-con-chorizo-jamon-y-queso-1080x671.jpg',
     negocio_id: '1',
     nombre: 'pizza',
     pasos: [],
@@ -103,6 +103,7 @@ describe('Pantalla SearchScreen', () => {
     test('Deben filtrarse las recetas cuando se hace una busqueda', async () => {
       const { result, waitForNextUpdate } = renderHook(() => useElements({ navigation }));
 
+      await waitForNextUpdate();
       act(() => result.current.search.onChangeText('pizza'));
 
       expect(result.current.search.value).toBe('pizza');
