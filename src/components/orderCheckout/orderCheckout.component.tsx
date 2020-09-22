@@ -1,4 +1,4 @@
-import React, {Component, useEffect, useState} from 'react';
+import React, {Component, PropsWithChildren, useEffect, useState} from 'react';
 import { View, Text, TouchableOpacity, Button, FlatList} from 'react-native';
 import {StackScreenProps} from '@react-navigation/stack';
 import {CartStackParamList} from '../../navigation/types';
@@ -6,7 +6,7 @@ import {GlobalDispatch, useGlobalSelector} from '../../storage';
 import {Item} from '../../storage/global-state.interface';
 import {useDispatch} from 'react-redux';
 import {styles} from '../../Style';
-import firestore from '@react-native-firebase/firestore'
+//import firestore from '@react-native-firebase/firestore'
 import CarItem from './CarItem/CarItem.component';
 
 interface ItemDetail{
@@ -21,7 +21,7 @@ export default function OrderCheckout({route,navigation}:StackScreenProps<CartSt
   const cart:Item[] = useGlobalSelector(({cart})=>cart)
   const confirmacion = () => {navigation.push('OrderConfirmation', {total})}
 
-  useEffect(()=>{
+  /*useEffect(()=>{
     setItemDetails([])
     cart.map((i:Item)=>{
       firestore()
@@ -40,7 +40,7 @@ export default function OrderCheckout({route,navigation}:StackScreenProps<CartSt
           calcularTotal()
         })
     })
-  },[])
+  },[])*/
 
   useEffect(()=>{
     //Actualiza el total cada vez que el precio se actualiza
@@ -54,8 +54,14 @@ export default function OrderCheckout({route,navigation}:StackScreenProps<CartSt
     })
     setTotal(total)
   }
+  return(
+    <Template cart={cart} itemDetails={itemDetails} total={total} confirmacion={confirmacion}/>
+  )
+}
 
-  return (<View style={styles.container}>
+const Template = ({cart,itemDetails,total,confirmacion}:PropsWithChildren<any>) => {
+  return (
+  <View style={styles.container}>
     <FlatList
       data={cart}
       renderItem={({item,index} )=>{ return(
@@ -80,7 +86,7 @@ export default function OrderCheckout({route,navigation}:StackScreenProps<CartSt
     </View>
     <TouchableOpacity
       style={styles.btn}
-      onPress={confirmacion}
+      onPress={()=>confirmacion}
     >
       <Text style={styles.textButton}>Confirmar Orden</Text>
     </TouchableOpacity>
