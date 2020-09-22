@@ -1,11 +1,47 @@
-//import '../__mocks__/firebase-auth-mock';
+import '../../../__mocks__/firebase-firestore-mock';
+import '../../../__mocks__/firebase-auth-mock';
 
 import React from 'react';
-import renderer from 'react-test-renderer'
-import OrderConfirmation from './orderConfirmation.component'
+import renderer, {act} from 'react-test-renderer';
+import OrderConfirmation from '../orderConfirmation/orderConfirmation.component';
+
+// redux
+import {Provider} from 'react-redux';
+import {GlobalState} from '../../storage/global-state.interface';
+import configureStore from 'redux-mock-store';
+import {store} from '../../storage';
+import {fireEvent, render} from '@testing-library/react-native';
+const mockStore = configureStore([]);
 
 describe('Order confirmation screen component', () => {
-  test('renders', () => {
-    //renderer.create(<OrderConfirmation navigation={null}/>)
+  const route:any = {
+    params:{
+      total: 1000
+    }
+  }
+  const navigation:any = null
+
+  // redux
+  let store:any = null;
+  const initialState: GlobalState = {
+    cart: [],
+    search: '',
+  }
+
+  const cart:any = []
+  const itemDetails:any = []
+  const total = 56
+  const confirmacion = () => { }
+
+  //Configure redux
+  beforeEach(() => {
+    store = mockStore(initialState);
+  });
+
+  test('Should renders without crashing', () => {
+    renderer.create(
+      <Provider store={store}>
+        <OrderConfirmation navigation={navigation} route={route}/>)
+      </Provider>)
   })
 })

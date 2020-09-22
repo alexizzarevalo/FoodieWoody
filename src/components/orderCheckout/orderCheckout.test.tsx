@@ -9,6 +9,7 @@ import {Provider} from 'react-redux';
 import {GlobalState} from '../../storage/global-state.interface';
 import configureStore from 'redux-mock-store';
 import {store} from '../../storage';
+
 import Template from './orderCheckout.view';
 import {fireEvent, render} from '@testing-library/react-native';
 import CarItem from './CarItem/CarItem.component';
