@@ -13,23 +13,30 @@ import {store} from '../../storage';
 import Template from './orderCheckout.view';
 import {fireEvent, render} from '@testing-library/react-native';
 import CarItem from './CarItem/CarItem.component';
+import {firebase} from '../../../__mocks__/firebase-auth-mock';
+import LoginScreen from '../loginScreen';
 const mockStore = configureStore([]);
 
 describe('Order confirmation screen component', () => {
-  const route:any = null
-  const navigation:any = null
+  const route: any = null
+  const navigation: any = null
 
   // redux
-  let store:any = null;
+  let store: any = null;
   const initialState: GlobalState = {
     cart: [],
     search: '',
   }
 
-  const cart:any = []
-  const itemDetails:any = []
+  const cart: any = []
+  const carItem = {
+    receta_id: 'idfalso',
+    cantidad: 3
+  }
+  const itemDetails: any = []
   const total = 56
-  const confirmacion = () => { }
+  const confirmacion = () => {
+  }
 
   //Configure redux
   beforeEach(() => {
@@ -39,30 +46,26 @@ describe('Order confirmation screen component', () => {
   test('Should renders without crashing', () => {
     renderer.create(
       <Provider store={store}>
-        <OrderCheckout navigation={navigation} route={route}/>
+        <OrderCheckout navigation={navigation} route={route} />
       </Provider>)
   })
 
   test('Should renders view with no empty car', () => {
-    cart.push({
-      receta_id: 'idfalso',
-      cantidad: 3
-    })
+    cart.push(carItem)
     renderer.create(
       <Provider store={store}>
-        <Template cart={cart} itemDetails={itemDetails} total={total} confirmacion={confirmacion}/>
+        <Template cart={cart} itemDetails={itemDetails} total={total} confirmacion={confirmacion} />
       </Provider>
     )
   })
 
   test('Should navigate to confirmation screen', () => {
-    const { getByTestId } = render(
+    const {getByTestId} = render(
       <Provider store={store}>
-        <Template cart={cart} itemDetails={itemDetails} total={total} confirmacion={confirmacion}/>
+        <Template cart={cart} itemDetails={itemDetails} total={total} confirmacion={confirmacion} />
       </Provider>
     )
     const confirmationbtn = getByTestId('confirmationbtn');
     fireEvent.press(confirmationbtn)
   })
 })
-

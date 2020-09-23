@@ -17,7 +17,6 @@ import {styles} from '../../Style';
 import firestore, {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
 import CarItem from './CarItem/CarItem.component';
 import Template from './orderCheckout.view';
-import {getRecetas} from '../SearchScreen/state';
 
 interface ItemDetail{
   nombre:string,
