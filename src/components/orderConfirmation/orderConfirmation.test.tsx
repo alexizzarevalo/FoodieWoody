@@ -1,6 +1,5 @@
 import '../../../__mocks__/firebase-firestore-mock';
-import '../../../__mocks__/firebase-auth-mock';
-
+import firebaseAuthMock, { firebase } from '../../../__mocks__/firebase-auth-mock';
 import React from 'react';
 import renderer, {act} from 'react-test-renderer';
 import OrderConfirmation from '../orderConfirmation/orderConfirmation.component';
@@ -14,12 +13,22 @@ import {fireEvent, render} from '@testing-library/react-native';
 const mockStore = configureStore([]);
 
 describe('Order confirmation screen component', () => {
+  //@ts-ignore
+  jest.spyOn(firebase, 'auth').mockImplementation(() => {
+    return { onAuthStateChanged :()=> {
+        return Promise.resolve()
+    }}
+  })
+
+  //props
   const route:any = {
     params:{
       total: 1000
     }
   }
-  const navigation:any = null
+  const navigation:any = {
+    navigate: (id:string) => { return Promise.resolve()}
+  }
 
   // redux
   let store:any = null;
@@ -43,5 +52,14 @@ describe('Order confirmation screen component', () => {
       <Provider store={store}>
         <OrderConfirmation navigation={navigation} route={route}/>)
       </Provider>)
+  })
+
+  test('Should navigate to Search again', ()=>{
+    const {getByTestId} = render(
+      <Provider store={store}>
+        <OrderConfirmation navigation={navigation} route={route}/>)
+      </Provider>)
+    const confirmationbtn = getByTestId('confirmationbtn')
+    fireEvent.press(confirmationbtn)
   })
 })

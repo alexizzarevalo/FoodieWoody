@@ -12,20 +12,24 @@ const sendPasswordResetEmail = (email: string): Promise<string> => {
   return Promise.resolve('Hola');
 }
 
+const onAuthStateChanged = () => {
+  return Promise.resolve('Hola');
+}
+
 export const auth = () => {
   return {
     signInWithEmailAndPassword,
-    sendPasswordResetEmail
+    sendPasswordResetEmail,
+    onAuthStateChanged
   }
 }
 
 export const firebase = {
   auth
 }
+
 export default jest.mock('@react-native-firebase/auth', () => {
   return {
     firebase
   }
 });
-
-

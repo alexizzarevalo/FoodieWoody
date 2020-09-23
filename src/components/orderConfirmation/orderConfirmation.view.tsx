@@ -43,7 +43,9 @@ export default function Template({
           </View>
           <Text style={styles.text_header}>Total</Text>
           <TextInput style={styles.input} editable={false} value={`Q.${total}`}/>
-          <TouchableHighlight style={styles.btn} onPress={pressHandler}>
+          <TouchableHighlight
+            testID={"confirmationbtn"}
+            style={styles.btn} onPress={pressHandler}>
             <Text style={styles.textButton}>Terminar pedido</Text>
           </TouchableHighlight>
         </ScrollView>

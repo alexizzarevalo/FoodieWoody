@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { ScrollView, Text, TextInput, TouchableHighlight, View } from 'react-native';
-import firestore from '@react-native-firebase/firestore'
+import {Picker} from '@react-native-community/picker';
 import { styles } from '../../Style';
+import Template from './orderConfirmation.view';
+
+import firestore, {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
+import {firebase, FirebaseAuthTypes} from '@react-native-firebase/auth';
+
 import { GlobalDispatch, useGlobalSelector } from '../../storage';
 import { useDispatch } from 'react-redux';
 import { Item } from '../../storage/global-state.interface';
-import useUser from '../../hooks/useUser';
-import {Picker} from '@react-native-community/picker';
-import Template from './orderConfirmation.view';
 
 interface User {
   nombre: string,
@@ -16,51 +18,66 @@ interface User {
   telefono: string,
 }
 
+function first_page(uid:any,setCustomInformation:any){
+  if (uid) {
+    get_customer_info(uid)
+      .then(documentSnapShot => {
+        setCustomInformation(documentSnapShot.data() as User)
+      })
+  }
+}
+
+function get_customer_info(uid:string):Promise<FirebaseFirestoreTypes.DocumentSnapshot>{
+  return new Promise(resolve => {
+    firestore()
+      .collection('users')
+      .doc(uid)
+      .get()
+      .then(resolve)
+  })
+}
+
+function save_pedido(uid:any,aux:any){
+  return new Promise((resolve) => {firestore()
+    .collection('ordenes')
+    .add({
+      user_id: 'users/' + uid,
+      recetas: aux
+    })
+    .then(resolve);
+  })
+}
+
 export default function orderConfirmation(
   { route, navigation }: any) {
-  const {total} = route.params
-  const cart: Item[] = useGlobalSelector(({cart}) => cart)
-  const dispatch: GlobalDispatch = useDispatch();
-  const {user} = useUser()
   const [customerInformation, setCustomerInformation] = useState<User>({
     nombre: '',
     correo: '',
     telefono: '',
     direccion: ''
   });
+  const {total} = route.params
+  const cart: Item[] = useGlobalSelector(({cart}) => cart)
+  const dispatch: GlobalDispatch = useDispatch();
+  const {currentUser} = firebase.auth()
+
   useEffect(() => {
-    if (user) {
-      firestore()
-        .collection('users')
-        .doc(user.uid)
-        .get()
-        .then((documentSnapShot) => {
-          setCustomerInformation(documentSnapShot.data() as User)
-          console.log(customerInformation)
-        }).catch(console.log)
-    }
-  }, [user]);
+    first_page(currentUser?.uid,setCustomerInformation)
+  }, []);
 
   const pressHandler = () => {
     const aux: {}[] = [];
     cart.map((i) => {
       aux.push({receta: 'recetas/' + i.receta_id, cantidad: i.cantidad})
     })
-
-    //Adding format to the info
-    firestore()
-      .collection('ordenes')
-      .add({
-        user_id: 'users/' + user?.uid,
-        recetas: aux
-      })
+    save_pedido(currentUser?.uid,aux)
       .then(() => {
         console.log('Orden added!');
-      });
-
+      })
     dispatch({type: 'SET_CART', payload: []})
     navigation.navigate('Search')
   }
+
   return(
     <Template customerInformation={customerInformation} total={total} pressHandler={pressHandler} />
   )

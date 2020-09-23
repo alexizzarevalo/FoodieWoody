@@ -36,12 +36,13 @@ describe('Order confirmation screen component', () => {
     store = mockStore(initialState);
   });
 
-  test('Should renders hole component', () => {
+  test('Should renders without crashing', () => {
     renderer.create(
       <Provider store={store}>
         <OrderCheckout navigation={navigation} route={route}/>
       </Provider>)
   })
+
   test('Should renders view with no empty car', () => {
     cart.push({
       receta_id: 'idfalso',
