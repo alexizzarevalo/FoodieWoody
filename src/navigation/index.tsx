@@ -1,12 +1,14 @@
 import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useFocusEffect, useIsFocused } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import CartNavigation from './cart_Navigation';
 import LoginScreen from "../components/loginScreen";
 import useUser from '../hooks/useUser';
 import SearchNavigation from './search_Navigation';
 import RegisterN from '../components/register';
-import {DrawerParamList} from './types';
+import { DrawerParamList } from './types';
+import { View, ActivityIndicator } from 'react-native';
+import auth from "@react-native-firebase/auth";
 
 const Drawer = createDrawerNavigator<DrawerParamList>();
 
@@ -20,16 +22,30 @@ export default function Navigation() {
           !isLogged ?
             <>
               <Drawer.Screen options={{ title: 'Iniciar sesión' }} name={'Login'} component={LoginScreen} />
-              <Drawer.Screen name={'Register'} component={RegisterN} />
+              <Drawer.Screen options={{ title: 'Registrarse' }} name={'Register'} component={RegisterN} />
             </>
             :
             <>
-              <Drawer.Screen name={'Cart'} component={CartNavigation} />
-              <Drawer.Screen name={'Search'} component={SearchNavigation} />
+              <Drawer.Screen options={{ title: 'Inicio - Recetas' }} name={'Search'} component={SearchNavigation} />
+              <Drawer.Screen options={{ title: 'Cerrar sesión' }} name={'Logout'} component={Logout} />
               {/*Agregar aqui las demas pantallas*/}
             </>
         }
       </Drawer.Navigator>
     </NavigationContainer>
   );
+}
+
+function Logout() {
+  const useFocused = useIsFocused();
+
+  React.useEffect(() => {
+    useFocused && auth().signOut();
+  }, [useFocused]);
+
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <ActivityIndicator color="orange" size={30}></ActivityIndicator>
+    </View>
+  )
 }

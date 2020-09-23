@@ -1,42 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { View, Text, StyleSheet, TextInput, FlatList, ActivityIndicator } from "react-native";
-import Receta, { IReceta } from "./Receta";
-import firestore from "@react-native-firebase/firestore";
 import { StackScreenProps } from "@react-navigation/stack";
-import { SearchStackParamList, DrawerParamList } from "../../navigation/types";
+import { SearchStackParamList } from "../../navigation/types";
 import Icon from 'react-native-vector-icons/AntDesign';
+import { useElements } from "./state";
 
-export default function SearchScreen({ navigation }: StackScreenProps<SearchStackParamList & DrawerParamList, 'Search'>) {
-    const [search, setSearch] = useState<string>('');
-    const [recetas, setRecetas] = useState<IReceta[]>([]);
-    const [busqueda, setBusqueda] = useState<IReceta[]>([]);
-    const [loading, setLoading] = useState<boolean>(false);
-    const [showInput, setShowInput] = useState<boolean>(false);
+type Props = StackScreenProps<SearchStackParamList, 'Search'> & { showSearch?: boolean };
 
-    useEffect(() => {
-        setLoading(true);
-        firestore()
-            .collection('recetas')
-            .get()
-            .then(snapshot => {
-                const recetas: IReceta[] = [];
-                snapshot.forEach(docSnapshot => {
-                    recetas.push({ ...docSnapshot.data() as IReceta, id: docSnapshot.id })
-                })
-                setRecetas(recetas);
-                setBusqueda(recetas);
-            }).finally(() => { setLoading(false) })
-    }, [])
-
-    useEffect(() => {
-        const txtToFind = search.toLowerCase();
-        setBusqueda(() => {
-            return recetas.filter(receta => {
-                return receta.nombre.toLowerCase().includes(txtToFind) ||
-                    receta.descripcion.toLowerCase().includes(txtToFind);
-            })
-        })
-    }, [search])
+export default function SearchScreen({ navigation, showSearch = false }: Props) {
+    const { loading, recetas, search, cartIcon, renderReceta, getKeyReceta } = useElements({ navigation, showSearch })
 
     return (
         <View style={styles.container}>
@@ -49,17 +21,17 @@ export default function SearchScreen({ navigation }: StackScreenProps<SearchStac
                     alignItems: 'center',
                     paddingHorizontal: 20
                 }}>
-                    <Icon name={showInput ? 'back' : 'search1'} size={40} onPress={() => { setShowInput(state => !state) }} ></Icon>
+                    <Icon name={search.icon.name} size={40} onPress={search.icon.onPress} ></Icon>
                     {
-                        !showInput ? <Text style={{ fontSize: 25, fontWeight: 'bold', color: 'white' }}>Foodie Woody</Text> :
+                        !search.showInput ? <Text style={{ fontSize: 25, fontWeight: 'bold', color: 'white' }}>Foodie Woody</Text> :
                             <TextInput
                                 placeholder="Buscar..."
                                 style={{ borderBottomWidth: 1, flex: 1, fontSize: 18 }}
-                                value={search}
-                                onChangeText={setSearch}
+                                value={search.value}
+                                onChangeText={search.onChangeText}
                             />
                     }
-                    <Icon name="shoppingcart" size={40} onPress={() => { navigation.navigate('Cart') }}></Icon>
+                    <Icon name="shoppingcart" size={40} onPress={cartIcon.onPress}></Icon>
                 </View>
             </View>
             <View style={styles.container}>
@@ -71,9 +43,9 @@ export default function SearchScreen({ navigation }: StackScreenProps<SearchStac
                             </View>
                             :
                             <FlatList
-                                data={busqueda}
-                                renderItem={({ item }) => <Receta key={item.id} receta={item} nav={navigation} />}
-                                keyExtractor={(item) => item.id}
+                                data={recetas}
+                                renderItem={renderReceta}
+                                keyExtractor={getKeyReceta}
                                 ListEmptyComponent={
                                     <View style={{ marginTop: 150, justifyContent: 'center', alignItems: 'center' }}>
                                         <Text>No hay recetas por ahora</Text>

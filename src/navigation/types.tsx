@@ -2,24 +2,23 @@ import { IReceta } from "../components/SearchScreen/Receta";
 import {Receta} from '../models/receta'
 /*Screen names with their parameters*/
 export type CartStackParamList = {
-  Cart:undefined;
   OrderCheckout: undefined;
-  OrderConfirmation: undefined;
-  DetalleReceta: {
-    receta: Receta
-  }
+  OrderConfirmation: {
+    total: number;
+  };
 };
 
 export type DrawerParamList = {
   Login: undefined;
+  Logout: undefined;
   Search: undefined;
-  Cart: undefined;
   Register: undefined;
 };
 
 export type SearchStackParamList = {
   Search: undefined;
-  Detail: {
+  DetalleReceta: {
     receta: IReceta
   };
+  Checkout: undefined;
 }

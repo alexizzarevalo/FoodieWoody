@@ -1,37 +1,11 @@
 import React from "react";
-import { View, Text, Image, Alert } from "react-native";
-import { TouchableHighlight } from "react-native-gesture-handler";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { SearchStackParamList } from "../../../navigation/types";
+import { View, Text, Image, TouchableHighlight } from "react-native";
+import { useRecetaElements, Props } from "./state";
 
-export interface IReceta {
-    id: string;
-    nombre: string;
-    descripcion: string;
-    imagen: string;
-    precio: number;
-    pasos: string[];
-    negocio_id: string;
-}
-
-type Props = {
-    receta: IReceta;
-    nav: StackNavigationProp<SearchStackParamList, 'Search'>;
-}
+export type { IReceta } from './state';
 
 export default function Receta({ receta, nav }: Props) {
-    
-    function addToCart() {
-        // TODO: Agregar al carrito esta receta (Contexto global)
-        Alert.alert('Agregar al carrito', `¿Desea agregar ${receta.nombre} a su carrito?`)
-    }
-
-    function goToDetails() {
-        nav.navigate('Detail', {
-            receta
-        })
-    }
-
+    const { addToCart, goToDetails } = useRecetaElements({ nav, receta });
     return (
         <View style={{
             flex: 1, flexDirection: 'row',
@@ -41,7 +15,7 @@ export default function Receta({ receta, nav }: Props) {
         }}>
             <View style={{ width: 80, height: 80, borderRadius: 8, overflow: 'hidden' }}>
                 <TouchableHighlight onPress={goToDetails}>
-                    <Image source={{ uri: 'https://cdn2.cocinadelirante.com/sites/default/files/styles/gallerie/public/images/2017/04/pizzapepperoni0.jpg' }} resizeMode="cover" height={80} width={80} style={{ borderRadius: 8, width: 80, height: 80 }}></Image>
+                    <Image source={{ uri: receta.imagen }} resizeMode="cover" height={80} width={80} style={{ borderRadius: 8, width: 80, height: 80 }}></Image>
                 </TouchableHighlight>
             </View>
             <View style={{ alignItems: 'center', justifyContent: 'space-evenly', marginHorizontal: 8 }}>
