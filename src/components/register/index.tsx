@@ -2,26 +2,32 @@ import React, { useState, useRef } from "react";
 import { DrawerScreenProps } from "@react-navigation/drawer";
 import { DrawerParamList } from "../../navigation/types";
 import {
-  View, 
-  Text, 
-  TouchableOpacity, 
+  View,
+  Text,
+  TouchableOpacity,
   TextInput,
   ScrollView,
   StatusBar,
   Image,
   Alert
 } from 'react-native';
-import firebase from "../../database/Firebase";
-import "firebase/auth" 
-import "firebase/firestore" 
-//import {} from '@react-navigation/drawer';
-
 import {styles} from '../../Style'
 import { sendEmail } from "../loginScreen";
 
+/*
+//Test
+import firebase from "../../database/Firebase";
+import "firebase/auth"
+import "firebase/firestore"
 const ref = firebase.firestore().collection('users');
+*/
 
-
+/*
+//Produccion
+import {firebase as firebaseFirestore} from '@react-native-firebase/firestore'
+import {firebase} from '@react-native-firebase/auth'
+const ref = firebaseFirestore.firestore().collection('users');
+*/
 
 export default function RegisterN({ navigation }: DrawerScreenProps<DrawerParamList, 'Register'>) {
   const [email, setEmail] = useState('');
@@ -48,12 +54,12 @@ export default function RegisterN({ navigation }: DrawerScreenProps<DrawerParamL
     firebase.auth()
       .createUserWithEmailAndPassword(email, password)
       .then((res:any) => respuesta(res, name, address, phone))
-      .catch((error:Error) => respuestaErr(error))      
+      .catch((error:Error) => respuestaErr(error))
     }
   }
 
 
-  
+
 
   return (
     <View style={styles.container}>
@@ -65,8 +71,8 @@ export default function RegisterN({ navigation }: DrawerScreenProps<DrawerParamL
       <ScrollView>
             <Text style={styles.labelbold}>Correo:</Text>
             <View style={styles.action}>
-                
-                <TextInput 
+
+                <TextInput
                     placeholder="Correo Electrónico"
                     testID="email"
                     style={styles.textInput}
@@ -81,16 +87,16 @@ export default function RegisterN({ navigation }: DrawerScreenProps<DrawerParamL
                 marginTop: 20
             }]}>Contraseña</Text>
             <View style={styles.action}>
-                <TextInput 
+                <TextInput
                     placeholder="Contraseña"
                     testID="password"
                     style={styles.textInput}
                     autoCapitalize="none"
-                    onChangeText={setPassword} 
+                    onChangeText={setPassword}
                     ref = {psw}
                     value = {password}
                     secureTextEntry = {true}
-                    onSubmitEditing={() => { pswConf.current?.focus() }} 
+                    onSubmitEditing={() => { pswConf.current?.focus() }}
                 />
             </View>
 
@@ -98,47 +104,47 @@ export default function RegisterN({ navigation }: DrawerScreenProps<DrawerParamL
                 marginTop: 20
             }]}>Confirma tu contraseña</Text>
             <View style={styles.action}>
-                <TextInput 
+                <TextInput
                     placeholder="Confirma tu contraseña"
                     testID="passwordc"
                     style={styles.textInput}
                     autoCapitalize="none"
                     ref = {pswConf}
                     value = {passwordC}
-                    onChangeText={setPasswordC} 
+                    onChangeText={setPasswordC}
                     secureTextEntry = {true}
-                    onSubmitEditing={() => { nameR.current?.focus() }} 
+                    onSubmitEditing={() => { nameR.current?.focus() }}
                 />
             </View>
             <Text style={[styles.labelbold, {
                 marginTop: 20
             }]}>Nombre y Apellido</Text>
             <View style={styles.action}>
-                <TextInput 
+                <TextInput
                     placeholder="Nombre y Apellido"
                     testID="name"
                     style={styles.textInput}
                     autoCapitalize="none"
                     ref = {nameR}
                     value = {name}
-                    onChangeText={setName} 
-                    onSubmitEditing={() => { addressR.current?.focus() }} 
+                    onChangeText={setName}
+                    onSubmitEditing={() => { addressR.current?.focus() }}
                 />
             </View>
-            
+
             <Text style={[styles.labelbold, {
                 marginTop: 20
             }]}>Dirección</Text>
             <View style={styles.action}>
-                <TextInput 
+                <TextInput
                     placeholder="Dirección"
                     testID="address"
                     style={styles.textInput}
                     autoCapitalize="none"
                     ref = {addressR}
                     value = {address}
-                    onChangeText={setAddress} 
-                    onSubmitEditing={() => { phoneR.current?.focus() }} 
+                    onChangeText={setAddress}
+                    onSubmitEditing={() => { phoneR.current?.focus() }}
                 />
             </View>
 
@@ -146,14 +152,14 @@ export default function RegisterN({ navigation }: DrawerScreenProps<DrawerParamL
                 marginTop: 20
             }]}>Teléfono</Text>
             <View style={styles.action}>
-                <TextInput 
+                <TextInput
                     placeholder="Teléfono"
                     testID="phone"
                     style={styles.textInput}
                     autoCapitalize="none"
                     ref = {phoneR}
                     value= {phone}
-                    onChangeText={setPhone} 
+                    onChangeText={setPhone}
                     onSubmitEditing={signIn}
                 />
             </View>
@@ -165,7 +171,7 @@ export default function RegisterN({ navigation }: DrawerScreenProps<DrawerParamL
                         borderColor: '#f87c09',
                         borderWidth: 1
                     }]}
-                    
+
                 >
                     <Text style={[styles.textSign, {
                         color: '#f87c09'
@@ -189,7 +195,7 @@ export function respuesta(res:any, name:string, address: string, phone: string){
       addDetails(res.user.uid, 'usuario', res.user.email, address, phone, name);
       //navigation.navigate('Login')
     }
-    
+
   }
 }
 

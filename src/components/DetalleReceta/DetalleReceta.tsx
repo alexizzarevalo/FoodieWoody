@@ -2,8 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Text, View, Image, StyleSheet } from 'react-native';
 import { Receta, Ingrediente } from '../../models/receta';
 
-import { firestore } from '../../firebaseConfig';
+//Produccion
 //import firestore from '@react-native-firebase/firestore'
+
+//Test
+import { firestore } from '../../firebaseConfig';
+
 import { StackScreenProps } from '@react-navigation/stack';
 import { SearchStackParamList } from '../../navigation/types';
 

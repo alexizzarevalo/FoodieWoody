@@ -1,5 +1,10 @@
 import '../../../__mocks__/firebase-firestore-mock';
+
+
 import firebaseAuthMock, { firebase } from '../../../__mocks__/firebase-auth-mock';
+
+import { firebase as firebaseFirestore, FirebaseFirestoreTypes } from "@react-native-firebase/firestore";
+
 import React from 'react';
 import renderer, {act} from 'react-test-renderer';
 import OrderConfirmation from '../orderConfirmation/orderConfirmation.component';
@@ -62,4 +67,11 @@ describe('Order confirmation screen component', () => {
     const confirmationbtn = getByTestId('confirmationbtn')
     fireEvent.press(confirmationbtn)
   })
+
+  /*
+  jest.spyOn(firebaseFirestore, 'firestore').mockImplementation(() => {
+    return { onAuthStateChanged :()=> {
+        return Promise.resolve()
+      }}
+  })*/
 })

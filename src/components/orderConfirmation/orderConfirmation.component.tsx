@@ -4,7 +4,7 @@ import {Picker} from '@react-native-community/picker';
 import { styles } from '../../Style';
 import Template from './orderConfirmation.view';
 
-import firestore, {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
+import  {firebase as firebaseFirestore, FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
 import {firebase, FirebaseAuthTypes} from '@react-native-firebase/auth';
 
 import { GlobalDispatch, useGlobalSelector } from '../../storage';
@@ -29,7 +29,7 @@ function first_page(uid:any,setCustomInformation:any){
 
 function get_customer_info(uid:string):Promise<FirebaseFirestoreTypes.DocumentSnapshot>{
   return new Promise(resolve => {
-    firestore()
+    firebaseFirestore.firestore()
       .collection('users')
       .doc(uid)
       .get()
@@ -38,7 +38,8 @@ function get_customer_info(uid:string):Promise<FirebaseFirestoreTypes.DocumentSn
 }
 
 function save_pedido(uid:any,aux:any){
-  return new Promise((resolve) => {firestore()
+  return new Promise((resolve) => {
+    firebaseFirestore.firestore()
     .collection('ordenes')
     .add({
       user_id: 'users/' + uid,
