@@ -14,10 +14,5 @@ import {
 import {styles} from '../../Style'
 
 export default function LoginScreen({ navigation }: DrawerScreenProps<DrawerParamList, 'RegistroNegocio'>) {
-    return (
-        <View style={styles.container}>
-            
-        </View>
-    );
-
+    return null
 }
