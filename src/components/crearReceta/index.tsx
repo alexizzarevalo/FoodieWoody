@@ -10,8 +10,6 @@ import {
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore'
 
-declare const global: {HermesInternal: null | {}};
-
 export default function CrearReceta(){
     const [nombrer, setNombrer] = useState('');
     const [costo, setCosto] = useState('');
@@ -41,10 +39,7 @@ export default function CrearReceta(){
         <StatusBar barStyle="dark-content" />
           <View style={styles.container}>
               <Text style={styles.titulo}> Crea una receta </Text>
-  
                       <Text style={styles.textos}> Nombre: </Text>
-                  
-                  
                   <TextInput
                       style={styles.texti}
                       underlineColorAndroid = "transparent"
@@ -52,14 +47,8 @@ export default function CrearReceta(){
                       onChangeText={nombre => setNombrer(nombrer)}
                       defaultValue=""
                   />
-                  
-             
               <View style={styles.separador}></View>
-              
-                  
                       <Text> Descripción: </Text>
-                  
-                  
                   <TextInput
                       style={styles.textig}
                       underlineColorAndroid = "transparent"
@@ -67,14 +56,8 @@ export default function CrearReceta(){
                       onChangeText={desc => setDesc(desc)}
                       defaultValue=""
                   />
-              
-              
               <View style={styles.separador}></View>
-              
-                  
                       <Text> Ingredientes: </Text>
-                 
-                  
                   <TextInput
                       style={styles.textig}
                       underlineColorAndroid = "transparent"
@@ -82,14 +65,8 @@ export default function CrearReceta(){
                       onChangeText={ingredientes => setIngredientes(ingredientes)}
                       defaultValue=""
                   />
-                  
-              
               <View style={styles.separador}></View>
-              
-                  
                       <Text> Tiempo de preparación: </Text>
-                  
-                  
                   <TextInput
                       style={styles.texti}
                       underlineColorAndroid = "transparent"
@@ -97,14 +74,8 @@ export default function CrearReceta(){
                       onChangeText={preparacion => setPreparacion(preparacion)}
                       defaultValue=""
                   />
-                  
-              
               <View style={styles.separador}></View>
-              
-                  
                       <Text> Costo total: </Text>
-                  
-                 
                   <TextInput
                       style={styles.texti}
                       underlineColorAndroid = "transparent"
@@ -112,8 +83,6 @@ export default function CrearReceta(){
                       onChangeText={costo => setCosto(costo)}
                       defaultValue=""
                   />
-                 
-              
               <TouchableOpacity
                 style={styles.boton}
                 onPress={pressHandler}
