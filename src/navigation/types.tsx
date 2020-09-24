@@ -13,6 +13,7 @@ export type DrawerParamList = {
   Logout: undefined;
   Search: undefined;
   Register: undefined;
+  RegistroNegocio: undefined;
 };
 
 export type SearchStackParamList = {
