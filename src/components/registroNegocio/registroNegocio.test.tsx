@@ -40,3 +40,21 @@ describe('RegistroNegocio Component', () => {
     });
 });
 
+    test('Campos para datos del negocio vacios al iniciar', ()=>{
+        const { getByTestId } = render(
+            <RegistroNegocio navigation={navigation} route={route} />
+        );
+
+        const nombre = getByTestId('nombre');
+        const direccion = getByTestId('direccion');
+        const telefono = getByTestId('telefono');
+
+        //@ts-ignore
+        expect(nombre).toHaveProp('value', '');
+        //@ts-ignore
+        expect(direccion).toHaveProp('value', '');
+        //@ts-ignore
+        expect(telefono).toHaveProp('value', '');
+    });
+});
+
