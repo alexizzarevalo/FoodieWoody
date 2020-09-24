@@ -14,6 +14,13 @@ const navigation: any = {
 };
 const route: any = null;
 
+//Errores de registro
+const AuthError = {
+    emailExist : 'email-already-in-use',
+    weakPassword: 'weak-password',
+    invaidEmail: 'invalid-email'
+}
+
 describe('RegistroNegocio Component', () => {
     //renderizar correctamente, la primera prueba siempre retornara algo, por lo que estara correcta
     test('Debe renderizar correctamente', () => {
@@ -26,7 +33,7 @@ describe('RegistroNegocio Component', () => {
         const { getByTestId } = render(
             <RegistroNegocio navigation={navigation} route={route} />
         );
-
+        //Obtengo objetos segun ID (campo testID)
         const emailInput = getByTestId('email');
         const passwordInput = getByTestId('password');
         const passwordCInput = getByTestId('passwordc');
@@ -43,14 +50,51 @@ describe('RegistroNegocio Component', () => {
         const { getByTestId } = render(
             <RegistroNegocio navigation={navigation} route={route} />
         );
-
+        //Obtengo objetos segun ID (campo testID)
         const nombre = getByTestId('nombre');
         const telefono = getByTestId('telefono');
-
         //@ts-ignore
         expect(nombre).toHaveProp('value', '');
         //@ts-ignore
         expect(telefono).toHaveProp('value', '');
+    });
+
+    //ver
+    test('Verificar el cambio de valores con los inputs', () => {
+        const { getByTestId, } = render(
+            <RegistroNegocio navigation={navigation} route={route} />
+        );
+
+        const emailInput = getByTestId('email');
+        const passwordInput = getByTestId('password');
+        const passwordInputC = getByTestId('passwordC');
+        const telefonoInput = getByTestId('telefono');
+        const NombreInput = getByTestId('nombre');
+
+        const email = 'correo@gmail.com';
+        const password = 'password';
+        const telefono = '5552222';
+        const nombre = 'TACOS PEREZ';
+
+        act(() => { fireEvent.changeText(emailInput, email) })
+        //@ts-ignore
+        expect(emailInput).toHaveProp('value', email);
+
+        act(() => { fireEvent.changeText(passwordInput, password) })
+        //@ts-ignore
+        expect(passwordInput).toHaveProp('value', password);
+
+        act(() => { fireEvent.changeText(passwordInputC, password) })
+        //@ts-ignore
+        expect(passwordInputC).toHaveProp('value', password);
+
+        act(() => { fireEvent.changeText(telefonoInput, password) })
+        //@ts-ignore
+        expect(telefonoInput).toHaveProp('value', telefono);
+
+        act(() => { fireEvent.changeText(NombreInput, nombre) })
+        //@ts-ignore
+        expect(NombreInput).toHaveProp('value', nombre);
     });
 });
 
