@@ -21,5 +21,22 @@ describe('RegistroNegocio Component', () => {
             renderer.create(<RegistroNegocio navigation={navigation} route={route} />)
         })
     })
+
+    test('Campos para auth vacios al iniciar', ()=>{
+        const { getByTestId } = render(
+            <RegistroNegocio navigation={navigation} route={route} />
+        );
+
+        const emailInput = getByTestId('email');
+        const passwordInput = getByTestId('password');
+        const passwordCInput = getByTestId('passwordc');
+
+        //@ts-ignore
+        expect(emailInput).toHaveProp('value', '');
+        //@ts-ignore
+        expect(passwordInput).toHaveProp('value', '');
+        //@ts-ignore
+        expect(passworCdInput).toHaveProp('value', '');
+    });
 });
 
