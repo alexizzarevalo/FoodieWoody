@@ -5,7 +5,8 @@ import React from 'react';
 // Note: test renderer must be required after react-native.
 import renderer, { act } from 'react-test-renderer';
 import { render, fireEvent, waitFor } from "@testing-library/react-native";
-import RegistroNegocio from './index';
+import RegistroNegocio, {useElements} from './index';
+import { renderHook } from "@testing-library/react-hooks";
 
 
 //constantes para renderizado
@@ -67,7 +68,7 @@ describe('RegistroNegocio Component', () => {
 
         const emailInput = getByTestId('email');
         const passwordInput = getByTestId('password');
-        const passwordInputC = getByTestId('passwordC');
+        const passwordInputC = getByTestId('passwordc');
         const telefonoInput = getByTestId('telefono');
         const NombreInput = getByTestId('nombre');
 
@@ -88,7 +89,7 @@ describe('RegistroNegocio Component', () => {
         //@ts-ignore
         expect(passwordInputC).toHaveProp('value', password);
 
-        act(() => { fireEvent.changeText(telefonoInput, password) })
+        act(() => { fireEvent.changeText(telefonoInput, telefono) })
         //@ts-ignore
         expect(telefonoInput).toHaveProp('value', telefono);
 
@@ -96,5 +97,16 @@ describe('RegistroNegocio Component', () => {
         //@ts-ignore
         expect(NombreInput).toHaveProp('value', nombre);
     });
+
+    describe('Focus en los elementos', () => {
+        const {result} = renderHook(() => useElements({navigation}))
+        result.current.passwordField.focus();
+        result.current.passwordcField.focus();
+        result.current.nombreField.focus();
+        result.current.telefonoField.focus();
+    });
+
 });
+
+
 

@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { DrawerScreenProps } from "@react-navigation/drawer";
+import { DrawerScreenProps, DrawerNavigationProp } from "@react-navigation/drawer";
 import { DrawerParamList } from "../../navigation/types";
 import {
   View,
@@ -12,8 +12,90 @@ import {
   Alert
 } from 'react-native';
 import {styles} from '../../Style'
+import { email } from "../../../__mocks__/register-user-mock";
 
+
+
+//Manejo de estados de drawer
+export function useElements({ navigation }: { navigation: DrawerNavigationProp<DrawerParamList, "RegistroNegocio"> }) {
+    const [loading, setLoading] = useState(false);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [passwordc, setPasswordc] = useState('');
+    const [nombre, setNombre] = useState('');
+    const [telefono, setTelefono] = useState('');
+
+    //Referencias para focus
+    const passwordRef = useRef<TextInput>(null);
+    const passwordcRef = useRef<TextInput>(null);
+    const nombredRef = useRef<TextInput>(null);
+    const telefonodRef = useRef<TextInput>(null);
+
+    //Eventos de cambio de inputs
+    const handleEmailChange = (email: string) => {
+        setEmail(email);
+    }
+    const handlePasswordChange = (password: string) => {
+        setPassword(password);
+    };
+    const handlePasswordCChange = (passwordc: string) => {
+        setPasswordc(passwordc);
+    };
+    const handleTelefonoChange = (telefono: string) => {
+        setTelefono(telefono);
+    };
+    const handleNombreChange = (Nombre: string) => {
+        setNombre(Nombre);
+    };
+    
+    //eventos de cambio de foco
+    const focusPasswordField = () => { passwordRef.current?.focus() }
+    const focusPasswordcField = () => { passwordcRef.current?.focus() }
+    const focusTelefonoField = () => { telefonodRef.current?.focus() }
+    const focusNombreField = () => { nombredRef.current?.focus() }
+
+    //Para ir a pagina de login
+    const goToLogin = () => navigation.navigate('Login');
+
+    return {
+        emailField: {
+            onChangeText: handleEmailChange,
+            value: email
+        },
+        passwordField: {
+            onChangeText: handlePasswordChange,
+            value: password,
+            focus: focusPasswordField,
+            ref: passwordRef
+        },
+        passwordcField: {
+            onChangeText: handlePasswordCChange,
+            value: passwordc,
+            focus: focusPasswordcField,
+            ref: passwordRef
+        },
+        telefonoField:{
+            onChangeText: handleTelefonoChange,
+            value: telefono,
+            focus: focusTelefonoField,
+            ref: telefono
+        },
+        nombreField:{
+            onChangeText: handleNombreChange,
+            value: nombre,
+            focus: focusNombreField,
+            ref: nombre
+        },
+        loading: {
+            value: loading,
+            change: setLoading
+        },
+    }
+}
+
+//render de la pantallla
 export default function Registronegocio({ navigation }: DrawerScreenProps<DrawerParamList, 'RegistroNegocio'>) {
+    const { emailField, passwordField, passwordcField, telefonoField, nombreField, loading } = useElements({ navigation });
     return(<View style={styles.container}>
         <View style={styles.container}>
             <Text style={[styles.headerText, { fontSize: 40 }]}>Foodie Woody</Text>
@@ -27,7 +109,9 @@ export default function Registronegocio({ navigation }: DrawerScreenProps<Drawer
                     style={styles.input}
                     placeholder={"Escribe tu correo electrónico"}
                     blurOnSubmit={false} //Para que no se baje el teclado cuando presiona enter
-                    value = ""
+                    value = {emailField.value}
+                    onChangeText = {emailField.onChangeText}
+                    onSubmitEditing ={passwordField.focus}
                 />
                 <Text style={styles.labelbold}>Contraseña:</Text>
                 <TextInput
@@ -36,7 +120,9 @@ export default function Registronegocio({ navigation }: DrawerScreenProps<Drawer
                     placeholder={"Escribe tu contraseña"}
                     blurOnSubmit={true}
                     secureTextEntry={true} // Modo contraseña
-                    value = ""
+                    value = {passwordField.value}
+                    onChangeText = {passwordField.onChangeText}
+                    onSubmitEditing ={passwordcField.focus}
                 />
                 <Text style={styles.labelbold}>Confirma Contraseña:</Text>
                 <TextInput
@@ -45,7 +131,9 @@ export default function Registronegocio({ navigation }: DrawerScreenProps<Drawer
                     placeholder={"Escribe tu contraseña"}
                     blurOnSubmit={true}
                     secureTextEntry={true} // Modo contraseña
-                    value = ""
+                    value = {passwordcField.value}
+                    onChangeText = {passwordcField.onChangeText}
+                    onSubmitEditing ={nombreField.focus}
                 />
                 <Text style={styles.labelbold}>Nombre de Negocio:</Text>
                 <TextInput
@@ -53,7 +141,9 @@ export default function Registronegocio({ navigation }: DrawerScreenProps<Drawer
                     style={styles.input}
                     placeholder={"Negocio"}
                     blurOnSubmit={true}
-                    value = ""
+                    value = {nombreField.value}
+                    onChangeText = {nombreField.onChangeText}
+                    onSubmitEditing ={telefonoField.focus}
                 />
                 <Text style={styles.labelbold}>Teléfono:</Text>
                 <TextInput
@@ -61,7 +151,8 @@ export default function Registronegocio({ navigation }: DrawerScreenProps<Drawer
                     style={styles.input}
                     placeholder={"Teléfono"}
                     blurOnSubmit={true}
-                    value = ""
+                    value = {telefonoField.value}
+                    onChangeText = {telefonoField.onChangeText}
                 />
             </ScrollView>
         </View>
