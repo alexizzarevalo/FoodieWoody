@@ -13,6 +13,43 @@ import {
 } from 'react-native';
 import {styles} from '../../Style'
 
-export default function LoginScreen({ navigation }: DrawerScreenProps<DrawerParamList, 'RegistroNegocio'>) {
-    return null
+export default function Registronegocio({ navigation }: DrawerScreenProps<DrawerParamList, 'RegistroNegocio'>) {
+    return(<View style={styles.container}>
+        <View style={styles.container}>
+            <Text style={[styles.headerText, { fontSize: 40 }]}>Foodie Woody</Text>
+            <Text style={styles.headerText}>Registra tu Negocio</Text>
+        </View>
+        <View style={styles.footer}>
+            <ScrollView>
+
+                <Text style={styles.labelbold}>Correo:</Text>
+                <TextInput
+                    testID="email"
+                    style={styles.input}
+                    placeholder={"Escribe tu correo electrónico"}
+                    blurOnSubmit={false} //Para que no se baje el teclado cuando presiona enter
+                    value = ""
+                />
+                <Text style={styles.labelbold}>Contraseña:</Text>
+                <TextInput
+                    testID="password"
+                    style={styles.input}
+                    placeholder={"Escribe tu contraseña"}
+                    blurOnSubmit={true}
+                    secureTextEntry={true} // Modo contraseña
+                    value = ""
+                />
+                <Text style={styles.labelbold}>Confirma Contraseña:</Text>
+                <TextInput
+                    testID="passwordc"
+                    style={styles.input}
+                    placeholder={"Escribe tu contraseña"}
+                    blurOnSubmit={true}
+                    secureTextEntry={true} // Modo contraseña
+                    value = ""
+                />
+            </ScrollView>
+        </View>
+    </View>
+);
 }

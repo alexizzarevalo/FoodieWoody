@@ -36,7 +36,7 @@ describe('RegistroNegocio Component', () => {
         //@ts-ignore
         expect(passwordInput).toHaveProp('value', '');
         //@ts-ignore
-        expect(passworCdInput).toHaveProp('value', '');
+        expect(passwordCInput).toHaveProp('value', '');
     });
 });
 

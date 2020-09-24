@@ -15,6 +15,11 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingBottom: 50
   },
+  headerText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 30,
+  },
   footer: {
     flex: Platform.OS === 'ios' ? 3 : 5,
     backgroundColor: '#fff',
