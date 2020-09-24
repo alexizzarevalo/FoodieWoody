@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   TextInput,
   ScrollView,
+  TouchableHighlight,
   StatusBar,
   Image,
   Alert
@@ -72,90 +73,106 @@ export function useElements({ navigation }: { navigation: DrawerNavigationProp<D
             onChangeText: handlePasswordCChange,
             value: passwordc,
             focus: focusPasswordcField,
-            ref: passwordRef
+            ref: passwordcRef
         },
         telefonoField:{
             onChangeText: handleTelefonoChange,
             value: telefono,
             focus: focusTelefonoField,
-            ref: telefono
+            ref: telefonodRef
         },
         nombreField:{
             onChangeText: handleNombreChange,
             value: nombre,
             focus: focusNombreField,
-            ref: nombre
+            ref: nombredRef
         },
         loading: {
             value: loading,
             change: setLoading
         },
+        goToLogin
     }
 }
 
 //render de la pantallla
 export default function Registronegocio({ navigation }: DrawerScreenProps<DrawerParamList, 'RegistroNegocio'>) {
-    const { emailField, passwordField, passwordcField, telefonoField, nombreField, loading } = useElements({ navigation });
+    const { emailField, passwordField, passwordcField, telefonoField, nombreField, loading, goToLogin } = useElements({ navigation });
     return(<View style={styles.container}>
-        <View style={styles.container}>
-            <Text style={[styles.headerText, { fontSize: 40 }]}>Foodie Woody</Text>
-            <Text style={styles.headerText}>Registra tu Negocio</Text>
-        </View>
-        <View style={styles.footer}>
-            <ScrollView>
-                <Text style={styles.labelbold}>Correo:</Text>
-                <TextInput
-                    testID="email"
-                    style={styles.input}
-                    placeholder={"Escribe tu correo electrónico"}
-                    blurOnSubmit={false} //Para que no se baje el teclado cuando presiona enter
-                    value = {emailField.value}
-                    onChangeText = {emailField.onChangeText}
-                    onSubmitEditing ={passwordField.focus}
-                />
-                <Text style={styles.labelbold}>Contraseña:</Text>
-                <TextInput
-                    testID="password"
-                    style={styles.input}
-                    placeholder={"Escribe tu contraseña"}
-                    blurOnSubmit={true}
-                    secureTextEntry={true} // Modo contraseña
-                    value = {passwordField.value}
-                    onChangeText = {passwordField.onChangeText}
-                    onSubmitEditing ={passwordcField.focus}
-                />
-                <Text style={styles.labelbold}>Confirma Contraseña:</Text>
-                <TextInput
-                    testID="passwordc"
-                    style={styles.input}
-                    placeholder={"Escribe tu contraseña"}
-                    blurOnSubmit={true}
-                    secureTextEntry={true} // Modo contraseña
-                    value = {passwordcField.value}
-                    onChangeText = {passwordcField.onChangeText}
-                    onSubmitEditing ={nombreField.focus}
-                />
-                <Text style={styles.labelbold}>Nombre de Negocio:</Text>
-                <TextInput
-                    testID="nombre"
-                    style={styles.input}
-                    placeholder={"Negocio"}
-                    blurOnSubmit={true}
-                    value = {nombreField.value}
-                    onChangeText = {nombreField.onChangeText}
-                    onSubmitEditing ={telefonoField.focus}
-                />
-                <Text style={styles.labelbold}>Teléfono:</Text>
-                <TextInput
-                    testID="telefono"
-                    style={styles.input}
-                    placeholder={"Teléfono"}
-                    blurOnSubmit={true}
-                    value = {telefonoField.value}
-                    onChangeText = {telefonoField.onChangeText}
-                />
-            </ScrollView>
-        </View>
-    </View>
+                <StatusBar backgroundColor='#f87c09' barStyle="light-content"/>
+                <View style = {styles.header}>
+                    <Text style={styles.text_header}>¡Registrate tu Negocio!</Text>
+                </View>
+                <View style = {styles.footer}>
+                <ScrollView>
+                    <Text style={styles.labelbold}>Correo:</Text>
+                    <TextInput
+                        testID="email"
+                        style={styles.input}
+                        placeholder={"Escribe tu correo electrónico"}
+                        blurOnSubmit={false} //Para que no se baje el teclado cuando presiona enter
+                        value = {emailField.value}
+                        onChangeText = {emailField.onChangeText}
+                        onSubmitEditing ={passwordField.focus}
+                    />
+                    <Text style={styles.labelbold}>Contraseña:</Text>
+                    <TextInput
+                        testID="password"
+                        style={styles.input}
+                        placeholder={"Escribe tu contraseña"}
+                        blurOnSubmit={false}
+                        secureTextEntry={true} // Modo contraseña
+                        ref = {passwordField.ref}
+                        value = {passwordField.value}
+                        onChangeText = {passwordField.onChangeText}
+                        onSubmitEditing ={passwordcField.focus}
+                    />
+                    <Text style={styles.labelbold}>Confirma Contraseña:</Text>
+                    <TextInput
+                        testID="passwordc"
+                        style={styles.input}
+                        placeholder={"Escribe tu contraseña"}
+                        blurOnSubmit={false}
+                        ref = {passwordcField.ref}
+                        secureTextEntry={true} // Modo contraseña
+                        value = {passwordcField.value}
+                        onChangeText = {passwordcField.onChangeText}
+                        onSubmitEditing ={nombreField.focus}
+                    />
+                    <Text style={styles.labelbold}>Nombre de Negocio:</Text>
+                    <TextInput
+                        testID="nombre"
+                        style={styles.input}
+                        placeholder={"Negocio"}
+                        blurOnSubmit={false}
+                        ref = {nombreField.ref}
+                        value = {nombreField.value}
+                        onChangeText = {nombreField.onChangeText}
+                        onSubmitEditing ={telefonoField.focus}
+                    />
+                    <Text style={styles.labelbold}>Teléfono:</Text>
+                    <TextInput
+                        testID="telefono"
+                        style={styles.input}
+                        placeholder={"Teléfono"}
+                        blurOnSubmit={false}
+                        ref = {telefonoField.ref}
+                        value = {telefonoField.value}
+                        onChangeText = {telefonoField.onChangeText}
+                    />
+                    <View style={styles.button}>
+                        <TouchableOpacity testID="registrar" style={styles.buttonWarning} activeOpacity={0.85}>
+                            <Text style={styles.buttonText}>Registrarse</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.buttonContainer}>
+                        <Text style={styles.textCenter}>¿Ya tienes cuenta?</Text>
+                        <TouchableHighlight testID="redirectLogin"  underlayColor='gray' onPress={goToLogin}>
+                            <Text style={styles.labelbold} >Inicia Sesión</Text>
+                        </TouchableHighlight>
+                    </View>
+                </ScrollView>
+                </View>
+            </View>
 );
 }
