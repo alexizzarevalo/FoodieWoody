@@ -1,0 +1,14 @@
+import firebase, { firestore } from 'firebase'
+
+export const firebaseConfig = {
+    apiKey: "AIzaSyBfDgWviKZ-9oxESD0C_8z-isxpRXVM2Rw",
+    authDomain: "foodie-woody.firebaseapp.com",
+    databaseURL: "https://foodie-woody.firebaseio.com",
+    projectId: "foodie-woody",
+    storageBucket: "foodie-woody.appspot.com",
+    messagingSenderId: "908133367026",
+    appId: "1:908133367026:web:bee92a7aba07c253b7646b",
+    measurementId: "G-KZZFYZYC4Q"
+  };
+  
+  export default firebase.initializeApp(firebaseConfig); 
