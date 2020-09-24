@@ -112,6 +112,7 @@ describe('RegistroNegocio Component', () => {
         );
         const registerButton = getByTestId('redirectLogin');
         act(() => fireEvent.press(registerButton))
+        
     })
 });
 
