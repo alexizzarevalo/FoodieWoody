@@ -106,6 +106,13 @@ describe('RegistroNegocio Component', () => {
         result.current.telefonoField.focus();
     });
 
+    test('Debe navegar hacia la pantalla de login', async () => {
+        const { getByTestId, } = render(
+            <RegistroNegocio navigation={navigation} route={route} />
+        );
+        const registerButton = getByTestId('redirectLogin');
+        act(() => fireEvent.press(registerButton))
+    })
 });
 
 
