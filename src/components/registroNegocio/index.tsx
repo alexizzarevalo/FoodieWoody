@@ -21,7 +21,6 @@ export default function Registronegocio({ navigation }: DrawerScreenProps<Drawer
         </View>
         <View style={styles.footer}>
             <ScrollView>
-
                 <Text style={styles.labelbold}>Correo:</Text>
                 <TextInput
                     testID="email"
@@ -46,6 +45,22 @@ export default function Registronegocio({ navigation }: DrawerScreenProps<Drawer
                     placeholder={"Escribe tu contraseña"}
                     blurOnSubmit={true}
                     secureTextEntry={true} // Modo contraseña
+                    value = ""
+                />
+                <Text style={styles.labelbold}>Nombre de Negocio:</Text>
+                <TextInput
+                    testID="nombre"
+                    style={styles.input}
+                    placeholder={"Negocio"}
+                    blurOnSubmit={true}
+                    value = ""
+                />
+                <Text style={styles.labelbold}>Teléfono:</Text>
+                <TextInput
+                    testID="telefono"
+                    style={styles.input}
+                    placeholder={"Teléfono"}
+                    blurOnSubmit={true}
                     value = ""
                 />
             </ScrollView>
