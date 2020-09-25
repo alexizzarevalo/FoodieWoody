@@ -97,3 +97,4 @@ ui-debug.log
 #API Keys
 ios/GoogleService-Info.plist
 /coverage
+test_servers
