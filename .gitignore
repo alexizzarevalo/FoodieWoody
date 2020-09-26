@@ -98,3 +98,6 @@ ui-debug.log
 ios/GoogleService-Info.plist
 /coverage
 test_servers
+
+#cucumber
+.irb-history
