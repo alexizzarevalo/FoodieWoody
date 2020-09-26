@@ -187,10 +187,9 @@ describe('RegistroNegocio Component', () => {
         act(() => { fireEvent.changeText(passwordInput, password) })
         act(() => { fireEvent.changeText(passwordInputC, password) })
         act(() => { fireEvent.changeText(telefonoInput, telefono) })
-        act(() => { fireEvent.changeText(NombreInput, nombre) })        
-
-        
-        // act(async () => await fireEvent.press(loginButton))
+        act(() => { fireEvent.changeText(NombreInput, nombre) })    
+        const regButton = getByTestId('registrar');            
+        act(async () => await fireEvent.press(regButton))
     })
 });
 
