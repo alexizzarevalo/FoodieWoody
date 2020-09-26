@@ -4,6 +4,7 @@ import React from 'react';
 import renderer, {act} from 'react-test-renderer';
 import CrearReceta from '../crearReceta/crearReceta.component';
 import {fireEvent, render} from '@testing-library/react-native';
+import crearReceta from '../crearReceta/crearReceta.component';
 
 //@ts-ignore
 jest.spyOn(firebase, 'firestore').mockImplementation(() => {
@@ -26,5 +27,12 @@ describe('crearReceta screen component', () => {
   test('Should renders without crashing', () => {
     renderer.create(
         <CrearReceta navigation={navigation} route={route}/>)
+  })
+
+  test('Should navigate to Search again', ()=>{
+    const {getByTestId} = render(
+        <CrearReceta navigation={navigation} route={route}/>)
+    const btnCrear = getByTestId('btnCrear')
+    fireEvent.press(btnCrear)
   })
 })

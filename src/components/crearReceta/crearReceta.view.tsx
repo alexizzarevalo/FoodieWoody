@@ -53,6 +53,7 @@ export default function Template({
                   defaultValue=""
               />
           <TouchableOpacity
+            testID={"btnCrear"}
             style={styles.boton}
             onPress={pressHandler}
           >
