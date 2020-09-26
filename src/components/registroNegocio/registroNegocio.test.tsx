@@ -15,6 +15,9 @@ const navigation: any = {
 };
 const route: any = null;
 
+//spy en los eventos de alerta
+jest.spyOn(Alert, 'alert');
+
 //Errores de registro
 const AuthError = {
     emailExist : 'email-already-in-use',
@@ -122,7 +125,7 @@ describe('RegistroNegocio Component', () => {
         const regButton = getByTestId('registrar');
         act(() => fireEvent.press(regButton))
 
-        expect(Alert.alert).toHaveBeenCalledWith('Datos faltantes', 'Debes agregar un correo y una contraseña');
+        expect(Alert.alert).toHaveBeenCalledWith('Datos faltantes', 'Todos los datos son obligatorios');
     })
 
     test('Accion de registrar usuario negocio', async () => {

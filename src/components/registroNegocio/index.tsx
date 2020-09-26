@@ -14,9 +14,7 @@ import {
 } from 'react-native';
 import {styles} from '../../Style'
 
-export function registrar(email:string, password:string){
 
-}
 
 export function validarCampos(email:string, password:string, passwordc:string, name:string, phone:string){
     let message = '';
@@ -115,6 +113,14 @@ export function useElements({ navigation }: { navigation: DrawerNavigationProp<D
 //render de la pantallla
 export default function Registronegocio({ navigation }: DrawerScreenProps<DrawerParamList, 'RegistroNegocio'>) {
     const { emailField, passwordField, passwordcField, telefonoField, nombreField, loading, goToLogin } = useElements({ navigation });
+
+    function registrar(email:string, password:string){
+        if (emailField.value.length === 0 || passwordField.value.length === 0 || passwordcField.value.length == 0 || telefonoField.value.length == 0 || nombreField.value.length == 0 ) {
+            Alert.alert('Datos faltantes', 'Todos los datos son obligatorios')
+            return
+        }
+    }
+
     return(<View style={styles.container}>
                 <StatusBar backgroundColor='#f87c09' barStyle="light-content"/>
                 <View style = {styles.header}>
@@ -178,7 +184,7 @@ export default function Registronegocio({ navigation }: DrawerScreenProps<Drawer
                         onChangeText = {telefonoField.onChangeText}
                     />
                     <View style={styles.button}>
-                        <TouchableOpacity testID="registrar" style={styles.buttonWarning} activeOpacity={0.85}>
+                        <TouchableOpacity testID="registrar" style={styles.buttonWarning} activeOpacity={0.85} onPress={registrar}>
                             <Text style={styles.buttonText}>Registrarse</Text>
                         </TouchableOpacity>
                     </View>
