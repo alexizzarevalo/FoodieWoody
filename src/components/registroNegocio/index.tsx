@@ -13,7 +13,24 @@ import {
   Alert
 } from 'react-native';
 import {styles} from '../../Style'
-import { email } from "../../../__mocks__/register-user-mock";
+
+export function registrar(email:string, password:string){
+
+}
+
+export function validarCampos(email:string, password:string, passwordc:string, name:string, phone:string){
+    let message = '';
+    if(email.trim().length ==0 || password.trim().length ==0 || passwordc.trim().length ==0 || name.trim().length ==0 || phone.trim().length ==0){
+        message = 'Campos Obligatorios'
+    }else if(password != passwordc){
+        message = 'Las contraseñas no coinciden'
+    }else{
+        return true;
+    }
+    Alert.alert("Error en datos", message)
+    return false;
+
+}
 
 
 

@@ -16,11 +16,17 @@ const onAuthStateChanged = () => {
   return Promise.resolve('Hola');
 }
 
+const createUserWithEmailAndPassword = (email: string, password: string): Promise<String> => {
+  return Promise.resolve('Usuario Registrado')
+
+}
+
 export const auth = () => {
   return {
     signInWithEmailAndPassword,
     sendPasswordResetEmail,
-    onAuthStateChanged
+    onAuthStateChanged,
+    createUserWithEmailAndPassword
   }
 }
 

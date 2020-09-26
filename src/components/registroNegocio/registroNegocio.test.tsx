@@ -1,4 +1,4 @@
-import firebase from '../../../__mocks__/firebase-register-mock';
+import firebase from '../../../__mocks__/firebase-auth-mock';
 import firestore from '../../../__mocks__/firebase-firestore-mock'
 import { Alert } from 'react-native';
 import React from 'react';
@@ -113,6 +113,54 @@ describe('RegistroNegocio Component', () => {
         const registerButton = getByTestId('redirectLogin');
         act(() => fireEvent.press(registerButton))
         
+    })
+
+    test('Error al iniciar si los datos', async() => {
+        const { getByTestId, } = render(
+            <RegistroNegocio navigation={navigation} route={route} />
+        );
+        const regButton = getByTestId('registrar');
+        act(() => fireEvent.press(regButton))
+
+        expect(Alert.alert).toHaveBeenCalledWith('Datos faltantes', 'Debes agregar un correo y una contraseña');
+    })
+
+    test('Accion de registrar usuario negocio', async () => {
+        const { getByTestId, } = render(
+            <RegistroNegocio navigation={navigation} route={route} />
+        );
+        const registerButton = getByTestId('redirectLogin');
+        act(() => fireEvent.press(registerButton))
+
+        let createUserWithEmailAndPassword = jest.fn(() => {
+            return Promise.reject(new Error('auth/wrong-password'));
+        })
+
+        //@ts-ignore
+        jest.spyOn(firebase, 'auth').mockImplementation(() => {
+            return { createUserWithEmailAndPassword }
+        })
+
+
+        const emailInput = getByTestId('email');
+        const passwordInput = getByTestId('password');
+        const passwordInputC = getByTestId('passwordc');
+        const telefonoInput = getByTestId('telefono');
+        const NombreInput = getByTestId('nombre');
+
+        const email = 'correo@gmail.com';
+        const password = 'password';
+        const telefono = '5552222';
+        const nombre = 'TACOS PEREZ';
+
+        act(() => { fireEvent.changeText(emailInput, email) })
+        act(() => { fireEvent.changeText(passwordInput, password) })
+        act(() => { fireEvent.changeText(passwordInputC, password) })
+        act(() => { fireEvent.changeText(telefonoInput, telefono) })
+        act(() => { fireEvent.changeText(NombreInput, nombre) })        
+
+        
+        // act(async () => await fireEvent.press(loginButton))
     })
 });
 
