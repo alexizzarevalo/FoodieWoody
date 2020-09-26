@@ -1,5 +1,11 @@
 Feature: Login feature
+  Como usuario
+  Quiero iniciar sesión en el sistema
+  Para poder usar la aplicación
 
-  Scenario: Como usuario quiero crear una cuenta en la app
-    When I press "Registrarse"
-    Then I see "¡Registrate ahora!"
+  Scenario: Iniciar sesión en el sistema correctamente
+    Given I am in the login page
+    When I fill in "emailInput" as "dalexis.da@gmail.com"
+    And I fill in "passwordInput" as "123456"
+    And I press "Iniciar sesión"
+    Then I should see "Bienvenido" text
