@@ -18,13 +18,6 @@ const route: any = null;
 //spy en los eventos de alerta
 jest.spyOn(Alert, 'alert');
 
-//Errores de registro
-const AuthError = {
-    emailExist : 'email-already-in-use',
-    weakPassword: 'weak-password',
-    invaidEmail: 'invalid-email'
-}
-
 describe('RegistroNegocio Component', () => {
     //renderizar correctamente, la primera prueba siempre retornara algo, por lo que estara correcta
     test('Debe renderizar correctamente', () => {
@@ -155,42 +148,42 @@ describe('RegistroNegocio Component', () => {
         expect(Alert.alert).toHaveBeenCalledWith('Datos incorrectos', 'Contraseñas no coinciden');
     })
 
-    test('Accion de registrar usuario negocio', async () => {
-        const { getByTestId, } = render(
-            <RegistroNegocio navigation={navigation} route={route} />
-        );
-        const registerButton = getByTestId('redirectLogin');
-        act(() => fireEvent.press(registerButton))
+    // test('Accion de registrar usuario negocio', async () => {
+    //     const { getByTestId, } = render(
+    //         <RegistroNegocio navigation={navigation} route={route} />
+    //     );
+    //     const registerButton = getByTestId('redirectLogin');
+    //     act(() => fireEvent.press(registerButton))
 
-        let createUserWithEmailAndPassword = jest.fn(() => {
-            return Promise.reject(new Error('auth/wrong-password'));
-        })
+    //     let createUserWithEmailAndPassword = jest.fn(() => {
+    //         return Promise.reject(new Error('email-already-in-use'));
+    //     })
 
-        //@ts-ignore
-        jest.spyOn(firebase, 'auth').mockImplementation(() => {
-            return { createUserWithEmailAndPassword }
-        })
+    //     //@ts-ignore
+    //     jest.spyOn(firebase, 'auth').mockImplementation(() => {
+    //         return { createUserWithEmailAndPassword }
+    //     })
 
 
-        const emailInput = getByTestId('email');
-        const passwordInput = getByTestId('password');
-        const passwordInputC = getByTestId('passwordc');
-        const telefonoInput = getByTestId('telefono');
-        const NombreInput = getByTestId('nombre');
+    //     const emailInput = getByTestId('email');
+    //     const passwordInput = getByTestId('password');
+    //     const passwordInputC = getByTestId('passwordc');
+    //     const telefonoInput = getByTestId('telefono');
+    //     const NombreInput = getByTestId('nombre');
 
-        const email = 'correo@gmail.com';
-        const password = 'password';
-        const telefono = '5552222';
-        const nombre = 'TACOS PEREZ';
+    //     const email = 'pedidos@dominos.com';
+    //     const password = 'password';
+    //     const telefono = '5552222';
+    //     const nombre = 'TACOS PEREZ';
 
-        act(() => { fireEvent.changeText(emailInput, email) })
-        act(() => { fireEvent.changeText(passwordInput, password) })
-        act(() => { fireEvent.changeText(passwordInputC, password) })
-        act(() => { fireEvent.changeText(telefonoInput, telefono) })
-        act(() => { fireEvent.changeText(NombreInput, nombre) })    
-        const regButton = getByTestId('registrar');            
-        act(async () => await fireEvent.press(regButton))
-    })
+    //     act(() => { fireEvent.changeText(emailInput, email) })
+    //     act(() => { fireEvent.changeText(passwordInput, password) })
+    //     act(() => { fireEvent.changeText(passwordInputC, password) })
+    //     act(() => { fireEvent.changeText(telefonoInput, telefono) })
+    //     act(() => { fireEvent.changeText(NombreInput, nombre) })    
+    //     const regButton = getByTestId('registrar');            
+    //     act(async () => await fireEvent.press(regButton))
+    // })
 });
 
 

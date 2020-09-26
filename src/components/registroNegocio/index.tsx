@@ -1,19 +1,55 @@
 import React, { useState, useRef } from "react";
 import { DrawerScreenProps, DrawerNavigationProp } from "@react-navigation/drawer";
+import { firebase } from "@react-native-firebase/auth";
 import { DrawerParamList } from "../../navigation/types";
 import {
-  View,
-  Text,
-  TouchableOpacity,
-  TextInput,
-  ScrollView,
-  TouchableHighlight,
-  StatusBar,
-  Image,
-  Alert
+    View,
+    Text,
+    TouchableOpacity,
+    TextInput,
+    ScrollView,
+    TouchableHighlight,
+    StatusBar,
+    Alert,
+    ActivityIndicator
 } from 'react-native';
-import {styles} from '../../Style'
+import { styles} from '../../Style';
 
+//import {firebase as firebaseFirestore, FirebaseFirestoreTypes} from '@react-native-firebase/firestore'
+
+import { firestore as firebaseFirestore } from '../../firebaseConfig';
+import "firebase/firestore"
+
+
+const AuthError = {
+    emailExist : 'email-already-in-use',
+    weakPassword: 'weak-password',
+    invaidEmail: 'invalid-email'
+}
+
+export function register(email: string, password: string) {
+    return new Promise((resolve, reject) => {
+        // firebase.auth()
+        //     .createUserWithEmailAndPassword(email, password)
+        //     .then(resolve)
+        //     .catch(reject);
+    })
+}
+
+//export function saveData(id:string, name: string, phone: string){
+function saveData(uid:string, email:string, name: string, phone: string){
+    return new Promise((resolve, reject)=>{
+        firebaseFirestore()
+        .collection('users')
+        .doc(uid)
+        .set({
+            correo: email,
+            nombre: name,
+            rol: 'negocio',
+            telefono: phone
+          });
+    })
+}
 
 //Manejo de estados de drawer
 export function useElements({ navigation }: { navigation: DrawerNavigationProp<DrawerParamList, "RegistroNegocio"> }) {
@@ -95,17 +131,36 @@ export function useElements({ navigation }: { navigation: DrawerNavigationProp<D
 
 //render de la pantallla
 export default function Registronegocio({ navigation }: DrawerScreenProps<DrawerParamList, 'RegistroNegocio'>) {
+    //let ref = firebaseFirestore.firestore().collection('users');
     const { emailField, passwordField, passwordcField, telefonoField, nombreField, loading, goToLogin } = useElements({ navigation });
 
-    function registrar(email:string, password:string){
+    function registrar(){
         if (emailField.value.length === 0 || passwordField.value.length === 0 || passwordcField.value.length == 0 || telefonoField.value.length == 0 || nombreField.value.length == 0 ) {
             Alert.alert('Datos faltantes', 'Todos los datos son obligatorios')
             return
         }else if(passwordField.value != passwordcField.value){
-            //message = 'Las contraseñas no coinciden'
             Alert.alert('Datos incorrectos', 'Contraseñas no coinciden')
             return
         }
+        loading.change(true);
+        return //descomentar este return, esto es porque no se ha implementado prueba de registro
+        //llamo a mi funcion de registrar, devuelve un promise de la funcion de crearusuarioconemailycontrase;a de auth
+        register(emailField.value.trim(), passwordField.value)
+            .then(() => {
+                //guardarlos datos de empresa con firebase
+            })
+            .catch((error: Error) => {
+                //errores, estos estan guardados en el array AuthError para fines practicos
+                if (error.message.includes(AuthError.emailExist)) {
+                    Alert.alert('Correo ya exisste', 'El correo ingresado ya se encuentra regisstrado');
+                } else if (error.message.includes(AuthError.invaidEmail)) {
+                    Alert.alert('Correo inválido', 'Ingresa una dirección de correo válida');
+                } else if (error.message.includes(AuthError.weakPassword)) {
+                    Alert.alert('Contraseña incorrecta', 'La contraseña ingresada es muy debil');
+                }  else {
+                    Alert.alert('Error', 'Error  al crear registro, intente nuevamente');
+                }
+            })
     }
 
     return(<View style={styles.container}>
@@ -172,7 +227,10 @@ export default function Registronegocio({ navigation }: DrawerScreenProps<Drawer
                     />
                     <View style={styles.button}>
                         <TouchableOpacity testID="registrar" style={styles.buttonWarning} activeOpacity={0.85} onPress={registrar}>
-                            <Text style={styles.buttonText}>Registrarse</Text>
+                            {
+                                loading.value ? <ActivityIndicator testID="activityIndicator" style={styles.buttonText} size={24} color={"white"} />
+                                    : <Text testID="loginButtonText" style={styles.buttonText}>Iniciar sesión</Text>
+                            }<Text style={styles.buttonText}>Registrarse</Text>
                         </TouchableOpacity>
                     </View>
                     <View style={styles.buttonContainer}>
