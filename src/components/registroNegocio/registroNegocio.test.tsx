@@ -128,6 +128,33 @@ describe('RegistroNegocio Component', () => {
         expect(Alert.alert).toHaveBeenCalledWith('Datos faltantes', 'Todos los datos son obligatorios');
     })
 
+    test('Contraseñas no coinciden', async() => {
+        const { getByTestId, } = render(
+            <RegistroNegocio navigation={navigation} route={route} />
+        );
+        const regButton = getByTestId('registrar');
+        act(() => fireEvent.press(regButton))
+        const emailInput = getByTestId('email');
+        const passwordInput = getByTestId('password');
+        const passwordInputC = getByTestId('passwordc');
+        const telefonoInput = getByTestId('telefono');
+        const NombreInput = getByTestId('nombre');
+
+        const email = 'correo@gmail.com';
+        const telefono = '5552222';
+        const nombre = 'TACOS PEREZ';
+
+        act(() => { fireEvent.changeText(emailInput, email) })
+        act(() => { fireEvent.changeText(passwordInput, 'contrasena') })
+        act(() => { fireEvent.changeText(passwordInputC, 'nocontrasena') })
+        act(() => { fireEvent.changeText(telefonoInput, telefono) })
+        act(() => { fireEvent.changeText(NombreInput, nombre) })    
+        
+        act(() => fireEvent.press(regButton))
+
+        expect(Alert.alert).toHaveBeenCalledWith('Datos incorrectos', 'Contraseñas no coinciden');
+    })
+
     test('Accion de registrar usuario negocio', async () => {
         const { getByTestId, } = render(
             <RegistroNegocio navigation={navigation} route={route} />

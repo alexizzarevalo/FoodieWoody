@@ -15,23 +15,6 @@ import {
 import {styles} from '../../Style'
 
 
-
-export function validarCampos(email:string, password:string, passwordc:string, name:string, phone:string){
-    let message = '';
-    if(email.trim().length ==0 || password.trim().length ==0 || passwordc.trim().length ==0 || name.trim().length ==0 || phone.trim().length ==0){
-        message = 'Campos Obligatorios'
-    }else if(password != passwordc){
-        message = 'Las contraseñas no coinciden'
-    }else{
-        return true;
-    }
-    Alert.alert("Error en datos", message)
-    return false;
-
-}
-
-
-
 //Manejo de estados de drawer
 export function useElements({ navigation }: { navigation: DrawerNavigationProp<DrawerParamList, "RegistroNegocio"> }) {
     const [loading, setLoading] = useState(false);
@@ -117,6 +100,10 @@ export default function Registronegocio({ navigation }: DrawerScreenProps<Drawer
     function registrar(email:string, password:string){
         if (emailField.value.length === 0 || passwordField.value.length === 0 || passwordcField.value.length == 0 || telefonoField.value.length == 0 || nombreField.value.length == 0 ) {
             Alert.alert('Datos faltantes', 'Todos los datos son obligatorios')
+            return
+        }else if(passwordField.value != passwordcField.value){
+            //message = 'Las contraseñas no coinciden'
+            Alert.alert('Datos incorrectos', 'Contraseñas no coinciden')
             return
         }
     }
