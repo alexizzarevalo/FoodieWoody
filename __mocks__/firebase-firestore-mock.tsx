@@ -2,6 +2,10 @@ const get = () => {
     return Promise.resolve('')
 }
 
+const add = () => {
+    return Promise.resolve('')
+}
+
 const doc = (name: string) => {
     return {
         get
@@ -10,7 +14,8 @@ const doc = (name: string) => {
 
 const collection = (name: string) => {
     return {
-        get
+        get,
+        add
     }
 }
 
