@@ -6,9 +6,21 @@ class SearchPage < Calabash::ABase
   end
 
   def search(text)
-    touch("ReactTextView tag:'searchIcon'")
-    touch("ReactEditText tag:'searchInput'")
+    touch_icon("searchIcon")
+    set_text_input("searchInput", text)
+  end
+
+  def go_to_cart()
+    touch_icon("cartIcon")
+  end
+
+  def touch_icon(id)
+    touch("ReactTextView tag:'#{id}'")
+  end
+
+  def set_text_input(id, text)
+    touch("ReactEditText tag:'#{id}'")
     wait_for_keyboard
-    enter_text "* tag:'searchInput'", text
+    enter_text "* tag:'#{id}'", text
   end
 end

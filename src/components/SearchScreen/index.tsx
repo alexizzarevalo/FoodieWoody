@@ -21,17 +21,18 @@ export default function SearchScreen({ navigation, showSearch = false }: Props) 
                     alignItems: 'center',
                     paddingHorizontal: 20
                 }}>
-                    <Icon name={search.icon.name} size={40} onPress={search.icon.onPress} ></Icon>
+                    <Icon testID="searchIcon" name={search.icon.name} size={40} onPress={search.icon.onPress} ></Icon>
                     {
                         !search.showInput ? <Text style={{ fontSize: 25, fontWeight: 'bold', color: 'white' }}>Foodie Woody</Text> :
                             <TextInput
+                                testID="searchInput"
                                 placeholder="Buscar..."
                                 style={{ borderBottomWidth: 1, flex: 1, fontSize: 18 }}
                                 value={search.value}
                                 onChangeText={search.onChangeText}
                             />
                     }
-                    <Icon name="shoppingcart" size={40} onPress={cartIcon.onPress}></Icon>
+                    <Icon testID="cartIcon" name="shoppingcart" size={40} onPress={cartIcon.onPress}></Icon>
                 </View>
             </View>
             <View style={styles.container}>
