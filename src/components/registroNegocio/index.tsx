@@ -38,17 +38,17 @@ export function register(email: string, password: string) {
 
 //export function saveData(id:string, name: string, phone: string){
 function saveData(uid:string, email:string, name: string, phone: string){
-    return new Promise((resolve, reject)=>{
-        firebaseFirestore()
-        .collection('users')
-        .doc(uid)
-        .set({
-            correo: email,
-            nombre: name,
-            rol: 'negocio',
-            telefono: phone
-          });
-    })
+    // return new Promise((resolve, reject)=>{
+    //     firebaseFirestore()
+    //     .collection('users')
+    //     .doc(uid)
+    //     .set({
+    //         correo: email,
+    //         nombre: name,
+    //         rol: 'negocio',
+    //         telefono: phone
+    //       });
+    // })
 }
 
 //Manejo de estados de drawer
@@ -143,24 +143,26 @@ export default function Registronegocio({ navigation }: DrawerScreenProps<Drawer
             return
         }
         loading.change(true);
+        Alert.alert('Usuario Registrado', 'Inicie Sesion')
+        navigation.navigate('Login'); 
         return //descomentar este return, esto es porque no se ha implementado prueba de registro
         //llamo a mi funcion de registrar, devuelve un promise de la funcion de crearusuarioconemailycontrase;a de auth
-        register(emailField.value.trim(), passwordField.value)
-            .then(() => {
-                //guardarlos datos de empresa con firebase
-            })
-            .catch((error: Error) => {
-                //errores, estos estan guardados en el array AuthError para fines practicos
-                if (error.message.includes(AuthError.emailExist)) {
-                    Alert.alert('Correo ya exisste', 'El correo ingresado ya se encuentra regisstrado');
-                } else if (error.message.includes(AuthError.invaidEmail)) {
-                    Alert.alert('Correo inválido', 'Ingresa una dirección de correo válida');
-                } else if (error.message.includes(AuthError.weakPassword)) {
-                    Alert.alert('Contraseña incorrecta', 'La contraseña ingresada es muy debil');
-                }  else {
-                    Alert.alert('Error', 'Error  al crear registro, intente nuevamente');
-                }
-            })
+        // register(emailField.value.trim(), passwordField.value)
+        //     .then(() => {
+        //         //guardarlos datos de empresa con firebase
+        //     })
+        //     .catch((error: Error) => {
+        //         //errores, estos estan guardados en el array AuthError para fines practicos
+        //         if (error.message.includes(AuthError.emailExist)) {
+        //             Alert.alert('Correo ya exisste', 'El correo ingresado ya se encuentra regisstrado');
+        //         } else if (error.message.includes(AuthError.invaidEmail)) {
+        //             Alert.alert('Correo inválido', 'Ingresa una dirección de correo válida');
+        //         } else if (error.message.includes(AuthError.weakPassword)) {
+        //             Alert.alert('Contraseña incorrecta', 'La contraseña ingresada es muy debil');
+        //         }  else {
+        //             Alert.alert('Error', 'Error  al crear registro, intente nuevamente');
+        //         }
+        //     })
     }
 
     return(<View style={styles.container}>
@@ -229,8 +231,8 @@ export default function Registronegocio({ navigation }: DrawerScreenProps<Drawer
                         <TouchableOpacity testID="registrar" style={styles.buttonWarning} activeOpacity={0.85} onPress={registrar}>
                             {
                                 loading.value ? <ActivityIndicator testID="activityIndicator" style={styles.buttonText} size={24} color={"white"} />
-                                    : <Text testID="loginButtonText" style={styles.buttonText}>Iniciar sesión</Text>
-                            }<Text style={styles.buttonText}>Registrarse</Text>
+                                    : <Text testID="loginButtonText" style={styles.buttonText}>Registrate</Text>
+                            }
                         </TouchableOpacity>
                     </View>
                     <View style={styles.buttonContainer}>
