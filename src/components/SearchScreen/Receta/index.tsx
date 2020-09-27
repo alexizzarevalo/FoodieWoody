@@ -14,7 +14,7 @@ export default function Receta({ receta, nav }: Props) {
             justifyContent: 'space-between', backgroundColor: '#acc2de', marginHorizontal: 20, marginVertical: 8
         }}>
             <View style={{ width: 80, height: 80, borderRadius: 8, overflow: 'hidden' }}>
-                <TouchableHighlight onPress={goToDetails}>
+                <TouchableHighlight testID="details" onPress={goToDetails}>
                     <Image source={{ uri: receta.imagen }} resizeMode="cover" height={80} width={80} style={{ borderRadius: 8, width: 80, height: 80 }}></Image>
                 </TouchableHighlight>
             </View>
@@ -23,7 +23,7 @@ export default function Receta({ receta, nav }: Props) {
                 <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Q{receta.precio}</Text>
             </View>
             <View style={{ justifyContent: 'center', marginRight: 0 }}>
-                <TouchableHighlight style={{
+                <TouchableHighlight testID="add" style={{
                     backgroundColor: 'purple', //#11c222
                     height: 80,
                     width: 80 / 2,

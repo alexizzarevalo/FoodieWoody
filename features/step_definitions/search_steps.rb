@@ -9,3 +9,14 @@ end
 When("I press {string} icon") do |id|
   touch_icon(id)
 end
+
+When("I press {string} for first recipe") do |text|
+  wait_for_element_exists "* tag:'#{text}'"
+  to_touch = query("* tag:'#{text}'")[0]
+  touch(to_touch)
+end
+
+When("I press {string} in alert") do |text|
+  wait_for_element_exists "* text:'#{text}'"
+  touch_alert_button_by_text(text)
+end
