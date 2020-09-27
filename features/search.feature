@@ -8,7 +8,7 @@ Feature: Search feature
         When I search "Pizza"
         Then I see "Pizza"
 
-    Scenario: Agregar un producto al carrito
+    Scenario: Ir al carrito
         Given I am in the search page
         When I press "cartIcon" icon
         Then I see "Checkout"
