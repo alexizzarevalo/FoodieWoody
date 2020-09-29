@@ -15,7 +15,7 @@ export default function Receta({ receta, nav }: Props) {
         }}>
             <View style={{ width: 80, height: 80, borderRadius: 8, overflow: 'hidden' }}>
                 <TouchableHighlight onPress={goToDetails}>
-                    <Image source={{ uri: receta.imagen }} resizeMode="cover" height={80} width={80} style={{ borderRadius: 8, width: 80, height: 80 }}></Image>
+                    <Image testID={"imageDetails"} source={{ uri: receta.imagen }} resizeMode="cover" height={80} width={80} style={{ borderRadius: 8, width: 80, height: 80 }}></Image>
                 </TouchableHighlight>
             </View>
             <View style={{ alignItems: 'center', justifyContent: 'space-evenly', marginHorizontal: 8 }}>
