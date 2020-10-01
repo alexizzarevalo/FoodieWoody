@@ -14,6 +14,7 @@ export type DrawerParamList = {
   Search: undefined;
   Register: undefined;
   RegistroNegocio: undefined;
+  CrearReceta: undefined;
 };
 
 export type SearchStackParamList = {
