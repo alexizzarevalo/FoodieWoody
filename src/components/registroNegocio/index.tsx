@@ -15,9 +15,9 @@ import {
 } from 'react-native';
 import { styles} from '../../Style';
 
-//import {firebase as firebaseFirestore, FirebaseFirestoreTypes} from '@react-native-firebase/firestore'
+import {firebase as firebaseFirestore, FirebaseFirestoreTypes} from '@react-native-firebase/firestore'
 
-import { firestore as firebaseFirestore } from '../../firebaseConfig';
+//import { firestore as firebaseFirestore } from '../../firebaseConfig';
 //import "firebase/firestore"
 
 
@@ -38,17 +38,17 @@ export function register(email: string, password: string) {
 
 //export function saveData(id:string, name: string, phone: string){
 function saveData(uid:string, email:string, name: string, phone: string){
-    // return new Promise((resolve, reject)=>{
-    //     firebaseFirestore()
-    //     .collection('users')
-    //     .doc(uid)
-    //     .set({
-    //         correo: email,
-    //         nombre: name,
-    //         rol: 'negocio',
-    //         telefono: phone
-    //       });
-    // })
+    return new Promise((resolve, reject)=>{
+        firebaseFirestore.firestore()
+        .collection('users')
+        .doc(uid)
+        .set({
+            correo: email,
+            nombre: name,
+            rol: 'negocio',
+            telefono: phone
+          });
+    })
 }
 
 //Manejo de estados de drawer
@@ -148,8 +148,9 @@ export default function Registronegocio({ navigation }: DrawerScreenProps<Drawer
         //return //descomentar este return, esto es porque no se ha implementado prueba de registro
         //llamo a mi funcion de registrar, devuelve un promise de la funcion de crearusuarioconemailycontrase;a de auth
         register(emailField.value.trim(), passwordField.value)
-            .then(() => {
+            .then((res:any) => {
                 //guardarlos datos de empresa con firebase
+                saveData(res.user.uid, emailField.value.trim(), nombreField.value.trim(), telefonoField.value.trim())
             })
             .catch((error: Error) => {
                 //errores, estos estan guardados en el array AuthError para fines practicos
