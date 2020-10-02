@@ -18,7 +18,7 @@ import { styles} from '../../Style';
 //import {firebase as firebaseFirestore, FirebaseFirestoreTypes} from '@react-native-firebase/firestore'
 
 import { firestore as firebaseFirestore } from '../../firebaseConfig';
-import "firebase/firestore"
+//import "firebase/firestore"
 
 
 const AuthError = {
@@ -29,10 +29,10 @@ const AuthError = {
 
 export function register(email: string, password: string) {
     return new Promise((resolve, reject) => {
-        // firebase.auth()
-        //     .createUserWithEmailAndPassword(email, password)
-        //     .then(resolve)
-        //     .catch(reject);
+        firebase.auth()
+            .createUserWithEmailAndPassword(email, password)
+            .then(resolve)
+            .catch(reject);
     })
 }
 
@@ -143,26 +143,26 @@ export default function Registronegocio({ navigation }: DrawerScreenProps<Drawer
             return
         }
         loading.change(true);
-        Alert.alert('Usuario Registrado', 'Inicie Sesion')
-        navigation.navigate('Login'); 
-        return //descomentar este return, esto es porque no se ha implementado prueba de registro
+        //Alert.alert('Usuario Registrado', 'Inicie Sesion')
+        //navigation.navigate('Login'); 
+        //return //descomentar este return, esto es porque no se ha implementado prueba de registro
         //llamo a mi funcion de registrar, devuelve un promise de la funcion de crearusuarioconemailycontrase;a de auth
-        // register(emailField.value.trim(), passwordField.value)
-        //     .then(() => {
-        //         //guardarlos datos de empresa con firebase
-        //     })
-        //     .catch((error: Error) => {
-        //         //errores, estos estan guardados en el array AuthError para fines practicos
-        //         if (error.message.includes(AuthError.emailExist)) {
-        //             Alert.alert('Correo ya exisste', 'El correo ingresado ya se encuentra regisstrado');
-        //         } else if (error.message.includes(AuthError.invaidEmail)) {
-        //             Alert.alert('Correo inválido', 'Ingresa una dirección de correo válida');
-        //         } else if (error.message.includes(AuthError.weakPassword)) {
-        //             Alert.alert('Contraseña incorrecta', 'La contraseña ingresada es muy debil');
-        //         }  else {
-        //             Alert.alert('Error', 'Error  al crear registro, intente nuevamente');
-        //         }
-        //     })
+        register(emailField.value.trim(), passwordField.value)
+            .then(() => {
+                //guardarlos datos de empresa con firebase
+            })
+            .catch((error: Error) => {
+                //errores, estos estan guardados en el array AuthError para fines practicos
+                if (error.message.includes(AuthError.emailExist)) {
+                    Alert.alert('Correo ya exisste', 'El correo ingresado ya se encuentra regisstrado');
+                } else if (error.message.includes(AuthError.invaidEmail)) {
+                    Alert.alert('Correo inválido', 'Ingresa una dirección de correo válida');
+                } else if (error.message.includes(AuthError.weakPassword)) {
+                    Alert.alert('Contraseña incorrecta', 'La contraseña ingresada es muy debil');
+                }  else {
+                    Alert.alert('Error', 'Error  al crear registro, intente nuevamente');
+                }
+            })
     }
 
     return(<View style={styles.container}>
