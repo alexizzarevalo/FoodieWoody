@@ -338,41 +338,6 @@ describe('RegistroNegocio Component', () => {
         await act(async () => await fireEvent.press(regButton))
     })
 
-    // test('Accion de registrar y devolver error', async () => {
-    //     const { getByTestId, } = render(
-    //         <RegistroNegocio navigation={navigation} route={route} />
-    //     );
-
-    //     let collection = jest.fn(() => {
-    //         return Promise.reject(new Error('unknow error'));
-    //     })
-
-    //     //@ts-ignore
-    //     jest.spyOn(firebaseFirestore, 'firestore').mockImplementation(() => {
-    //         return { collection }
-    //     })
-
-
-    //     const emailInput = getByTestId('email');
-    //     const passwordInput = getByTestId('password');
-    //     const passwordInputC = getByTestId('passwordc');
-    //     const telefonoInput = getByTestId('telefono');
-    //     const NombreInput = getByTestId('nombre');
-
-    //     const email = 'pedidos@dominos.com';
-    //     const password = 'password';
-    //     const telefono = '5552222';
-    //     const nombre = 'TACOS PEREZ';
-
-    //     act(() => { fireEvent.changeText(emailInput, email) })
-    //     act(() => { fireEvent.changeText(passwordInput, password) })
-    //     act(() => { fireEvent.changeText(passwordInputC, password) })
-    //     act(() => { fireEvent.changeText(telefonoInput, telefono) })
-    //     act(() => { fireEvent.changeText(NombreInput, nombre) })    
-    //     const regButton = getByTestId('registrar');            
-    //     await act(async () => await fireEvent.press(regButton))
-    // })
-
     
 });
 
