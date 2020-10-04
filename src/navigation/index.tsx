@@ -24,7 +24,7 @@ export default function Navigation() {
             <>
               <Drawer.Screen options={{ title: 'Iniciar sesión' }} name={'Login'} component={LoginScreen} />
               <Drawer.Screen options={{ title: 'Registrarse' }} name={'Register'} component={RegisterN} />
-              <Drawer.Screen options={{ title: 'Registrar Negocio' }} name={'RegistroNegocio'} component={RegistroNegocio} />
+              <Drawer.Screen options={{ title: 'Registrar Negocio' }} name={'RegistroNegocio'} component={RegistroNegocio}  />
             </>
             :
             <>
