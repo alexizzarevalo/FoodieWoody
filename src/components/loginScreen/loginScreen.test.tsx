@@ -87,6 +87,16 @@ describe('Login Screen Component', () => {
         act(() => fireEvent.press(registerButton))
     })
 
+    test('Debe navegar hacia la pantalla de registro negocio', async () => {
+        const { getByTestId, } = render(
+            <LoginScreen navigation={navigation} route={route} />
+        );
+
+        const registerButton = getByTestId('goToRegisterNButton');
+
+        act(() => fireEvent.press(registerButton))
+    })
+
     test('El boton de login debe tener un texto "Iniciar sesión"', async () => {
         const { getByTestId, } = render(
             <LoginScreen navigation={navigation} route={route} />

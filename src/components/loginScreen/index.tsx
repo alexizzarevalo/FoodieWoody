@@ -73,6 +73,7 @@ export function useElements({ navigation }: { navigation: DrawerNavigationProp<D
     const focusPasswordField = () => { passwordRef.current?.focus() }
 
     const goToRegister = () => navigation.navigate('Register')
+    const goToRegisterN = () => navigation.navigate('RegistroNegocio')
 
     return {
         emailField: {
@@ -90,11 +91,12 @@ export function useElements({ navigation }: { navigation: DrawerNavigationProp<D
             change: setLoading
         },
         goToRegister,
+        goToRegisterN
     }
 }
 
 export default function LoginScreen({ navigation }: DrawerScreenProps<DrawerParamList, 'Login'>) {
-    const { loading, emailField, passwordField, goToRegister } = useElements({ navigation });
+    const { loading, emailField, passwordField, goToRegister, goToRegisterN } = useElements({ navigation });
 
     function login() {
         if (emailField.value.length === 0 || passwordField.value.length === 0) {
@@ -167,6 +169,11 @@ export default function LoginScreen({ navigation }: DrawerScreenProps<DrawerPara
                     <View style={styles.buttonContainer}>
                         <TouchableOpacity testID="goToRegisterButton" style={styles.registerButton} activeOpacity={0.85} onPress={goToRegister}>
                             <Text style={styles.buttonText}>Registrarse</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.buttonContainer}>
+                        <TouchableOpacity testID="goToRegisterNButton" style={styles.registerButton} activeOpacity={0.85} onPress={goToRegisterN}>
+                            <Text style={styles.buttonText}>Registrate como Negocio</Text>
                         </TouchableOpacity>
                     </View>
 

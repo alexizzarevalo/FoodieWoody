@@ -169,7 +169,7 @@ export default function Registronegocio({ navigation }: DrawerScreenProps<Drawer
     return(<View style={styles.container}>
                 <StatusBar backgroundColor='#f87c09' barStyle="light-content"/>
                 <View style = {styles.header}>
-                    <Text style={styles.text_header}>¡Registrate tu Negocio!</Text>
+                    <Text style={styles.text_header}>¡Registra tu Negocio!</Text>
                 </View>
                 <View style = {styles.footer}>
                 <ScrollView>

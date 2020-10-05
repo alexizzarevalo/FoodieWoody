@@ -1,5 +1,9 @@
 Feature: RegistroNegocio feature
+  Como Negocio
+  Quiero Registrarme en la pagina
+  Para poder vender en la aplicación
 
-  Scenario: Como usuario quiero crear una cuenta en la app
-    When I press "Registrar Negocio"
-    Then I see "¡Registrate tu Negocio!"
+  Scenario: Guardar sin datos
+    Given I am in the registroNegocio page
+    When I press "Registrate"
+    Then Id "alertTitle" appears
