@@ -29,9 +29,11 @@ export default function Navigation() {
             </>
             :
             <>
-              <Drawer.Screen options={{ title: 'Crear Receta' }} name={'CrearReceta'} component={CrearReceta} />
+              {//<Drawer.Screen options={{ title: 'Crear Receta' }} name={'CrearReceta'} component={CrearReceta} />
+              }
               <Drawer.Screen options={{ title: 'Inicio - Recetas' }} name={'Search'} component={SearchNavigation} />
-              <Drawer.Screen options={{ title: 'Inicio - Recetas' }} name={'CrearReceta'} component={SearchNavigation} />
+              {//<Drawer.Screen options={{ title: 'Inicio - Recetas' }} name={'CrearReceta'} component={SearchNavigation} />
+              }
               <Drawer.Screen options={{ title: 'Cerrar sesión' }} name={'Logout'} component={Logout} />
               {/*Agregar aqui las demas pantallas*/}
             </>
