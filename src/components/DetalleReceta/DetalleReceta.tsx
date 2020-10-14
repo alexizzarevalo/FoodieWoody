@@ -3,9 +3,11 @@ import { Text, View, Image, StyleSheet } from 'react-native';
 import { Receta, Ingrediente } from '../../models/receta';
 
 //Produccion
+//Con este si funciona bien
 //import firestore from '@react-native-firebase/firestore'
 
 //Test
+//BUG error en la configuración
 import { firestore } from '../../firebaseConfig';
 
 import { StackScreenProps } from '@react-navigation/stack';
