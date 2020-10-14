@@ -92,7 +92,7 @@ ui-debug.log
 
 # CocoaPods
 /ios/Pods/
-/android/app/google-services.json
+#/android/app/google-services.json
 
 #API Keys
 ios/GoogleService-Info.plist
