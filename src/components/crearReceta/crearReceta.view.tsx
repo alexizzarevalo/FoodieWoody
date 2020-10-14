@@ -10,6 +10,7 @@ export default function Template({
           <Text style={styles.titulo}> Crea una receta </Text>
                   <Text style={styles.textos}> Nombre: </Text>
               <TextInput
+                  testID={"nombre"}
                   style={styles.texti}
                   underlineColorAndroid = "transparent"
                   placeholder=""
@@ -20,6 +21,7 @@ export default function Template({
                   <Text> Descripción: </Text>
               <TextInput
                   style={styles.textig}
+                  testID={"desc"}
                   underlineColorAndroid = "transparent"
                   placeholder=""
                   value = ""
@@ -29,6 +31,7 @@ export default function Template({
                   <Text> Ingredientes: </Text>
               <TextInput
                   style={styles.textig}
+                  testID={"ingredientes"}
                   underlineColorAndroid = "transparent"
                   placeholder=""
                   value = ""
@@ -38,6 +41,7 @@ export default function Template({
                   <Text> Tiempo de preparación: </Text>
               <TextInput
                   style={styles.texti}
+                  testID={"preparacion"}
                   underlineColorAndroid = "transparent"
                   placeholder=""
                   value = ""
@@ -47,6 +51,7 @@ export default function Template({
                   <Text> Costo total: </Text>
               <TextInput
                   style={styles.texti}
+                  testID={"total"}
                   underlineColorAndroid = "transparent"
                   placeholder=""
                   value = ""
