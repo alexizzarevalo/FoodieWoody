@@ -1,20 +1,20 @@
 require 'calabash-android/management/app_installation'
 
- module Cucumber
-     module RunningTestCase
-       class TestCase < SimpleDelegator
-         def feature
-           string = File.read(location.file)
-           document = ::Gherkin::Parser.new.parse(string)
-           document[:feature]
-         end
-       end
-     end
- end
+ #module Cucumber
+ #    module RunningTestCase
+ #      class TestCase < SimpleDelegator
+ #        def feature
+ #          string = File.read(location.file)
+ #          document = ::Gherkin::Parser.new.parse(string)
+ #          document[:feature]
+ #        end
+ #      end
+ #    end
+ #end
 
- AfterConfiguration do |config|
-   FeatureMemory.feature = nil
- end
+ #AfterConfiguration do |config|
+ #  FeatureMemory.feature = nil
+ #end
 
 # Before do |scenario|
 #   scenario = scenario.scenario_outline if scenario.respond_to?(:scenario_outline)
