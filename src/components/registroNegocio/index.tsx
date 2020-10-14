@@ -15,10 +15,10 @@ import {
 } from 'react-native';
 import { styles} from '../../Style';
 
-//import {firebase as firebaseFirestore, FirebaseFirestoreTypes} from '@react-native-firebase/firestore'
+import {firebase as firebaseFirestore, FirebaseFirestoreTypes} from '@react-native-firebase/firestore'
 
-import { firestore as firebaseFirestore } from '../../firebaseConfig';
-import "firebase/firestore"
+//import { firestore as firebaseFirestore } from '../../firebaseConfig';
+//import "firebase/firestore"
 
 
 const AuthError = {
@@ -29,17 +29,17 @@ const AuthError = {
 
 export function register(email: string, password: string) {
     return new Promise((resolve, reject) => {
-        // firebase.auth()
-        //     .createUserWithEmailAndPassword(email, password)
-        //     .then(resolve)
-        //     .catch(reject);
+        firebase.auth()
+            .createUserWithEmailAndPassword(email, password)
+            .then(resolve)
+            .catch(reject);
     })
 }
 
 //export function saveData(id:string, name: string, phone: string){
 function saveData(uid:string, email:string, name: string, phone: string){
     return new Promise((resolve, reject)=>{
-        firebaseFirestore()
+        firebaseFirestore.firestore()
         .collection('users')
         .doc(uid)
         .set({
@@ -143,11 +143,14 @@ export default function Registronegocio({ navigation }: DrawerScreenProps<Drawer
             return
         }
         loading.change(true);
-        return //descomentar este return, esto es porque no se ha implementado prueba de registro
+        //Alert.alert('Usuario Registrado', 'Inicie Sesion')
+        //navigation.navigate('Login'); 
+        //return //descomentar este return, esto es porque no se ha implementado prueba de registro
         //llamo a mi funcion de registrar, devuelve un promise de la funcion de crearusuarioconemailycontrase;a de auth
         register(emailField.value.trim(), passwordField.value)
-            .then(() => {
+            .then((res:any) => {
                 //guardarlos datos de empresa con firebase
+                saveData(res.user.uid, emailField.value.trim(), nombreField.value.trim(), telefonoField.value.trim())
             })
             .catch((error: Error) => {
                 //errores, estos estan guardados en el array AuthError para fines practicos
@@ -166,7 +169,7 @@ export default function Registronegocio({ navigation }: DrawerScreenProps<Drawer
     return(<View style={styles.container}>
                 <StatusBar backgroundColor='#f87c09' barStyle="light-content"/>
                 <View style = {styles.header}>
-                    <Text style={styles.text_header}>¡Registrate tu Negocio!</Text>
+                    <Text style={styles.text_header}>¡Registra tu Negocio!</Text>
                 </View>
                 <View style = {styles.footer}>
                 <ScrollView>
@@ -229,8 +232,8 @@ export default function Registronegocio({ navigation }: DrawerScreenProps<Drawer
                         <TouchableOpacity testID="registrar" style={styles.buttonWarning} activeOpacity={0.85} onPress={registrar}>
                             {
                                 loading.value ? <ActivityIndicator testID="activityIndicator" style={styles.buttonText} size={24} color={"white"} />
-                                    : <Text testID="loginButtonText" style={styles.buttonText}>Iniciar sesión</Text>
-                            }<Text style={styles.buttonText}>Registrarse</Text>
+                                    : <Text testID="loginButtonText" style={styles.buttonText}>Registrate</Text>
+                            }
                         </TouchableOpacity>
                     </View>
                     <View style={styles.buttonContainer}>
