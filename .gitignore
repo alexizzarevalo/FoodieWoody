@@ -1,3 +1,16 @@
+coverage/
+
+# Firebase
+__mocks__/firestore-emulator.tsx
+src/firebaseConfig.tsx
+firebase-debug.log
+firestore-debug.log
+firestore.indexes.json
+firestore.rules
+firebase.json
+.firebaserc
+ui-debug.log
+
 # OSX
 #
 .DS_Store
@@ -28,10 +41,17 @@ build/
 .gradle
 local.properties
 *.iml
+android/app/google-services.json
+yarn.lock
+android/app/build.gradle
+android/build.gradle
 
 # Visual Studio Code
 #
 .vscode/
+
+#firebase
+src/database/Firebase.js
 
 # node.js
 #
@@ -44,6 +64,17 @@ buck-out/
 \.buckd/
 *.keystore
 !debug.keystore
+
+#test
+coverage/
+
+database-debug.log
+firebase-debug.log
+firestore-debug.log
+firestore.indexes.json
+firestore.rules
+pubsub-debug.log
+ui-debug.log
 
 # fastlane
 #
@@ -61,3 +92,14 @@ buck-out/
 
 # CocoaPods
 /ios/Pods/
+/android/app/google-services.json
+
+#API Keys
+ios/GoogleService-Info.plist
+/coverage
+test_servers
+
+#cucumber
+.irb-history
+
+*.png
