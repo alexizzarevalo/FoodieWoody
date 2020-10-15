@@ -78,8 +78,8 @@ PLATFORMS
 DEPENDENCIES
   activesupport (~> 5.0)
   calabash-android
-  cucumber (~> 2.4)
-  json (~> 1.8, >= 1.8.3)
+  cucumber (= 2.99.0)
+  json (= 1.8.6)
   rspec
   rubyzip (= 1.2.1)
   thor (< 1)
