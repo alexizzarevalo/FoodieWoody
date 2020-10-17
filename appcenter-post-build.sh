@@ -24,7 +24,8 @@ then
 	echo ">Login into appcetner using User Token"
 	appcenter login --token $USER_TOKEN
 	echo ">Running test in App Center Test"
-	bundle exec appcenter test run calabash --app "foodiewoody/Foodie-Woody" --devices 5f746b78 --app-path $APPPATH --test-series "master" --locale "en_US" --project-dir ./features --token $API_TOKEN --async
+	# Error: empty email address
+	bundle exec appcenter test run calabash --app "foodiewoody/Foodie-Woody" --devices 5f746b78 --app-path $APPPATH --test-series "master" --locale "en_US" --project-dir ./features --async
 	kill -9
 	echo ">Post build end test sended"
 	# exit 0
