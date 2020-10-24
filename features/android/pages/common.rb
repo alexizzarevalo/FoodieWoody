@@ -18,10 +18,16 @@ end
 
 # Touch alert button by text
 def touch_alert_button_by_text(text)
+  wait_for_element_exists "* text:'#{text}'"
   touch query("AppCompatButton text:'#{text}'")
 end
 
 # Touch alert button by position. Order = [...,2, 1]
 def touch_alert_button_by_position(position)
   touch query("AppCompatButton id:'button#{position}'")
+end
+
+def touch_button_by_text(text)
+  sleep(2)
+  tap_when_element_exists "* marked:'#{text}'"
 end

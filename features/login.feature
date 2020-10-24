@@ -7,5 +7,5 @@ Feature: Login feature
     Given I am in the login page
     When I fill in "emailInput" as "dalexis.da@gmail.com"
     And I fill in "passwordInput" as "123456"
-    And I press "Iniciar sesión"
+    And I press button "Iniciar sesión"
     Then I should see "Bienvenido" text

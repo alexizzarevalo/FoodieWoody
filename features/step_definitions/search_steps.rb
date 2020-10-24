@@ -1,13 +1,15 @@
 Given("I am in the search page") do
-  @current_page = page(SearchPage).await(timeout: 30)
+  @login_page = page(LoginPage).await(timeout: 30)
+  @login_page.login
 end
 
 When(/^I search "([^"]*)"$/) do |text|
-  @current_page.search(text)
+  touch_icon("searchIcon")
+  set_text_input("searchInput", text)
 end
 
 When(/^I press "([^"]*)" icon$/) do |id|
-  touch_icon(id)
+  touch_icon("cartIcon")
 end
 
 When(/^I press "([^"]*)" for first recipe$/) do |text|
@@ -17,6 +19,5 @@ When(/^I press "([^"]*)" for first recipe$/) do |text|
 end
 
 When(/^I press "([^"]*)" in alert$/) do |text|
-  wait_for_element_exists "* text:'#{text}'"
   touch_alert_button_by_text(text)
 end

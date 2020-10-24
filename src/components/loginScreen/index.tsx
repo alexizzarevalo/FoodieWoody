@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { View, Text, TextInput, StyleSheet, Alert, ScrollView, ToastAndroid, ActivityIndicator } from "react-native";
 import { TouchableHighlight, TouchableOpacity } from "react-native-gesture-handler";
 import { DrawerNavigationProp, DrawerScreenProps } from "@react-navigation/drawer";
@@ -62,6 +62,14 @@ export function useElements({ navigation }: { navigation: DrawerNavigationProp<D
     const [password, setPassword] = useState('');
     const passwordRef = useRef<TextInput>(null);
 
+    useEffect(() => {
+        return () => {
+            setLoading(false);
+            setEmail('');
+            setPassword('');
+        }
+    }, [])
+
     const handleEmailChange = (email: string) => {
         setEmail(email);
     }
@@ -107,8 +115,6 @@ export default function LoginScreen({ navigation }: DrawerScreenProps<DrawerPara
         signIn(emailField.value.trim(), passwordField.value)
             .then(() => {
                 Alert.alert('Bienvenido', 'Has iniciado sesión correctamente');
-                emailField.onChangeText('');
-                passwordField.onChangeText('');
             })
             .catch((error: Error) => {
                 if (error.message.includes(AuthError.wrongPassword)) {
@@ -122,7 +128,8 @@ export default function LoginScreen({ navigation }: DrawerScreenProps<DrawerPara
                 } else {
                     Alert.alert('Error', 'No se pudo iniciar sesión. Intentalo nuevamente');
                 }
-            }).finally(() => { loading.change(false) })
+                loading.change(false)
+            })
     }
 
     return (
