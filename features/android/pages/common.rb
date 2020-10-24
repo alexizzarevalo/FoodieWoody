@@ -13,6 +13,7 @@ def set_text_input(id, text)
   touch("ReactEditText tag:'#{id}'")
   wait_for_keyboard
   enter_text "* tag:'#{id}'", text
+  hide_soft_keyboard
 end
 
 # Touch alert button by text

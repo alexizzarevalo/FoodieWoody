@@ -3,7 +3,7 @@ Given(/^I am in the login page$/) do
 end
 
 When(/^I fill in "(.*?)" as "(.*?)"$/) do |input, text|
-  @current_page.fill_in_input(input, text)
+  set_text_input input, text
 end
 
 Then(/^I should see "(.*?)" text$/) do |text|
