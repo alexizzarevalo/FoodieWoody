@@ -7,7 +7,7 @@ import useUser from '../hooks/useUser';
 import SearchNavigation from './search_Navigation';
 import RegisterN from '../components/register';
 import RegistroNegocio from '../components/registroNegocio';
-import CrearReceta from '../components/CreateAndUpdateReceta'
+import CrearReceta from '../components/CreateAndUpdateRecipe'
 import { DrawerParamList } from './types';
 import { View, ActivityIndicator } from 'react-native';
 import auth from "@react-native-firebase/auth";
