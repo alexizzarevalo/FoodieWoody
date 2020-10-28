@@ -7,7 +7,7 @@ import useUser from '../hooks/useUser';
 import SearchNavigation from './search_Navigation';
 import RegisterN from '../components/register';
 import RegistroNegocio from '../components/registroNegocio';
-import CrearReceta from '../components/crearReceta/crearReceta.view'
+import CrearReceta from '../components/CreateAndUpdateReceta'
 import { DrawerParamList } from './types';
 import { View, ActivityIndicator } from 'react-native';
 import auth from "@react-native-firebase/auth";
@@ -25,12 +25,11 @@ export default function Navigation() {
             <>
               <Drawer.Screen options={{ title: 'Iniciar sesión' }} name={'Login'} component={LoginScreen} />
               <Drawer.Screen options={{ title: 'Registrarse' }} name={'Register'} component={RegisterN} />
-              <Drawer.Screen options={{ title: 'Registrar Negocio' }} name={'RegistroNegocio'} component={RegistroNegocio}  />
+              <Drawer.Screen options={{ title: 'Registrar Negocio' }} name={'RegistroNegocio'} component={RegistroNegocio} />
             </>
             :
             <>
-              {//<Drawer.Screen options={{ title: 'Crear Receta' }} name={'CrearReceta'} component={CrearReceta} />
-              }
+              <Drawer.Screen options={{ title: 'Crear Receta' }} name={'CrearReceta'} component={CrearReceta} />
               <Drawer.Screen options={{ title: 'Inicio - Recetas' }} name={'Search'} component={SearchNavigation} />
               {//<Drawer.Screen options={{ title: 'Inicio - Recetas' }} name={'CrearReceta'} component={SearchNavigation} />
               }
