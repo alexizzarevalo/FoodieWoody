@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, Image, StyleSheet } from 'react-native';
-import { Receta, Ingrediente } from '../../models/receta';
-
+import { Text, View, Image, StyleSheet, ScrollView } from 'react-native';
+import { Recipe } from "./../CreateAndUpdateRecipe/state";
 //Produccion
 //Con este si funciona bien
 import firestore from '@react-native-firebase/firestore'
@@ -25,11 +24,11 @@ export function SectionTitle({title}: {title: string}) {
   );
 }
 
-export function StaticComponent({negocio_nombre, receta, ingredientes}:
-    {negocio_nombre: string, receta: Receta, ingredientes: Array<Ingrediente>}){
+export function StaticComponent({negocio_nombre, receta}:
+    {negocio_nombre: string, receta: Recipe}){
 
     return (<View style={styles.container}>
-        <View>
+        <ScrollView>
             <View>
                 <View style={styles.orangeFranja}></View>
                 <View style={styles.imageWrapper}>
@@ -52,9 +51,9 @@ export function StaticComponent({negocio_nombre, receta, ingredientes}:
             </View>
             <View>
                 <SectionTitle title="Ingredientes"/>
-                    {ingredientes.map((ingrediente, index) =>
+                    {receta.ingredientes.map((ingrediente, index) =>
                         <View key={index} style={styles.bulletItem}>
-                            <Text style={{textAlign:"justify"}}>{'\u2022 '} {ingrediente.nombre}</Text>
+                            <Text style={{textAlign:"justify"}}>{'\u2022 '} {ingrediente}</Text>
                         </View>
                     )}
             </View>
@@ -66,7 +65,7 @@ export function StaticComponent({negocio_nombre, receta, ingredientes}:
                     </View>
                 )}
             </View>
-        </View>
+        </ScrollView>
     </View>)
 }
 
@@ -78,42 +77,18 @@ export function getNegocioNombre(negocio_id:string, stateCallback: Function){
     )
 }
 
-export function getIngredientes(receta_id:string, stateCallback:Function){
-    firestore().collection('ingredientes_receta').where('receta_id', '==', 'recetas/' + receta_id).get().then(
-        query => {
-            const ids = Array<string>("0");
-            query.docs.forEach(doc => {
-                ids.push((doc.data().ingrediente_id as string).substring('ingredientes/'.length));
-            })
-
-            firestore().collection('ingredientes').where('id', 'in', ids).get().then(
-                query => {
-                    const ingredientes = Array<Ingrediente>();
-                    query.docs.forEach(doc => {
-                        ingredientes.push(doc.data() as Ingrediente);
-                    })
-
-                    stateCallback(ingredientes);
-                }
-            )
-        }
-    );
-}
-
 function DetalleReceta({route}:StackScreenProps<SearchStackParamList, "DetalleReceta">) {
 
-    const receta: Receta = route.params.receta;
+    const receta: Recipe = route.params.receta;
 
     const [negocio_nombre, setNegocioNombre] = useState('');
-    const [ingredientes, setIngredientes] = useState(Array<Ingrediente>());
 
     useEffect(() => {
         getNegocioNombre(receta.negocio_id, setNegocioNombre);
-        getIngredientes(receta.id, setIngredientes);
     }, [])
 
-    if(ingredientes.length != 0 && negocio_nombre.length != 0)
-        return <StaticComponent receta={receta} negocio_nombre={negocio_nombre} ingredientes={ingredientes}/>
+    if(receta.ingredientes.length != 0 && negocio_nombre.length != 0)
+        return <StaticComponent receta={receta} negocio_nombre={negocio_nombre}/>
     else
         return <></>
 }

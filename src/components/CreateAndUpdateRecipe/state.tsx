@@ -4,7 +4,7 @@ import { DrawerScreenProps } from "@react-navigation/drawer";
 import { DrawerParamList } from "../../navigation/types";
 import { Alert } from "react-native";
 
-interface Recipe {
+export interface Recipe {
     id: string;
     nombre: string;
     descripcion: string;

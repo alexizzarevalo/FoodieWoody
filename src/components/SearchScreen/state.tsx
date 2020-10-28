@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Receta, { IReceta } from "./Receta";
+import Receta, { Recipe } from "./Receta";
 import { firebase, FirebaseFirestoreTypes } from "@react-native-firebase/firestore";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { SearchStackParamList } from "../../navigation/types";
@@ -17,15 +17,15 @@ export function getRecetas(): Promise<FirebaseFirestoreTypes.QuerySnapshot> {
 export function SetRecetas(setLoading: any, setRecetas: any) {
     setLoading(true);
     getRecetas().then(snapshot => {
-        const recetas: IReceta[] = [];
+        const recetas: Recipe[] = [];
         snapshot.docs.forEach(docSnapshot => {
-            recetas.push({ ...docSnapshot.data() as IReceta, id: docSnapshot.id })
+            recetas.push({ ...docSnapshot.data() as Recipe, id: docSnapshot.id })
         })
         setRecetas(recetas);
     }).finally(() => { setLoading(false) })
 }
 
-export function filterRecetas(recetas: IReceta[], txtToFind: string) {
+export function filterRecetas(recetas: Recipe[], txtToFind: string) {
     return recetas.filter(receta => {
         return receta.nombre.toLowerCase().includes(txtToFind) ||
             receta.descripcion.toLowerCase().includes(txtToFind);;
@@ -33,12 +33,12 @@ export function filterRecetas(recetas: IReceta[], txtToFind: string) {
 }
 export function useElements({ navigation, showSearch = false }: { navigation: StackNavigationProp<SearchStackParamList, "Search">, showSearch?: boolean }) {
     const [search, setSearch] = useState<string>('');
-    const [recetas, setRecetas] = useState<IReceta[]>([]);
-    const [busqueda, setBusqueda] = useState<IReceta[]>([]);
+    const [recetas, setRecetas] = useState<Recipe[]>([]);
+    const [busqueda, setBusqueda] = useState<Recipe[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [showInput, setShowInput] = useState<boolean>(showSearch);
 
-    const update = (recetas: IReceta[]) => {
+    const update = (recetas: Recipe[]) => {
         act(() => {
             setRecetas(recetas);
             setBusqueda(recetas);
@@ -60,9 +60,9 @@ export function useElements({ navigation, showSearch = false }: { navigation: St
 
     const onPressCartIcon = () => { navigation.push('Checkout') }
 
-    const renderReceta = ({ item }: { item: IReceta }) => <Receta key={item.id} receta={item} nav={navigation} />
+    const renderReceta = ({ item }: { item: Recipe }) => <Receta key={item.id} receta={item} nav={navigation} />
 
-    const getKeyReceta = (item: IReceta) => item.id;
+    const getKeyReceta = (item: Recipe) => item.id;
 
     return {
         search: {

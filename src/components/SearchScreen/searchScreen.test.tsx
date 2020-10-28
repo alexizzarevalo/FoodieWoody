@@ -6,7 +6,7 @@ import { Alert } from 'react-native';
 import { useElements, SetRecetas, filterRecetas } from './state';
 import { renderHook, act } from '@testing-library/react-hooks';
 import renderer from "react-test-renderer";
-import { IReceta } from './Receta';
+import { Recipe } from './Receta';
 import SearchScreen from '.';
 
 jest.spyOn(Alert, 'alert');
@@ -23,6 +23,8 @@ const getReceta = (data: object) => {
     nombre: 'pizza',
     pasos: [],
     precio: 50,
+    ingredientes: [],
+    tiempo_preparacion: 0,
     ...data
   }
 }
@@ -73,11 +75,11 @@ describe('Pantalla SearchScreen', () => {
   describe('Estados de la pantalla', () => {
     test('Debe actualizar las recetas', async () => {
       const { result } = renderHook(() => {
-        const [recetas, setRecetas] = useState<IReceta[]>([]);
-        const [busqueda, setBusqueda] = useState<IReceta[]>([]);
+        const [recetas, setRecetas] = useState<Recipe[]>([]);
+        const [busqueda, setBusqueda] = useState<Recipe[]>([]);
         const [loading, setLoading] = useState<boolean>(false);
 
-        const actualizarRecetas = (recetas: IReceta[]) => {
+        const actualizarRecetas = (recetas: Recipe[]) => {
           setRecetas(recetas);
           setBusqueda(recetas);
         }

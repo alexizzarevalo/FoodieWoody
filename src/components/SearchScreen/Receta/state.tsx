@@ -3,19 +3,11 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { SearchStackParamList } from "../../../navigation/types";
 import { GlobalDispatch } from "../../../storage";
 import { useDispatch } from "react-redux";
-
-export interface IReceta {
-    id: string;
-    nombre: string;
-    descripcion: string;
-    imagen: string;
-    precio: number;
-    pasos: string[];
-    negocio_id: string;
-}
+import { Recipe } from '../../CreateAndUpdateRecipe/state';
+export type { Recipe } from '../../CreateAndUpdateRecipe/state';
 
 export type Props = {
-    receta: IReceta;
+    receta: Recipe;
     nav: StackNavigationProp<SearchStackParamList, 'Search'>;
 }
 

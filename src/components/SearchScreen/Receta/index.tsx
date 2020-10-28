@@ -3,7 +3,7 @@ import { View, Text, Image, TouchableHighlight } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useRecetaElements, Props } from "./state";
 
-export type { IReceta } from './state';
+export type { Recipe } from './state';
 
 export default function Receta({ receta, nav }: Props) {
     const { addToCart, goToDetails } = useRecetaElements({ nav, receta });

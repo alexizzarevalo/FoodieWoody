@@ -1,5 +1,5 @@
-import { IReceta } from "../components/SearchScreen/Receta";
-import {Receta} from '../models/receta'
+import { Recipe } from "../components/CreateAndUpdateRecipe/state";
+
 /*Screen names with their parameters*/
 export type CartStackParamList = {
   OrderCheckout: undefined;
@@ -22,7 +22,7 @@ export type DrawerParamList = {
 export type SearchStackParamList = {
   Search: undefined;
   DetalleReceta: {
-    receta: IReceta
+    receta: Recipe
   };
   Checkout: undefined;
 }
