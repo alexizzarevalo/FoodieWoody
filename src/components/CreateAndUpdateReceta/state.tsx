@@ -1,12 +1,13 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { firebase } from '@react-native-firebase/firestore';
+import { TextInput } from "react-native";
 
 interface Recipe {
     id: string;
     name: string;
     description: string;
     image: string;
-    ingredients: [];
+    ingredients: string[];
     steps: [];
     time: number;
     price: number;
@@ -14,15 +15,15 @@ interface Recipe {
 }
 
 const defaultRecipe: Recipe = {
-    id: '',
-    name: '',
-    description: '',
-    image: '',
+    id: '123',
+    name: 'Darwin',
+    description: 'Arevalo',
+    image: 'HOla',
     ingredients: [],
     steps: [],
     time: 0,
     price: 0,
-    bussinessId: ''
+    bussinessId: '50'
 }
 
 export type Props = {
@@ -31,6 +32,8 @@ export type Props = {
 
 export default function useCreateAndUpdateRecipeState({ update }: Props) {
     const [recipe, setRecipe] = useState<Recipe>({ ...defaultRecipe });
+    const ingredientRef = useRef<TextInput>(null);
+    const [tempState, setTempState] = useState<{ ingredient: string }>({ ingredient: '' });
 
     const changeId = (value: string) => {
         setRecipe(recipe => ({ ...recipe, id: value }));
@@ -42,10 +45,6 @@ export default function useCreateAndUpdateRecipeState({ update }: Props) {
 
     const changeDescription = (value: string) => {
         setRecipe(recipe => ({ ...recipe, description: value }));
-    }
-
-    const changeIngredients = (value: []) => {
-        setRecipe(recipe => ({ ...recipe, ingredients: value }));
     }
 
     const changeSteps = (value: []) => {
@@ -66,6 +65,22 @@ export default function useCreateAndUpdateRecipeState({ update }: Props) {
 
     const changeBussinessId = (value: string) => {
         setRecipe(recipe => ({ ...recipe, bussinessId: value }));
+    }
+
+    const addIngredient = () => {
+        if (!tempState.ingredient) return;
+
+        setRecipe(recipe => ({ ...recipe, ingredients: [...recipe.ingredients, tempState.ingredient] }))
+        changeTempIngredient('');
+    }
+
+    const removeIngredient = (index: number) => {
+        recipe.ingredients.splice(index, 1);
+        setRecipe(recipe => ({ ...recipe, ingredients: [...recipe.ingredients] }))
+    }
+
+    const changeTempIngredient = (ingredient: string) => {
+        setTempState(temp => ({ ...temp, ingredient }))
     }
 
     const saveRecipe = () => {
@@ -98,7 +113,13 @@ export default function useCreateAndUpdateRecipeState({ update }: Props) {
             name: { value: recipe.name, onChange: changeName },
             description: { value: recipe.description, onChange: changeDescription },
             image: { value: recipe.image, onChange: changeImage },
-            ingredients: { value: recipe.ingredients, onChange: changeIngredients },
+            ingredients: {
+                add: addIngredient, remove: removeIngredient, value: recipe.ingredients,
+                temp: {
+                    value: tempState.ingredient,
+                    onChange: changeTempIngredient
+                }
+            },
             steps: { value: recipe.steps, onChange: changeSteps },
             time: { value: recipe.time, onChange: changeTime },
             price: { value: recipe.price, onChange: changePrice },
