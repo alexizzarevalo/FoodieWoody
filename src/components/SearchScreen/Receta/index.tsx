@@ -1,5 +1,6 @@
 import React from "react";
 import { View, Text, Image, TouchableHighlight } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import { useRecetaElements, Props } from "./state";
 
 export type { IReceta } from './state';
@@ -18,10 +19,12 @@ export default function Receta({ receta, nav }: Props) {
                     <Image testID={"imageDetails"} source={{ uri: receta.imagen }} resizeMode="cover" height={80} width={80} style={{ borderRadius: 8, width: 80, height: 80 }}></Image>
                 </TouchableHighlight>
             </View>
-            <View style={{ alignItems: 'center', justifyContent: 'space-evenly', marginHorizontal: 8 }}>
-                <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{receta.nombre}</Text>
-                <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Q{receta.precio}</Text>
-            </View>
+            <TouchableOpacity style={{ flex: 1, alignItems: 'center', justifyContent: 'space-evenly' }} onPress={() => { nav.navigate('CrearReceta', { id: receta.id }) }}>
+                <View style={{ alignItems: 'center', justifyContent: 'space-evenly', marginHorizontal: 8 }}>
+                    <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{receta.nombre}</Text>
+                    <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Q{receta.precio}</Text>
+                </View>
+            </TouchableOpacity>
             <View style={{ justifyContent: 'center', marginRight: 0 }}>
                 <TouchableHighlight testID="add" style={{
                     backgroundColor: 'purple', //#11c222
