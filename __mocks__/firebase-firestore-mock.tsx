@@ -1,20 +1,22 @@
-const get = () => {
-    return Promise.resolve('')
-}
+const deletefn = () => Promise.resolve('');
 
-const add = () => {
-    return Promise.resolve('')
-}
+const getfn = () => Promise.resolve('');
+
+const set = () => Promise.resolve('');
+
+const add = () => Promise.resolve('');
 
 const doc = (name: string) => {
     return {
-        get
+        get: getfn,
+        set,
+        delete: deletefn
     }
 }
 
 const collection = (name: string) => {
     return {
-        get,
+        get: getfn,
         add,
         doc
     }

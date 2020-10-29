@@ -137,7 +137,6 @@ export default function useCreateAndUpdateRecipeState({ navigation, route }: Dra
     }
 
     const saveRecipe = () => {
-        console.log('Guardar', recipe);
         firebase.firestore()
             .collection('recetas')
             .add({ ...recipe, negocio_id: `users/${user?.uid}` })
@@ -208,10 +207,12 @@ export default function useCreateAndUpdateRecipeState({ navigation, route }: Dra
         actions: {
             handleSubmit,
             goBack,
-            deleteRecipe
+            deleteRecipe,
+            updateRecipe,
+            saveRecipe
         },
         update,
         loading,
-        canSaveOrUpdate
+        canSaveOrUpdate,
     }
 }
