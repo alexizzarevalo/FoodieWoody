@@ -148,6 +148,17 @@ export default function useCreateAndUpdateRecipeState({ navigation, route }: Dra
         setTempState(temp => ({ ...temp, step }))
     }
 
+    const canSaveOrUpdate = () => {
+        return recipe.nombre !== defaultRecipe.nombre
+            && recipe.descripcion !== defaultRecipe.descripcion
+            && recipe.ingredientes.length !== defaultRecipe.ingredientes.length
+            && recipe.pasos.length !== defaultRecipe.pasos.length
+            && recipe.precio !== defaultRecipe.precio
+            && recipe.imagen !== defaultRecipe.imagen
+            && recipe.precio > 0
+            && recipe.tiempo_preparacion > 0
+    }
+
     const saveRecipe = () => {
         console.log('Guardar', recipe);
         firebase.firestore()
@@ -223,6 +234,7 @@ export default function useCreateAndUpdateRecipeState({ navigation, route }: Dra
             deleteRecipe
         },
         update,
-        loading
+        loading,
+        canSaveOrUpdate
     }
 }

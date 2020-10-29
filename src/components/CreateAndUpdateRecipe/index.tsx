@@ -15,7 +15,7 @@ import useCreateAndUpdateRecipeState from "./state";
 import MultipleData from "./MultipleData";
 
 export default function CreateAndUpdateRecipe(props: DrawerScreenProps<DrawerParamList, 'CrearReceta'>) {
-  const { recipe, actions, update, loading } = useCreateAndUpdateRecipeState(props);
+  const { recipe, actions, update, loading, canSaveOrUpdate } = useCreateAndUpdateRecipeState(props);
 
   return (
     <View style={styles.container}>
@@ -99,16 +99,19 @@ export default function CreateAndUpdateRecipe(props: DrawerScreenProps<DrawerPar
                   value={recipe.price.value.toString()}
                   onChangeText={recipe.price.onChange}
                 />
+                {
+                  !canSaveOrUpdate() && <Text style={{ alignSelf: 'center', fontSize: 12, color: 'red' }}>Todos los campos son obligatorios</Text>
+                }
                 <View style={{ flex: 1, margin: 8 }}>
                   <TouchableOpacity style={{
-                    backgroundColor: '#f87c09',
+                    backgroundColor: !canSaveOrUpdate() ? 'gray' : '#f87c09',
                     width: '100%',
                     height: '100%',
                     alignItems: 'center',
                     justifyContent: 'center',
                     borderRadius: 8,
-                    padding: 8
-                  }} onPress={actions.handleSubmit}>
+                    padding: 8,
+                  }} onPress={actions.handleSubmit} disabled={!canSaveOrUpdate()}>
                     <Text style={{ fontSize: 25, color: 'white' }}>{update ? 'Actualizar' : 'Guardar'}</Text>
                   </TouchableOpacity>
                 </View>
