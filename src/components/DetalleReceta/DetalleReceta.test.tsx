@@ -2,15 +2,15 @@
 
 import React from 'react';
 
-import DetalleReceta, {getIngredientes, getNegocioNombre, SectionTitle, StaticComponent} from './DetalleReceta';
+import DetalleReceta, { getNegocioNombre, SectionTitle, StaticComponent } from './DetalleReceta';
 import { render, waitFor } from "@testing-library/react-native";
 
-import {Receta, Ingrediente} from '../../models/receta'
+// import { Receta, Ingrediente } from '../../models/receta'
 
 describe('DetalleReceta', () => {
 
     it('Componente SectionTitle muestra el texto correcto', () => {
-      console.log("It just to pass no empty suit test fails")
+        console.log("It just to pass no empty suit test fails")
     })
 
     /*const negocio_nombre = "Domino's Pizza"

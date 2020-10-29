@@ -1,13 +1,17 @@
 import '../../../__mocks__/firebase-firestore-mock';
+import '../../../__mocks__/firebase-auth-mock';
 import "../../../__mocks__/react-redux-mock";
-import { firebase, FirebaseFirestoreTypes } from "@react-native-firebase/firestore";
+import { firebase } from "@react-native-firebase/auth";
+import { firebase as firebaseStore, FirebaseFirestoreTypes } from "@react-native-firebase/firestore";
 import React, { useState } from 'react';
 import { Alert } from 'react-native';
-import { useElements, SetRecetas, filterRecetas } from './state';
+import * as state from './state';
+//{ useElements, SetRecetas, filterRecetas }
 import { renderHook, act } from '@testing-library/react-hooks';
 import renderer from "react-test-renderer";
 import { Recipe } from './Receta';
 import SearchScreen from '.';
+import { waitFor } from '@testing-library/react-native';
 
 jest.spyOn(Alert, 'alert');
 
@@ -30,36 +34,42 @@ const getReceta = (data: object) => {
 }
 
 //@ts-ignore
-jest.spyOn(firebase, 'firestore').mockImplementation(() => {
+jest.spyOn(firebase, 'auth').mockImplementation(() => {
   return {
-    collection: jest.fn(() => {
-      return {
-        get: jest.fn(() => {
-          const snapshot: FirebaseFirestoreTypes.QuerySnapshot = {
-            docs: [
-              //@ts-ignore
-              {
-                data: () => {
-                  return getReceta({ id: "1" });
-                },
-                id: '1',
-              },
-              //@ts-ignore
-              {
-                data: () => {
-                  return getReceta({ id: "2" });
-                },
-                id: '2',
-              }
-
-            ],
-          }
-          return Promise.resolve(snapshot);
-        })
-      }
+    onAuthStateChanged: jest.fn(() => {
     })
   }
 })
+
+//@ts-ignore
+jest.spyOn(firebaseStore, 'firestore').mockImplementation(() => ({
+  collection: jest.fn(() => ({
+    where: jest.fn(() => ({
+      get: jest.fn(() => {
+        const snapshot: FirebaseFirestoreTypes.QuerySnapshot = {
+          docs: [
+            //@ts-ignore
+            {
+              data: () => {
+                return getReceta({ id: "1" });
+              },
+              id: '1',
+            },
+            //@ts-ignore
+            {
+              data: () => {
+                return getReceta({ id: "2" });
+              },
+              id: '2',
+            }
+
+          ],
+        }
+        return Promise.resolve(snapshot);
+      })
+    })),
+  }))
+}))
 
 describe('Pantalla SearchScreen', () => {
   test('La pantalla debe renderizar correctamente sin el cuadro de busqueda', () => {
@@ -87,14 +97,14 @@ describe('Pantalla SearchScreen', () => {
         return { setRecetas, setBusqueda, setLoading, recetas, busqueda, loading, actualizarRecetas }
       })
 
-      await act(async () => SetRecetas(result.current.setLoading, result.current.actualizarRecetas))
+      await act(async () => state.SetRecetas(result.current.setLoading, result.current.actualizarRecetas, 'id'))
 
       expect(result.current.recetas.length).toBe(2);
       expect(result.current.recetas).toEqual([getReceta({ id: '1' }), getReceta({ id: '2' })]);
     })
 
     test('Debe ejecutarse el hook y cargar el estado inicial: useEffects', () => {
-      const { result, waitFor } = renderHook(() => useElements({ navigation }));
+      const { result, waitFor } = renderHook(() => state.useElements({ navigation }));
 
       expect(result.current.search.value).toBe("");
       waitFor(() => {
@@ -102,40 +112,28 @@ describe('Pantalla SearchScreen', () => {
       })
     })
 
-    test('Deben filtrarse las recetas cuando se hace una busqueda', async () => {
-      const { result, waitForNextUpdate } = renderHook(() => useElements({ navigation }));
-
-      await waitForNextUpdate();
-      act(() => result.current.search.onChangeText('pizza'));
-
-      expect(result.current.search.value).toBe('pizza');
-      await waitForNextUpdate()
-      expect(result.current.recetas.length).toBe(2);
-      expect(result.current.recetas).toEqual([getReceta({ id: "1" }), getReceta({ id: "2" })]);
-    })
-
     test('Debe limpiarse la busqueda cuando se presiona el icono', async () => {
-      const { result } = renderHook(() => useElements({ navigation }));
+      const { result } = renderHook(() => state.useElements({ navigation }));
 
-      act(() => result.current.search.icon.onPress());
+      await act(async () => result.current.search.icon.onPress());
 
       expect(result.current.search.value).toBe('');
       expect(result.current.search.showInput).toBeTruthy();
 
-      act(() => result.current.search.icon.onPress());
+      await act(async () => result.current.search.icon.onPress());
 
       expect(result.current.search.value).toBe('');
       expect(result.current.search.showInput).toBeFalsy();
     })
 
-    test('Debe empujarse la pantalla de checkout en el stack navigation', async () => {
+    test('Debe empujarse la pantalla de agregar una receta en el stack navigation', async () => {
       const navigation = {
         push: jest.fn((screenName: string) => {
-          expect(screenName).toBe('Checkout');
+          expect(screenName).toBe('CreateAndUpdateRecipe');
         })
       };
       //@ts-ignore
-      const { result } = renderHook(() => useElements({ navigation }));
+      const { result } = renderHook(() => state.useElements({ navigation }));
 
       result.current.addIcon.onPress();
 
@@ -143,10 +141,10 @@ describe('Pantalla SearchScreen', () => {
     })
 
     test('Deben filtrar las recetas por nombre y por descripcion', async () => {
-      const resultByName = filterRecetas([getReceta({}), getReceta({})], 'pizza');
+      const resultByName = state.filterRecetas([getReceta({}), getReceta({})], 'pizza');
       expect(resultByName.length).toBe(2);
 
-      const resultByDescription = filterRecetas([getReceta({}), getReceta({})], 'hawaiana');
+      const resultByDescription = state.filterRecetas([getReceta({}), getReceta({})], 'hawaiana');
       expect(resultByDescription.length).toBe(2);
     })
   })

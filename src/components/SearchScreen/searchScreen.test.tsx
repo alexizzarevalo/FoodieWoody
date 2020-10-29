@@ -1,6 +1,8 @@
 import '../../../__mocks__/firebase-firestore-mock';
+import "../../../__mocks__/firebase-auth-mock";
 import "../../../__mocks__/react-redux-mock";
-import { firebase, FirebaseFirestoreTypes } from "@react-native-firebase/firestore";
+import { firebase } from "@react-native-firebase/auth";
+import { firebase as firebaseStore, FirebaseFirestoreTypes } from "@react-native-firebase/firestore";
 import React, { useState } from 'react';
 import { Alert } from 'react-native';
 import { useElements, SetRecetas, filterRecetas } from './state';
@@ -30,7 +32,15 @@ const getReceta = (data: object) => {
 }
 
 //@ts-ignore
-jest.spyOn(firebase, 'firestore').mockImplementation(() => {
+jest.spyOn(firebase, 'auth').mockImplementation(() => {
+  return {
+    onAuthStateChanged: jest.fn(() => {
+    })
+  }
+})
+
+//@ts-ignore
+jest.spyOn(firebaseStore, 'firestore').mockImplementation(() => {
   return {
     collection: jest.fn(() => {
       return {

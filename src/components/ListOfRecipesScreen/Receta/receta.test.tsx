@@ -4,7 +4,6 @@ import { Alert } from 'react-native';
 import { renderHook } from "@testing-library/react-hooks";
 import renderer from 'react-test-renderer';
 import Receta, { Recipe } from '.';
-import { useRecetaElements } from './state';
 import { useDispatch } from "react-redux";
 
 jest.spyOn(Alert, 'alert');
@@ -31,28 +30,5 @@ describe('Componente de receta', () => {
         //@ts-ignore
         renderer.create(<Receta nav={nav} receta={recetaProp} />)
     })
-
-    describe('Hook: useRecetaElements', () => {
-
-        test('Debe llamar a la accion ADD_TO_CART con el id de la receta y cantidad de 1', () => {
-            const dispatch = jest.fn().mockImplementation(({ type, payload }) => {
-                expect(type).toBe('ADD_TO_CART');
-                expect(payload).toEqual({ cantidad: 1, receta_id: recetaProp.id });
-            });
-
-            //@ts-ignore
-            useDispatch.mockImplementation(() => {
-                return dispatch;
-            })
-
-            //@ts-ignore
-            const { result } = renderHook(() => useRecetaElements({ receta: recetaProp, nav }));
-            result.current.addToCart();
-
-            expect(Alert.alert).toBeCalledTimes(1);
-            //@ts-ignore
-            Alert.alert.mock.calls[0][2][1].onPress();
-        })
-    });
 })
 

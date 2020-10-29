@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, Image, StyleSheet, ScrollView } from 'react-native';
-import { Recipe } from "./../CreateAndUpdateRecipe/state";
+import { Recipe } from "../../models/recipe";
 //Produccion
 //Con este si funciona bien
 import firestore from '@react-native-firebase/firestore'

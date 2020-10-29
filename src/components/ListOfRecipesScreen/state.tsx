@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Receta, { Recipe } from "./Receta";
 import { firebase, FirebaseFirestoreTypes } from "@react-native-firebase/firestore";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { MyRecipesStackParamList, SearchStackParamList } from "../../navigation/types";
+import { MyRecipesStackParamList } from "../../navigation/types";
 import { act } from "react-test-renderer";
 import useUser from "../../hooks/useUser";
 

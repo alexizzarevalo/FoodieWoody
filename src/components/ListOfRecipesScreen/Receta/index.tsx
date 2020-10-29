@@ -1,13 +1,11 @@
 import React from "react";
 import { View, Text, Image, TouchableHighlight } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { useRecetaElements, Props } from "./state";
+import { Props } from "./state";
 import Icon from 'react-native-vector-icons/AntDesign';
 
 export type { Recipe } from './state';
 
 export default function Receta({ receta, nav }: Props) {
-    const { addToCart } = useRecetaElements({ nav, receta });
     return (
         <View style={{
             flex: 1, flexDirection: 'row',

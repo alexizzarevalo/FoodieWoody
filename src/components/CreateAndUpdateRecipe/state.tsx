@@ -4,30 +4,7 @@ import { DrawerScreenProps } from "@react-navigation/drawer";
 import { DrawerParamList } from "../../navigation/types";
 import { Alert } from "react-native";
 import useUser from "../../hooks/useUser";
-
-export interface Recipe {
-    id: string;
-    nombre: string;
-    descripcion: string;
-    imagen: string;
-    ingredientes: string[];
-    pasos: string[];
-    tiempo_preparacion: number;
-    precio: number;
-    negocio_id: string;
-}
-
-const defaultRecipe: Recipe = {
-    id: '',
-    nombre: '',
-    descripcion: '',
-    imagen: '',
-    ingredientes: [],
-    pasos: [],
-    tiempo_preparacion: 0,
-    precio: 0,
-    negocio_id: ''
-}
+import { Recipe, defaultRecipe } from "../../models/recipe";
 
 export type MultiProps = {
     provider: {
