@@ -15,7 +15,8 @@ const doc = (name: string) => {
 const collection = (name: string) => {
     return {
         get,
-        add
+        add,
+        doc
     }
 }
 

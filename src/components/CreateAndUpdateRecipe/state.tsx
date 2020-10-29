@@ -33,7 +33,7 @@ export default function useCreateAndUpdateRecipeState({ navigation, route }: Dra
 
         setUpdate(!!id);
 
-        if (route.params.id) {
+        if (!!route.params.id) {
             firebase.firestore().collection('recetas')
                 .doc(id)
                 .get()
@@ -59,7 +59,7 @@ export default function useCreateAndUpdateRecipeState({ navigation, route }: Dra
             setLoading(false);
         }
 
-    }, [route.params]);
+    }, [route.params.id]);
 
     const goBack = () => {
         navigation.goBack();

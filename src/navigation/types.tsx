@@ -1,4 +1,4 @@
-import { Recipe } from "../components/CreateAndUpdateRecipe/state";
+import { Recipe } from "../models/recipe";
 
 /*Screen names with their parameters*/
 export type CartStackParamList = {

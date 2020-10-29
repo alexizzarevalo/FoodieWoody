@@ -12,9 +12,7 @@ const sendPasswordResetEmail = (email: string): Promise<string> => {
   return Promise.resolve('Hola');
 }
 
-const onAuthStateChanged = () => {
-  return Promise.resolve('Hola');
-}
+const onAuthStateChanged = () => () => { };
 
 const createUserWithEmailAndPassword = (email: string, password: string): Promise<String> => {
   return Promise.resolve('Usuario Registrado')
