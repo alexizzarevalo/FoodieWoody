@@ -5,6 +5,7 @@ import CartNavigation from './cart_Navigation';
 import LoginScreen from "../components/loginScreen";
 import useUser from '../hooks/useUser';
 import SearchNavigation from './search_Navigation';
+import myRecipesNavigation from './myRecipesNavigation';
 import RegisterN from '../components/register';
 import RegistroNegocio from '../components/registroNegocio';
 import CrearReceta from '../components/CreateAndUpdateRecipe'
@@ -15,7 +16,7 @@ import auth from "@react-native-firebase/auth";
 const Drawer = createDrawerNavigator<DrawerParamList>();
 
 export default function Navigation() {
-  const { isLogged } = useUser();
+  const { userData, isLogged } = useUser();
 
   return (
     <NavigationContainer>
@@ -29,12 +30,15 @@ export default function Navigation() {
             </>
             :
             <>
-              <Drawer.Screen options={{ title: 'Inicio - Recetas' }} name={'Search'} component={SearchNavigation} />
-              <Drawer.Screen options={{ title: 'Crear Receta' }} name={'CrearReceta'} initialParams={{ id: '' }} component={CrearReceta} />
-              {//<Drawer.Screen options={{ title: 'Inicio - Recetas' }} name={'CrearReceta'} component={SearchNavigation} />
+              {userData?.rol == 'negocio' ?
+                <>
+                  <Drawer.Screen options={{ title: 'Mis recetas' }} name={'ListOfRecipes'} component={myRecipesNavigation} />
+                </> :
+                <>
+                  <Drawer.Screen options={{ title: 'Inicio - Recetas' }} name={'Search'} component={SearchNavigation} />
+                </>
               }
               <Drawer.Screen options={{ title: 'Cerrar sesión' }} name={'Logout'} component={Logout} />
-              {/*Agregar aqui las demas pantallas*/}
             </>
         }
       </Drawer.Navigator>

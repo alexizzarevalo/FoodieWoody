@@ -26,3 +26,10 @@ export type SearchStackParamList = {
   };
   Checkout: undefined;
 }
+
+export type MyRecipesStackParamList = {
+  ListOfRecipes: undefined;
+  CreateAndUpdateRecipe: {
+    id?: string;
+  };
+}

@@ -3,6 +3,7 @@ import { firebase } from '@react-native-firebase/firestore';
 import { DrawerScreenProps } from "@react-navigation/drawer";
 import { DrawerParamList } from "../../navigation/types";
 import { Alert } from "react-native";
+import useUser from "../../hooks/useUser";
 
 export interface Recipe {
     id: string;
@@ -47,6 +48,7 @@ export default function useCreateAndUpdateRecipeState({ navigation, route }: Dra
     const [recipe, setRecipe] = useState<Recipe>({ ...defaultRecipe });
     const [tempState, setTempState] = useState<{ ingredient: string; step: string }>({ ingredient: '', step: '' });
     const [update, setUpdate] = useState<boolean>(false);
+    const { user } = useUser();
 
     useEffect(() => {
         setLoading(true);
@@ -76,6 +78,8 @@ export default function useCreateAndUpdateRecipeState({ navigation, route }: Dra
                     console.log(err);
                     setLoading(false);
                 });
+        } else {
+            setLoading(false);
         }
 
     }, [route.params]);
@@ -146,11 +150,13 @@ export default function useCreateAndUpdateRecipeState({ navigation, route }: Dra
 
     const saveRecipe = () => {
         console.log('Guardar', recipe);
-        // firebase.firestore()
-        //     .collection('ordenes')
-        //     .add(recipe)
-        //     .then(console.log)
-        //     .catch(console.log);
+        firebase.firestore()
+            .collection('recetas')
+            .add({ ...recipe, negocio_id: `users/${user?.uid}` })
+            .then(() => {
+                goBack()
+            })
+            .catch(console.log);
     }
 
     const updateRecipe = () => {
