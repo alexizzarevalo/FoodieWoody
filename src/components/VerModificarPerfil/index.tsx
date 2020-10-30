@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, FlatList, Alert, SafeAreaView} from 'react-native';
-import Element from './components/Element'
+import Element from './Element'
 
-class App extends Component {
+class VerModificarPerfil extends Component {
 
-  constructor(props){
+  constructor(props: any){
     super(props);
     this.state = {
       datos : [
@@ -100,4 +100,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default App;
+export default VerModificarPerfil;
