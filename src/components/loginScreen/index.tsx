@@ -180,7 +180,7 @@ export default function LoginScreen({ navigation }: DrawerScreenProps<DrawerPara
                     </View>
                     <View style={styles.buttonContainer}>
                         <TouchableOpacity testID="goToRegisterNButton" style={styles.registerButton} activeOpacity={0.85} onPress={goToRegisterN}>
-                            <Text style={styles.buttonText}>Registrate como Negocio</Text>
+                            <Text style={styles.buttonText}>Registrar como Negocio</Text>
                         </TouchableOpacity>
                     </View>
 

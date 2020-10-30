@@ -163,6 +163,8 @@ export default function Registronegocio({ navigation }: DrawerScreenProps<Drawer
                 }  else {
                     Alert.alert('Error', 'Error  al crear registro, intente nuevamente');
                 }
+            }).finally(()=>{
+                loading.change(false);
             })
     }
 
