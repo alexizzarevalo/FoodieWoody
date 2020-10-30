@@ -15,4 +15,21 @@ function VerModificarPerfil(props: any){
     )
 }
 
+const styles = StyleSheet.create({
+    container : {
+        marginTop : 10,
+        marginBottom : 10
+    },
+    top : {
+        flex : 1,
+        justifyContent : 'flex-start',
+        alignItems : 'flex-start'
+    },
+    bottom : {
+        flex : 2,
+        justifyContent : 'center',
+        alignItems : 'center'
+    }
+  });
+
 export default VerModificarPerfil
