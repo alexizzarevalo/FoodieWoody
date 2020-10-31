@@ -5,6 +5,7 @@ end
 
 # Touch any with testId = test_id
 def touch_by_test_id(test_id)
+  wait_for_element_exists "* tag:'#{test_id}'"
   touch query("* tag:'#{test_id}'")
 end
 
@@ -14,6 +15,7 @@ def set_text_input(id, text)
   wait_for_keyboard
   enter_text "* tag:'#{id}'", text
   hide_soft_keyboard
+  sleep(1)
 end
 
 # Touch alert button by text

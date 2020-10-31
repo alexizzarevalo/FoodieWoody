@@ -8,11 +8,10 @@ Then(/^Id "(.*?)" appears$/) do |id|
   check_element_exists "* id:'#{id}'"
 end
 
-
-Then(/^I Swipe up$/) do 
+Then(/^I Swipe up$/) do
   pan_up()
 end
 
-Then(/^Hide Keyboard$/) do 
-  hide_soft_keyboard ()
+When(/^I press the button "(.*?)"$/) do |testId|
+  touch_by_test_id testId
 end

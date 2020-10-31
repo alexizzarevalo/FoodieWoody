@@ -11,9 +11,11 @@ import {
     TouchableHighlight,
     StatusBar,
     Alert,
-    ActivityIndicator
+    ActivityIndicator,
+    Button
 } from 'react-native';
 import { styles} from '../../Style';
+import Icon from 'react-native-vector-icons/AntDesign';
 
 import {firebase as firebaseFirestore, FirebaseFirestoreTypes} from '@react-native-firebase/firestore'
 
@@ -170,8 +172,12 @@ export default function Registronegocio({ navigation }: DrawerScreenProps<Drawer
 
     return(<View style={styles.container}>
                 <StatusBar backgroundColor='#f87c09' barStyle="light-content"/>
-                <View style = {styles.header}>
+                <View style = {[styles.header, {flex: 1, flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between'}]}>
                     <Text style={styles.text_header}>¡Registra tu Negocio!</Text>
+                    {/* <Button title="Crear" onPress={registrar}></Button> */}
+                    <Icon testID="registerIcon" name="plus" size={40} onPress={registrar}></Icon>
                 </View>
                 <View style = {styles.footer}>
                 <ScrollView>

@@ -13,14 +13,11 @@ Scenario: Registrar con clave corta
     When I press "Registrar como Negocio"
     And I fill in "email" as "dalexis.da@gmail.com"
     And I fill in "password" as "1234"
-    And Hide Keyboard
     And I fill in "passwordc" as "1234"
-    And Hide Keyboard
     And I fill in "nombre" as "Negocio prueba"
-    And Hide Keyboard
     And I fill in "telefono" as "1234"
-    And Hide Keyboard
-    And I press "Registrate"
+    And I Swipe up
+    And I press "registerIcon" icon
     Then Id "alertTitle" appears
 
 
@@ -29,12 +26,9 @@ Scenario: Registrar con clave corta
     When I press "Registrar como Negocio"
     And I fill in "email" as "dalexis.da@gmail.com"
     And I fill in "password" as "123456"
-    And Hide Keyboard
     And I fill in "passwordc" as "123456"
-    And Hide Keyboard
     And I fill in "nombre" as "Negocio prueba"
-    And Hide Keyboard
     And I fill in "telefono" as "1234"
-    And Hide Keyboard
-    And I press "Registrate"
-    Then Id alertTitle appears
+    And I Swipe up
+    And I press "registerIcon" icon
+    Then Id 'alertTitle' appears
