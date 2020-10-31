@@ -11,3 +11,8 @@ Feature: Negocio feature
         Given I am in the recipes page
         And I press "createIcon" icon
         Then I see "Crear receta"
+
+    Scenario: Cerrar sesion para proteger el acceso
+        Given I am in the recipes page
+        When I logout
+        Then I see "Inicia Sesión"

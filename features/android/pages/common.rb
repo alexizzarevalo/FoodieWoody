@@ -31,3 +31,9 @@ def touch_button_by_text(text)
   sleep(2)
   tap_when_element_exists "* marked:'#{text}'"
 end
+
+def open_drawer()
+  #adb shell input swipe 0 500 500 500 50
+  pan("* text:'Acerca de Foodie Woody'", :right, from: { x: 0, y: 50 }, to: { x: 500, y: 50 })
+  sleep(2)
+end

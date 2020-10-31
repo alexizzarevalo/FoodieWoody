@@ -9,7 +9,7 @@ import myRecipesNavigation from './myRecipesNavigation';
 import RegisterN from '../components/register';
 import RegistroNegocio from '../components/registroNegocio';
 import { DrawerParamList } from './types';
-import { View, ActivityIndicator } from 'react-native';
+import { View, ActivityIndicator, Text } from 'react-native';
 import auth from "@react-native-firebase/auth";
 
 const Drawer = createDrawerNavigator<DrawerParamList>();
@@ -40,6 +40,7 @@ export default function Navigation() {
               <Drawer.Screen options={{ title: 'Cerrar sesión' }} name={'Logout'} component={Logout} />
             </>
         }
+        <Drawer.Screen options={{ title: 'Acerca de Foodie Woody' }} name={'AcercaDe'} component={About} />
       </Drawer.Navigator>
     </NavigationContainer>
   );
@@ -55,6 +56,22 @@ function Logout() {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <ActivityIndicator color="orange" size={30}></ActivityIndicator>
+    </View>
+  )
+}
+
+function About() {
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#f87c09' }}>
+      <View>
+        <Text style={{ fontSize: 40, color: 'white' }}>Foodie Woody</Text>
+      </View>
+      <View>
+        <Text style={{ color: 'white' }}>v1.0.0</Text>
+      </View>
+      <View>
+        <Text style={{ color: 'white' }}>Aplicacion donde puedes compartir tus recetas</Text>
+      </View>
     </View>
   )
 }

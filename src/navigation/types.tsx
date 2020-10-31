@@ -17,6 +17,7 @@ export type DrawerParamList = {
   CrearReceta: {
     id?: string;
   };
+  AcercaDe: undefined;
 };
 
 export type SearchStackParamList = {
