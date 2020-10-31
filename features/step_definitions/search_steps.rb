@@ -1,6 +1,6 @@
 Given("I am in the search page") do
   @login_page = page(LoginPage).await(timeout: 30)
-  @login_page.login
+  @login_page.login("dalexis.da@gmail.com", "123456")
 end
 
 When(/^I search "([^"]*)"$/) do |text|
