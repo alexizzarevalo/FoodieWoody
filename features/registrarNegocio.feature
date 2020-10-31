@@ -22,4 +22,4 @@ Feature: RegistroNegocio feature
     And I fill in "telefono" as "1234"
     And Hide Keyboard
     And I press "Registrate"
-    Then Id alertTitle appears
+    Then Id "alertTitle" appears
