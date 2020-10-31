@@ -31,4 +31,4 @@ Scenario: Registrar con clave corta
     And I fill in "telefono" as "1234"
     And I Swipe up
     And I press "registerIcon" icon
-    Then Id 'alertTitle' appears
+    Then Id "alertTitle" appears
