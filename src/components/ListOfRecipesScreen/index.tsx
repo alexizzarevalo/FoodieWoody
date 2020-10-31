@@ -32,7 +32,7 @@ export default function ListOfRecipesScreen({ navigation, showSearch = false }: 
                                 onChangeText={search.onChangeText}
                             />
                     }
-                    <Icon testID="cartIcon" name="plus" size={40} onPress={addIcon.onPress}></Icon>
+                    <Icon testID="createIcon" name="plus" size={40} onPress={addIcon.onPress}></Icon>
                 </View>
             </View>
             <View style={styles.container}>

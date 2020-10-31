@@ -9,7 +9,7 @@ When(/^I search "([^"]*)"$/) do |text|
 end
 
 When(/^I press "([^"]*)" icon$/) do |id|
-  touch_icon("cartIcon")
+  touch_icon(id)
 end
 
 When(/^I press "([^"]*)" for first recipe$/) do |text|
