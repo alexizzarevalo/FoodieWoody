@@ -65,7 +65,7 @@ describe('Order confirmation screen component', () => {
         <Template cart={cart} itemDetails={itemDetails} total={total} confirmacion={confirmacion} />
       </Provider>
     )
-    const confirmationbtn = getByTestId('confirmationbtn');
+    const confirmationbtn = getByTestId('cnfirmationbtn');
     fireEvent.press(confirmationbtn)
   })
 })
